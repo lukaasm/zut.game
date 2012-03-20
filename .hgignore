@@ -1,0 +1,10 @@
+syntax: glob
+
+bin/*.dll
+bin/*.pdb
+bin/*.exe
+
+vs2k10/*.sdf
+vs2k10/*.opensdf
+vs2k10/*.suo
+vs2k10/ipch/*
