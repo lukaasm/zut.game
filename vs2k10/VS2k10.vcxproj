@@ -74,6 +74,9 @@
       <AdditionalLibraryDirectories>../dep/glew/lib;../dep/glfw/lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>GLfW.lib;opengl32.lib;glew32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PostBuildEvent>
+      <Command>copy ..\dep\glew\bin\glew32.dll ..\bin\</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\src\BaseApp.cpp" />
@@ -81,6 +84,13 @@
   <ItemGroup>
     <ClInclude Include="..\src\BaseApp.h" />
     <ClInclude Include="..\src\Common.h" />
+    <ClInclude Include="resource.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="VS2k10.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\res\icon.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
