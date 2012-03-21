@@ -22,5 +22,16 @@
     <ClInclude Include="..\src\Common.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="VS2k10.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\res\icon.png">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>
