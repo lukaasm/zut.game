@@ -90,7 +90,7 @@
     <ResourceCompile Include="VS2k10.rc" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\res\icon.png" />
+    <None Include="..\res\icon.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
