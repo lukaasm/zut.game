@@ -80,10 +80,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\src\BaseApp.cpp" />
+    <ClCompile Include="..\src\RenderDevice.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\BaseApp.h" />
+    <ClInclude Include="..\src\CallBack.h" />
     <ClInclude Include="..\src\Common.h" />
+    <ClInclude Include="..\src\RenderDevice.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>

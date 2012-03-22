@@ -8,6 +8,18 @@
 #include <GL/glew.h>
 #include <GL/glfw.h>
 
+#include "RenderDevice.h"
+
+BaseApp::BaseApp()
+{
+    _renderDevice = new RenderDevice();
+}
+
+BaseApp::~BaseApp()
+{
+    delete_ptr(_renderDevice)
+}
+
 void BaseApp::_createContext()
 {
     if (!glfwInit())
@@ -23,14 +35,7 @@ void BaseApp::_createContext()
     // create our window
     glfwOpenWindow(800, 600, 0, 0, 0, 0, 0, 0, GLFW_WINDOW);
 
-    //glfwSetWindowSizeCallback(resizeCallback);
-
-    //log_basic("Successfully created window with OpenGL context: %s", glGetString(GL_VERSION));
-}
-
-void BaseApp::ResizeWindow(int32 width, int32 height)
-{
-
+    glfwSetWindowSizeCallback(BaseApp::ResizeWindow);
 }
 
 void BaseApp::CreateWindow()
@@ -42,20 +47,59 @@ void BaseApp::CreateWindow()
     uint32 glewInitResult = glewInit();
     if (glewInitResult != GLEW_OK)
         exit(EXIT_FAILURE);
+
+    GetRenderDevice()->OnInit();
+}
+
+uint32 BaseApp::GetLoopTime() const
+{
+    uint32 diff = uint32(glfwGetTime()*1000.0f);
+    glfwSetTime(0);
+    return diff;
 }
 
 void BaseApp::Run()
 {
     _stop = false;
+
     while (!Stopped())
     {
-        glfwSwapBuffers();
+        Update(GetLoopTime());
+        Render();
     }
+}
+
+void BaseApp::Render()
+{
+    GetRenderDevice()->OnRender();
+
+    glfwSwapBuffers();
+}
+
+ResizeCallBack* BaseApp::ResizeCallback = NULL;
+
+void BaseApp::ResizeWindow(int32 width, int32 height)
+{
+    (*BaseApp::ResizeCallback)(width, height);
+}
+
+void BaseApp::_resizeWindow(int32 width, int32 height)
+{
+    GetRenderDevice()->OnResize(width, height);
+}
+
+void BaseApp::Update(const uint32 diff)
+{
 }
 
 void main()
 {
-    BaseApp program;
-    program.CreateWindow();
-    program.Run();
+    BaseApp *p = new BaseApp;
+
+    BaseApp::ResizeCallback = new CallBack<BaseApp, void, int32, int32>(p, &BaseApp::_resizeWindow);
+
+    p->CreateWindow();
+    p->Run();
+
+    delete_ptr(p)
 }
