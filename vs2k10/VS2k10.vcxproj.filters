@@ -1,9 +1,18 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
+    <Filter Include="Other">
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Classes">
+      <UniqueIdentifier>{4d3712b0-d324-4ea0-8980-45d199b16667}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Classes\BaseApp">
+      <UniqueIdentifier>{c6e2b98a-5a7a-4f6b-b9e2-38f43980e79d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Classes\RenderDevice">
+      <UniqueIdentifier>{badbeb3f-e774-421d-bf6d-28ebdace9ab5}</UniqueIdentifier>
     </Filter>
     <Filter Include="Resource Files">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
@@ -11,18 +20,21 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\src\BaseApp.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\src\BaseApp.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\Common.h">
-      <Filter>Source Files</Filter>
+      <Filter>Other</Filter>
     </ClInclude>
-    <ClInclude Include="resource.h" />
+    <ClInclude Include="..\src\BaseApp.h">
+      <Filter>Classes\BaseApp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\RenderDevice.h">
+      <Filter>Classes\RenderDevice</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Other</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\CallBack.h">
+      <Filter>Other</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="VS2k10.rc">
@@ -33,5 +45,13 @@
     <None Include="..\res\icon.ico">
       <Filter>Resource Files</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\src\BaseApp.cpp">
+      <Filter>Classes\BaseApp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\RenderDevice.cpp">
+      <Filter>Classes\RenderDevice</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
