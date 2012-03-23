@@ -24,6 +24,9 @@
     <Filter Include="Frame\Shader">
       <UniqueIdentifier>{4da8a124-50b1-4642-bb26-d40cbadea580}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Frame\Camera">
+      <UniqueIdentifier>{07e8c40b-1de0-4a9a-9ffc-c33e55123c46}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\Common.h">
@@ -46,6 +49,9 @@
     </ClInclude>
     <ClInclude Include="..\src\Shader.h">
       <Filter>Frame\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Camera.h">
+      <Filter>Frame\Camera</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -70,6 +76,9 @@
     </ClCompile>
     <ClCompile Include="..\src\Shader.cpp">
       <Filter>Frame\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Camera.cpp">
+      <Filter>Frame\Camera</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

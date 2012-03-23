@@ -13,7 +13,7 @@ class Grid;
 class RenderDevice;
 
 typedef CallBack<BaseApp, void, int32, int32 > ResizeCallBack;
-typedef CallBack<BaseApp, void, void, void > CloseCallBack;
+typedef CallBack<BaseApp, void > CloseCallBack;
 
 class BaseApp
 {
@@ -32,8 +32,12 @@ class BaseApp
 
         static ResizeCallBack *ResizeCallback;
         static void ResizeWindow(int32, int32);
-
         void _resizeWindow(int32, int32);
+
+        static CloseCallBack *CloseCallback;
+        static int CloseWindow();
+        void _closeWindow();
+
 
         bool Stopped() const { return _stop; }
         RenderDevice* GetRenderDevice() const { return _renderDevice; }

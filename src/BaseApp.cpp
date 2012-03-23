@@ -39,6 +39,7 @@ void BaseApp::_createContext()
     glfwOpenWindow(800, 600, 0, 0, 0, 0, 0, 0, GLFW_WINDOW);
 
     glfwSetWindowSizeCallback(BaseApp::ResizeWindow);
+    glfwSetWindowCloseCallback(BaseApp::CloseWindow);
 }
 
 void BaseApp::CreateWindow()
@@ -103,6 +104,19 @@ void BaseApp::_resizeWindow(int32 width, int32 height)
     GetRenderDevice()->OnResize(width, height);
 }
 
+CloseCallBack* BaseApp::CloseCallback = NULL;
+
+int BaseApp::CloseWindow()
+{
+    (*BaseApp::CloseCallback)();
+    return 0;
+}
+
+void BaseApp::_closeWindow()
+{
+    _stop = true;
+}
+
 void BaseApp::Update(const uint32 diff)
 {
 }
@@ -111,7 +125,8 @@ void main()
 {
     BaseApp *p = new BaseApp;
 
-    BaseApp::ResizeCallback = new CallBack<BaseApp, void, int32, int32>(p, &BaseApp::_resizeWindow);
+    BaseApp::ResizeCallback = new ResizeCallBack(p, &BaseApp::_resizeWindow);
+    BaseApp::CloseCallback = new CloseCallBack(p, &BaseApp::_closeWindow);
 
     p->CreateWindow();
     p->Run();
