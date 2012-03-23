@@ -8,16 +8,19 @@
 #include <GL/glew.h>
 #include <GL/glfw.h>
 
+#include "Grid.h"
 #include "RenderDevice.h"
 
 BaseApp::BaseApp()
 {
+    _grid = NULL;
     _renderDevice = new RenderDevice();
 }
 
 BaseApp::~BaseApp()
 {
     delete_ptr(_renderDevice)
+    delete_ptr(_grid)
 }
 
 void BaseApp::_createContext()
@@ -48,6 +51,13 @@ void BaseApp::CreateWindow()
     if (glewInitResult != GLEW_OK)
         exit(EXIT_FAILURE);
 
+    Init();
+}
+
+void BaseApp::Init()
+{
+    _grid = new Grid(GetRenderDevice());
+
     GetRenderDevice()->OnInit();
 }
 
@@ -65,15 +75,20 @@ void BaseApp::Run()
     while (!Stopped())
     {
         Update(GetLoopTime());
+
         Render();
+
+        glfwSwapBuffers();
     }
 }
 
 void BaseApp::Render()
 {
+    GetRenderDevice()->Clear(0.0f, 0.0f, 0.0f, 0.0f);
+
     GetRenderDevice()->OnRender();
 
-    glfwSwapBuffers();
+    _grid->OnRender();
 }
 
 ResizeCallBack* BaseApp::ResizeCallback = NULL;

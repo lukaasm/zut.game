@@ -9,6 +9,7 @@
 #include "Common.h"
 
 class BaseApp;
+class Grid;
 class RenderDevice;
 
 typedef CallBack<BaseApp, void, int32, int32 > ResizeCallBack;
@@ -24,6 +25,7 @@ class BaseApp
 
         uint32 GetLoopTime() const;
 
+        void Init();
         void Render();
         void Run();
         void Update(const uint32);
@@ -41,6 +43,7 @@ class BaseApp
 
         bool _stop;
 
+        Grid* _grid;
         RenderDevice* _renderDevice;
 };
 

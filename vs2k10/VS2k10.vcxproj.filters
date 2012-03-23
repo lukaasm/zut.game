@@ -5,18 +5,24 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="Classes">
-      <UniqueIdentifier>{4d3712b0-d324-4ea0-8980-45d199b16667}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Classes\BaseApp">
-      <UniqueIdentifier>{c6e2b98a-5a7a-4f6b-b9e2-38f43980e79d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Classes\RenderDevice">
-      <UniqueIdentifier>{badbeb3f-e774-421d-bf6d-28ebdace9ab5}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Resource Files">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Frame">
+      <UniqueIdentifier>{4d3712b0-d324-4ea0-8980-45d199b16667}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Frame\BaseApp">
+      <UniqueIdentifier>{c6e2b98a-5a7a-4f6b-b9e2-38f43980e79d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Frame\RenderDevice">
+      <UniqueIdentifier>{badbeb3f-e774-421d-bf6d-28ebdace9ab5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Frame\Grid">
+      <UniqueIdentifier>{6d030ae7-ccf5-4280-a91c-f2eb1a3afe86}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Frame\Shader">
+      <UniqueIdentifier>{4da8a124-50b1-4642-bb26-d40cbadea580}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -24,16 +30,22 @@
       <Filter>Other</Filter>
     </ClInclude>
     <ClInclude Include="..\src\BaseApp.h">
-      <Filter>Classes\BaseApp</Filter>
+      <Filter>Frame\BaseApp</Filter>
     </ClInclude>
     <ClInclude Include="..\src\RenderDevice.h">
-      <Filter>Classes\RenderDevice</Filter>
+      <Filter>Frame\RenderDevice</Filter>
     </ClInclude>
     <ClInclude Include="resource.h">
       <Filter>Other</Filter>
     </ClInclude>
     <ClInclude Include="..\src\CallBack.h">
       <Filter>Other</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Grid.h">
+      <Filter>Frame\Grid</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Shader.h">
+      <Filter>Frame\Shader</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -48,10 +60,16 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\BaseApp.cpp">
-      <Filter>Classes\BaseApp</Filter>
+      <Filter>Frame\BaseApp</Filter>
     </ClCompile>
     <ClCompile Include="..\src\RenderDevice.cpp">
-      <Filter>Classes\RenderDevice</Filter>
+      <Filter>Frame\RenderDevice</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Grid.cpp">
+      <Filter>Frame\Grid</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Shader.cpp">
+      <Filter>Frame\Shader</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
