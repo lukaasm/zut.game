@@ -48,7 +48,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>../dep/glew/include;../dep/glfw/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../dep/glew/include;../dep/glfw/include;../dep/glm/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -80,13 +80,17 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\src\BaseApp.cpp" />
+    <ClCompile Include="..\src\Grid.cpp" />
     <ClCompile Include="..\src\RenderDevice.cpp" />
+    <ClCompile Include="..\src\Shader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\BaseApp.h" />
     <ClInclude Include="..\src\CallBack.h" />
     <ClInclude Include="..\src\Common.h" />
+    <ClInclude Include="..\src\Grid.h" />
     <ClInclude Include="..\src\RenderDevice.h" />
+    <ClInclude Include="..\src\Shader.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
