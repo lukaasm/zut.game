@@ -6,6 +6,7 @@
 
 #include <stdio.h>
 #include <GL/glew.h>
+#include <glm/gtc/matrix_transform.hpp>
 
 #include "RenderDevice.h"
 #include "Shader.h"
@@ -53,7 +54,10 @@ void Grid::OnRender()
 {
     _shader->Bind();
 
-    _renderDevice->SetUniforms(_shader);
+    // scale only local matrix
+    _modelMatrix = scale(_renderDevice->GetModelMatrix(), vec3(0.1f));
+
+    _renderDevice->SetUniforms(_shader, _modelMatrix);
 
     glBindVertexArray(_vao);
     glDrawArrays(GL_LINES, 0, _size*4);

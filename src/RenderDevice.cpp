@@ -15,6 +15,8 @@
 RenderDevice::RenderDevice()
 {
     _camera = NULL;
+
+    _modelMatrix = mat4(1.0f);
 }
 
 RenderDevice::~RenderDevice()
@@ -38,8 +40,6 @@ void RenderDevice::OnInit()
 void RenderDevice::OnRender()
 {
     _viewMatrix = translate(mat4(1.0f), vec3(-10.0f, -10.0f, 3.0f));
-    _modelMatrix = scale(glm::mat4(1.0f), vec3(0.1f));
-
 }
 
 void RenderDevice::OnResize(int32 width, int32 height)
@@ -57,11 +57,11 @@ void RenderDevice::OnUpdate(const uint32 diff)
     GetCamera()->OnUpdate(diff);
 }
 
-void RenderDevice::SetUniforms(Shader* shader)
+void RenderDevice::SetUniforms(Shader* shader, mat4 modelMatrix)
 {
     glUniformMatrix4fv(shader->GetProjMatrixLocation(), 1, GL_FALSE, value_ptr(GetProjMatrix()));
     glUniformMatrix4fv(shader->GetViewMatrixLocation(), 1, GL_FALSE, value_ptr(GetViewMatrix()));
-    glUniformMatrix4fv(shader->GetModelMatrixLocation(), 1, GL_FALSE, value_ptr(GetModelMatrix()));
+    glUniformMatrix4fv(shader->GetModelMatrixLocation(), 1, GL_FALSE, value_ptr(GetModelMatrix()*modelMatrix));
 }
 
 mat4 RenderDevice::GetProjMatrix() const

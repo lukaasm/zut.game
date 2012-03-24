@@ -5,7 +5,11 @@
 #ifndef H_GRID
 #define H_GRID
 
+#include <glm/glm.hpp>
+
 #include "Common.h"
+
+using namespace glm;
 
 class RenderDevice;
 class Shader;
@@ -23,6 +27,8 @@ class Grid
         uint32 _vao;
 
         uint32 _size;
+
+        mat4 _modelMatrix;
 
         RenderDevice* _renderDevice;
         Shader* _shader;
