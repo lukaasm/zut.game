@@ -121,7 +121,7 @@ void BaseApp::Update(const uint32 diff)
 {
 }
 
-void main()
+int main()
 {
     BaseApp *p = new BaseApp;
 
@@ -132,4 +132,6 @@ void main()
     p->Run();
 
     delete_ptr(p)
+
+    return 0;
 }
