@@ -9,6 +9,8 @@
 
 #include "Common.h"
 
+using namespace glm;
+
 class Shader;
 
 class RenderDevice
@@ -33,9 +35,9 @@ class RenderDevice
         int32 _width;
         int32 _height;
 
-        glm::mat4 _projMatrix;
-        glm::mat4 _viewMatrix;
-        glm::mat4 _modelMatrix;
+        mat4 _projMatrix;
+        mat4 _viewMatrix;
+        mat4 _modelMatrix;
 };
 
 #endif
