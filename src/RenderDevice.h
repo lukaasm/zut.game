@@ -11,12 +11,14 @@
 
 using namespace glm;
 
+class Camera;
 class Shader;
 
 class RenderDevice
 {
     public:
         RenderDevice();
+        ~RenderDevice();
 
         void Clear(float, float, float, float);
 
@@ -27,17 +29,23 @@ class RenderDevice
 
         void SetUniforms(Shader*);
 
-        glm::mat4 GetModelMatrix() const { return _modelMatrix; }
-        glm::mat4 GetViewMatrix() const { return _viewMatrix; }
-        glm::mat4 GetProjMatrix() const { return _projMatrix; }
+        Camera* GetCamera() const { return _camera; }
+
+        int32 GetWidth() const { return _width; }
+        int32 GetHeight() const { return _height; }
+
+        mat4 GetModelMatrix() const { return _modelMatrix; }
+        mat4 GetViewMatrix() const { return _viewMatrix; }
+        mat4 GetProjMatrix() const;
 
     private:
         int32 _width;
         int32 _height;
 
-        mat4 _projMatrix;
         mat4 _viewMatrix;
         mat4 _modelMatrix;
+
+        Camera* _camera;
 };
 
 #endif
