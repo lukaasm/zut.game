@@ -37,7 +37,7 @@ void RenderDevice::OnInit()
 
 void RenderDevice::OnRender()
 {
-    _viewMatrix = translate(mat4(1.0f), vec3(-2.0f, -2.0f, -3.0f));
+    _viewMatrix = translate(mat4(1.0f), vec3(-10.0f, -10.0f, 3.0f));
     _modelMatrix = scale(glm::mat4(1.0f), vec3(0.1f));
 
 }
