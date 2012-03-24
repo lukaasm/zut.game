@@ -4,6 +4,7 @@
 
 #include "Shader.h"
 
+#include <cstdlib>
 #include <fstream>
 #include <GL/glew.h>
 using namespace std;
@@ -44,7 +45,7 @@ void Shader::prepareShader(string shadName, uint32& subid, uint32& id)
     string data = "";
     string line = "";
 
-    ifstream file(shadName, ios::binary);
+    ifstream file(shadName.c_str(), ios::binary);
     if (file.is_open())
     {
         while (!file.eof())
