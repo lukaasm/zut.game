@@ -28,8 +28,8 @@ void RenderDevice::OnInit()
 
 void RenderDevice::OnRender()
 {
-    _viewMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(-2.0f, -2.0f, -3.0f));
-    _modelMatrix = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
+    _viewMatrix = translate(mat4(1.0f), vec3(-2.0f, -2.0f, -3.0f));
+    _modelMatrix = scale(glm::mat4(1.0f), vec3(0.1f));
 
 }
 
@@ -40,7 +40,7 @@ void RenderDevice::OnResize(int32 width, int32 height)
 
     glViewport(0, 0, width, height);
 
-    _projMatrix = glm::perspective(60.0f, float(_width / _height), 0.1f, 100.f);
+    _projMatrix = perspective(60.0f, float(_width / _height), 0.1f, 100.f);
 }
 
 void RenderDevice::OnUpdate(const uint32 diff)
@@ -49,7 +49,7 @@ void RenderDevice::OnUpdate(const uint32 diff)
 
 void RenderDevice::SetUniforms(Shader* shader)
 {
-    glUniformMatrix4fv(shader->GetProjMatrixLocation(), 1, GL_FALSE, glm::value_ptr(GetProjMatrix()));
-    glUniformMatrix4fv(shader->GetViewMatrixLocation(), 1, GL_FALSE, glm::value_ptr(GetViewMatrix()));
-    glUniformMatrix4fv(shader->GetModelMatrixLocation(), 1, GL_FALSE, glm::value_ptr(GetModelMatrix()));
+    glUniformMatrix4fv(shader->GetProjMatrixLocation(), 1, GL_FALSE, value_ptr(GetProjMatrix()));
+    glUniformMatrix4fv(shader->GetViewMatrixLocation(), 1, GL_FALSE, value_ptr(GetViewMatrix()));
+    glUniformMatrix4fv(shader->GetModelMatrixLocation(), 1, GL_FALSE, value_ptr(GetModelMatrix()));
 }
