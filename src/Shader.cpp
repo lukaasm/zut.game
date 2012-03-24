@@ -7,6 +7,7 @@
 #include <cstdlib>
 #include <fstream>
 #include <GL/glew.h>
+
 using namespace std;
 
 Shader::Shader(string vertName, string fragName)

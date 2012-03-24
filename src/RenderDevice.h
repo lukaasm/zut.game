@@ -27,7 +27,7 @@ class RenderDevice
         void OnResize(int32, int32);
         void OnUpdate(const uint32);
 
-        void SetUniforms(Shader*);
+        void SetUniforms(Shader*, mat4 = mat4(1.0f));
 
         Camera* GetCamera() const { return _camera; }
 
