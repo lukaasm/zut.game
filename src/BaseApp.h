@@ -22,6 +22,7 @@ class BaseApp
         ~BaseApp();
 
         void CreateWindow();
+        void CreateCallBacks();
 
         uint32 GetLoopTime() const;
 

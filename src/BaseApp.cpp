@@ -19,6 +19,9 @@ BaseApp::BaseApp()
 
 BaseApp::~BaseApp()
 {
+    delete_ptr(BaseApp::CloseCallback)
+    delete_ptr(BaseApp::ResizeCallback)
+
     delete_ptr(_renderDevice)
     delete_ptr(_grid)
 }
@@ -37,9 +40,6 @@ void BaseApp::_createContext()
 
     // create our window
     glfwOpenWindow(800, 600, 0, 0, 0, 0, 0, 0, GLFW_WINDOW);
-
-    glfwSetWindowSizeCallback(BaseApp::ResizeWindow);
-    glfwSetWindowCloseCallback(BaseApp::CloseWindow);
 }
 
 void BaseApp::CreateWindow()
@@ -53,6 +53,15 @@ void BaseApp::CreateWindow()
         exit(EXIT_FAILURE);
 
     Init();
+}
+
+void BaseApp::CreateCallBacks()
+{
+    BaseApp::ResizeCallback = new ResizeCallBack(this, &BaseApp::_resizeWindow);
+    glfwSetWindowSizeCallback(BaseApp::ResizeWindow);
+
+    BaseApp::CloseCallback = new CloseCallBack(this, &BaseApp::_closeWindow);
+    glfwSetWindowCloseCallback(BaseApp::CloseWindow);
 }
 
 void BaseApp::Init()
@@ -125,10 +134,8 @@ void main()
 {
     BaseApp *p = new BaseApp;
 
-    BaseApp::ResizeCallback = new ResizeCallBack(p, &BaseApp::_resizeWindow);
-    BaseApp::CloseCallback = new CloseCallBack(p, &BaseApp::_closeWindow);
-
     p->CreateWindow();
+    p->CreateCallBacks();
     p->Run();
 
     delete_ptr(p)

@@ -10,20 +10,22 @@
 #include "RenderDevice.h"
 #include "Shader.h"
 
+using namespace glm;
+
 Grid::Grid(RenderDevice* renderDevice)
 {
     _renderDevice = renderDevice;
 
     _size = 40;
-    glm::vec3 vertices[160]; // _size*4
+    vec3 vertices[160]; // _size*4
 
     for (uint32 x = 0; x < _size; x++)
     {
-        vertices[x*2] = glm::vec3(float(x), 0.0f, 0.0f);
-        vertices[x*2 +1] = glm::vec3(float(x), _size, 0.0f);
+        vertices[x*2] = vec3(float(x), 0.0f, 0.0f);
+        vertices[x*2 +1] = vec3(float(x), float(_size), 0.0f);
 
-        vertices[x*2 +_size*2] = glm::vec3(0.0f, float(x), 0.0f);
-        vertices[x*2 +_size*2+1] = glm::vec3(_size, float(x), 0.0f);
+        vertices[x*2 +_size*2] = vec3(0.0f, float(x), 0.0f);
+        vertices[x*2 +_size*2+1] = vec3(float(_size), float(x), 0.0f);
     };
 
     glGenVertexArrays(1, &_vao);
