@@ -10,6 +10,7 @@
 
 class BaseApp;
 class Grid;
+class Keyboard;
 class RenderDevice;
 
 typedef CallBack<BaseApp, void, int32, int32 > ResizeCallBack;
@@ -41,6 +42,8 @@ class BaseApp
 
 
         bool Stopped() const { return _stop; }
+
+        Keyboard* GetKeyboard() const { return _keyboard; }
         RenderDevice* GetRenderDevice() const { return _renderDevice; }
 
     private:
@@ -49,6 +52,7 @@ class BaseApp
         bool _stop;
 
         Grid* _grid;
+        Keyboard* _keyboard;
         RenderDevice* _renderDevice;
 };
 

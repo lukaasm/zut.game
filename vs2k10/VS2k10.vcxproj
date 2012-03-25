@@ -82,6 +82,7 @@
     <ClCompile Include="..\src\BaseApp.cpp" />
     <ClCompile Include="..\src\Camera.cpp" />
     <ClCompile Include="..\src\Grid.cpp" />
+    <ClCompile Include="..\src\Input.cpp" />
     <ClCompile Include="..\src\RenderDevice.cpp" />
     <ClCompile Include="..\src\Shader.cpp" />
   </ItemGroup>
@@ -91,6 +92,7 @@
     <ClInclude Include="..\src\Camera.h" />
     <ClInclude Include="..\src\Common.h" />
     <ClInclude Include="..\src\Grid.h" />
+    <ClInclude Include="..\src\Input.h" />
     <ClInclude Include="..\src\RenderDevice.h" />
     <ClInclude Include="..\src\Shader.h" />
     <ClInclude Include="resource.h" />

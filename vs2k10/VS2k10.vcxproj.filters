@@ -53,6 +53,9 @@
     <ClInclude Include="..\src\Camera.h">
       <Filter>Frame\Camera</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\Input.h">
+      <Filter>Frame</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="VS2k10.rc">
@@ -79,6 +82,9 @@
     </ClCompile>
     <ClCompile Include="..\src\Camera.cpp">
       <Filter>Frame\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Input.cpp">
+      <Filter>Frame</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

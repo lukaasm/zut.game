@@ -39,7 +39,7 @@ void RenderDevice::OnInit()
 
 void RenderDevice::OnRender()
 {
-    _viewMatrix = translate(mat4(1.0f), vec3(-10.0f, -10.0f, 3.0f));
+    GetCamera()->LookAt();
 }
 
 void RenderDevice::OnResize(int32 width, int32 height)
@@ -67,4 +67,9 @@ void RenderDevice::SetUniforms(Shader* shader, mat4 modelMatrix)
 mat4 RenderDevice::GetProjMatrix() const
 {
     return GetCamera()->GetProjMatrix();
+}
+
+mat4 RenderDevice::GetViewMatrix() const
+{
+    return GetCamera()->GetViewMatrix();
 }
