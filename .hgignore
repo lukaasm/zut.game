@@ -1,13 +1,15 @@
 syntax: glob
 
 bin/*.dll
-bin/*.pdb
 bin/*.exe
 bin/*.ilk
+bin/*.pdb
 
-vs2k10/*.sdf
+vs2k10/*.aps
 vs2k10/*.opensdf
+vs2k10/*.sdf
 vs2k10/*.suo
-vs2k10/ipch/*
+
 vs2k10/Debug/*
+vs2k10/ipch/*
 vs2k10/Release/*

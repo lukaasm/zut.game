@@ -9,11 +9,14 @@
 #include <GL/glfw.h>
 
 #include "Grid.h"
+#include "Input.h"
 #include "RenderDevice.h"
 
 BaseApp::BaseApp()
 {
     _grid = NULL;
+
+    _keyboard = new Keyboard();
     _renderDevice = new RenderDevice();
 }
 
@@ -62,6 +65,8 @@ void BaseApp::CreateCallBacks()
 
     BaseApp::CloseCallback = new CloseCallBack(this, &BaseApp::_closeWindow);
     glfwSetWindowCloseCallback(BaseApp::CloseWindow);
+
+    GetKeyboard()->CreateCallBacks();
 }
 
 void BaseApp::Init()
@@ -90,6 +95,8 @@ void BaseApp::Run()
 
         glfwSwapBuffers();
     }
+
+    glfwTerminate();
 }
 
 void BaseApp::Render()
@@ -128,6 +135,7 @@ void BaseApp::_closeWindow()
 
 void BaseApp::Update(const uint32 diff)
 {
+    GetRenderDevice()->OnUpdate(diff);
 }
 
 int main()
