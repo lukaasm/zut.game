@@ -34,15 +34,12 @@ class RenderDevice
         int32 GetWidth() const { return _width; }
         int32 GetHeight() const { return _height; }
 
-        mat4 GetModelMatrix() const { return _modelMatrix; }
         mat4 GetViewMatrix() const;
         mat4 GetProjMatrix() const;
 
     private:
         int32 _width;
         int32 _height;
-
-        mat4 _modelMatrix;
 
         Camera* _camera;
 };
