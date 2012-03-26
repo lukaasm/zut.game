@@ -71,7 +71,7 @@ void Grid::OnRender()
     _shader->Bind();
 
     // scale only local matrix
-    _modelMatrix = scale(_renderDevice->GetModelMatrix(), vec3(1.5f));
+    _modelMatrix = scale(mat4(1.0f), vec3(0.5f));
 
     _renderDevice->SetUniforms(_shader, _modelMatrix);
 

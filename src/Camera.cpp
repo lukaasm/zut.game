@@ -16,8 +16,8 @@ Camera::Camera(RenderDevice* renderDevice)
 {
     _renderDevice = renderDevice;
 
-    _position = vec3(-2.0f, -2.0f, 0.0f);
-    _lookAt = vec3(0.0f, 0.0f, -1.0f);
+    _position = vec3(2.0f, 1.0f, 0.0f);
+    _lookAt = vec3(2.0f, 0.0f, -5.0f);
 
     _angle = 0.0f;
 
@@ -27,16 +27,13 @@ Camera::Camera(RenderDevice* renderDevice)
 
 void Camera::LookAt()
 {
-    /*vec3 viewZ = normalize(_position - _lookAt);
-    vec3 viewX = normalize(cross(viewZ, _up));
-    vec3 viewY = normalize(cross(viewX, viewZ));
-
-    mat4 rotation = mat4(vec4(viewX.x, viewY.x, viewZ.x, 0.0f), vec4(viewX.y, viewY.y, viewZ.y, 0.0f), vec4(viewX.z, viewY.z, viewZ.z, 0.0f), vec4(0.0f, 0.0f, 0.0f, 1.0f));
-    mat4 translation = translate(mat4(1.0f), _position*(-1.0f));
-
-    _viewMatrix = rotation * translation;*/
-
     _viewMatrix = lookAt(_position, _lookAt, _up);
+    //_viewMatrix = translate(_viewMatrix, vec3(_position*-1.0f));
+}
+
+void Camera::OnResize()
+{
+    _projMatrix = perspective(60.0f, float(_renderDevice->GetWidth() / _renderDevice->GetHeight()), 0.01f, 100.f);
 }
 
 void Camera::Move(MoveType type, float angleOrDist)
@@ -88,11 +85,6 @@ void Camera::RotateY(float angle)
 {
   //  _direction = normalize(rotateY(_right, angle));
   //  _right = cross(_direction, _up);
-}
-
-void Camera::OnResize()
-{
-    _projMatrix = perspective(60.0f, float(_renderDevice->GetWidth() / _renderDevice->GetHeight()), 0.1f, 1000.f);
 }
 
 void Camera::OnUpdate(const uint32 diff)
