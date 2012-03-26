@@ -27,6 +27,9 @@
     <Filter Include="Frame\Camera">
       <UniqueIdentifier>{07e8c40b-1de0-4a9a-9ffc-c33e55123c46}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Frame\Input">
+      <UniqueIdentifier>{8e5f17cd-bab1-43cf-81ab-6daea38bf936}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\Common.h">
@@ -54,7 +57,7 @@
       <Filter>Frame\Camera</Filter>
     </ClInclude>
     <ClInclude Include="..\src\Input.h">
-      <Filter>Frame</Filter>
+      <Filter>Frame\Input</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -84,7 +87,7 @@
       <Filter>Frame\Camera</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Input.cpp">
-      <Filter>Frame</Filter>
+      <Filter>Frame\Input</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -7,6 +7,13 @@
 #include <GL/glfw.h>
 
 #include "BaseApp.h"
+#include "Camera.h"
+#include "RenderDevice.h"
+
+Keyboard::Keyboard(BaseApp* app)
+{
+    _baseApp = app;
+}
 
 Keyboard::~Keyboard()
 {
@@ -40,8 +47,31 @@ void Keyboard::OnKeyState(int32 key, int32 state)
 
 void Keyboard::OnKeyPress(int32 key)
 {
-    if (key == GLFW_KEY_ESC)
-        BaseApp::CloseWindow();
+    switch (key)
+    {
+        case GLFW_KEY_ESC:
+            BaseApp::CloseWindow();
+            break;
+        case 'A':
+            _baseApp->GetRenderDevice()->GetCamera()->Move(MOVE_STRAFE_LEFT, 0.0f);
+            break;
+        case 'D':
+            _baseApp->GetRenderDevice()->GetCamera()->Move(MOVE_STRAFE_RIGHT, 0.0f);
+            break;
+        case 'W':
+            _baseApp->GetRenderDevice()->GetCamera()->Move(MOVE_FORWARD, 1.0f);
+            break;
+        case 'S':
+            _baseApp->GetRenderDevice()->GetCamera()->Move(MOVE_BACKWARD, 1.0f);
+            break;
+        case 'Q':
+            _baseApp->GetRenderDevice()->GetCamera()->Move(MOVE_ROTATE_LEFT, 1.0f);
+            break;
+        case 'E':
+            _baseApp->GetRenderDevice()->GetCamera()->Move(MOVE_ROTATE_RIGHT, 1.0f);
+            break;
+    }
+
 }
 
 void Keyboard::OnKeyRelease(int32 key)
