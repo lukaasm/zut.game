@@ -12,5 +12,5 @@ out vec3 pass_Color;
 void main(void)
 {
      gl_Position = projMatrix * viewMatrix * modelMatrix * vec4(in_Position, 1.0);
-     pass_Color = vec3(0.0f, 0.0f, 1.0f);
+     pass_Color = in_Color;
 }
