@@ -35,10 +35,6 @@ class Camera
 
         void Move(MoveType, float);
 
-        vec3 &GetPosition() { return _position; }
-        vec3 &GetDirection() { return _direction; }
-        vec3 &GetUpVector() { return _up; }
-
         mat4 GetProjMatrix() const { return _projMatrix; }
         mat4 GetViewMatrix() const { return _viewMatrix; }
 
@@ -49,10 +45,12 @@ class Camera
         mat4 _viewMatrix;
         mat4 _projMatrix;
 
+        vec3 _lookAt;
         vec3 _position;
-        vec3 _direction;
         vec3 _right;
         vec3 _up;
+
+        float _angle;
 
         RenderDevice* _renderDevice;
 };

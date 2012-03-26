@@ -18,15 +18,31 @@ Grid::Grid(RenderDevice* renderDevice)
     _renderDevice = renderDevice;
 
     _size = 40;
+
     vec3 vertices[160]; // _size*4
 
+    /*vertices[0] = vec3(0.0f, 0.0f, 0.0f);
+    vertices[1] = vec3(1.0f, 0.0f, 0.0f);
+    vertices[2] = vec3(1.0f, 1.0f, 0.0f);
+    vertices[3] = vec3(0.0f, 1.0f, 0.0f);
+    vertices[4] = vec3(0.0f, 0.0f, 0.0f);
+
+    vertices[5] = vec3(0.5f, 0.5f, 1.0f);
+    vertices[6] = vec3(1.5f, 0.5f, 1.0f);
+    vertices[7] = vec3(1.5f, 1.5f, 1.0f);
+    vertices[8] = vec3(0.5f, 1.5f, 1.0f);
+    vertices[9] = vec3(0.5f, 0.5f, 1.0f);
+
+    vertices[10] = vec3(0.0f, 0.0f, 0.0f);
+    vertices[11] = vec3(0.0f, 0.0f, -20.0f);
+    */
     for (uint32 x = 0; x < _size; x++)
     {
         vertices[x*2] = vec3(float(x), 0.0f, 0.0f);
-        vertices[x*2 +1] = vec3(float(x), float(_size), 0.0f);
+        vertices[x*2 +1] = vec3(float(x), 0.0f, -float(_size));
 
-        vertices[x*2 +_size*2] = vec3(0.0f, float(x), 0.0f);
-        vertices[x*2 +_size*2+1] = vec3(float(_size), float(x), 0.0f);
+        vertices[x*2 +_size*2] = vec3(0.0f, 0.0f, -float(x));
+        vertices[x*2 +_size*2+1] = vec3(float(_size), 0.0f, -float(x));
     };
 
     glGenVertexArrays(1, &_vao);
@@ -55,7 +71,7 @@ void Grid::OnRender()
     _shader->Bind();
 
     // scale only local matrix
-    _modelMatrix = scale(_renderDevice->GetModelMatrix(), vec3(0.1f));
+    _modelMatrix = scale(_renderDevice->GetModelMatrix(), vec3(1.5f));
 
     _renderDevice->SetUniforms(_shader, _modelMatrix);
 

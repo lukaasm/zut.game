@@ -9,6 +9,7 @@
 
 #include "CallBack.h"
 
+class BaseApp;
 class Keyboard;
 
 typedef CallBack<Keyboard, void, int32 > KeyStateCallBack;
@@ -16,6 +17,7 @@ typedef CallBack<Keyboard, void, int32 > KeyStateCallBack;
 class Keyboard
 {
     public:
+        Keyboard(BaseApp*);
         ~Keyboard();
 
         void CreateCallBacks();
@@ -27,6 +29,9 @@ class Keyboard
 
         void OnKeyPress(int32);
         void OnKeyRelease(int32);
+
+    private:
+        BaseApp* _baseApp;
 };
 
 namespace Mouse

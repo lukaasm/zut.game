@@ -16,7 +16,7 @@ BaseApp::BaseApp()
 {
     _grid = NULL;
 
-    _keyboard = new Keyboard();
+    _keyboard = new Keyboard(this);
     _renderDevice = new RenderDevice();
 }
 
@@ -25,8 +25,9 @@ BaseApp::~BaseApp()
     delete_ptr(BaseApp::CloseCallback)
     delete_ptr(BaseApp::ResizeCallback)
 
-    delete_ptr(_renderDevice)
     delete_ptr(_grid)
+    delete_ptr(_keyboard)
+    delete_ptr(_renderDevice)
 }
 
 void BaseApp::_createContext()
@@ -71,9 +72,9 @@ void BaseApp::CreateCallBacks()
 
 void BaseApp::Init()
 {
-    _grid = new Grid(GetRenderDevice());
-
     GetRenderDevice()->OnInit();
+
+    _grid = new Grid(GetRenderDevice());
 }
 
 uint32 BaseApp::GetLoopTime() const

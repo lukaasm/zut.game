@@ -16,7 +16,7 @@ RenderDevice::RenderDevice()
 {
     _camera = NULL;
 
-    _modelMatrix = mat4(1.0f);
+    _modelMatrix = scale(mat4(1.0f), vec3(0.2f));
 }
 
 RenderDevice::~RenderDevice()
@@ -27,12 +27,14 @@ RenderDevice::~RenderDevice()
 void RenderDevice::Clear(float r, float g, float b, float a)
 {
     glClearColor(r, g, b, a);
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
 void RenderDevice::OnInit()
 {
     _camera = new Camera(this);
+
+    glEnable(GL_DEPTH_TEST);
 
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 }
@@ -40,6 +42,8 @@ void RenderDevice::OnInit()
 void RenderDevice::OnRender()
 {
     GetCamera()->LookAt();
+
+    _modelMatrix = scale(mat4(1.0f), vec3(0.2f));
 }
 
 void RenderDevice::OnResize(int32 width, int32 height)
