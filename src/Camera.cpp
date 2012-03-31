@@ -31,7 +31,7 @@ void Camera::LookAt()
 
 void Camera::OnResize()
 {
-    _projMatrix = perspective(60.0f, float(_renderDevice->GetWidth() / _renderDevice->GetHeight()), 0.01f, 100.f);
+    _projMatrix = perspective(60.0f, float(_renderDevice->GetWidth() / _renderDevice->GetHeight()), 0.1f, 100.f);
 }
 
 void Camera::Move(MoveType type, float angleOrDist)

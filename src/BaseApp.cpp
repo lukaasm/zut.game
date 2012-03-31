@@ -12,6 +12,8 @@
 #include "Input.h"
 #include "RenderDevice.h"
 
+#define UPDATE_INTERVAL 50
+
 BaseApp::BaseApp()
 {
     _grid = NULL;
@@ -77,20 +79,13 @@ void BaseApp::Init()
     _grid = new Grid(GetRenderDevice());
 }
 
-uint32 BaseApp::GetLoopTime() const
-{
-    uint32 diff = uint32(glfwGetTime()*1000.0f);
-    glfwSetTime(0);
-    return diff;
-}
-
 void BaseApp::Run()
 {
     _stop = false;
 
     while (!Stopped())
     {
-        Update(GetLoopTime());
+        PerformUpdate();
 
         Render();
 
@@ -137,6 +132,16 @@ void BaseApp::_closeWindow()
 void BaseApp::Update(const uint32 diff)
 {
     GetRenderDevice()->OnUpdate(diff);
+}
+
+void BaseApp::PerformUpdate()
+{
+    const uint32 diff = uint32(glfwGetTime()*1000.0f);
+    if (diff >= UPDATE_INTERVAL)
+    {
+        Update(diff);
+        glfwSetTime(0);
+    }
 }
 
 int main()

@@ -25,7 +25,7 @@ class BaseApp
         void CreateWindow();
         void CreateCallBacks();
 
-        uint32 GetLoopTime() const;
+        void PerformUpdate();
 
         void Init();
         void Render();
