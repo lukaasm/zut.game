@@ -50,8 +50,6 @@ class Camera
         vec3 _right;
         vec3 _up;
 
-        float _angle;
-
         RenderDevice* _renderDevice;
 };
 
