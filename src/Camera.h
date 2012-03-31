@@ -15,18 +15,22 @@ class RenderDevice;
 
 enum MoveType
 {
-    MOVE_FORWARD      = 1,
-    MOVE_BACKWARD     = 2,
-    MOVE_ROTATE_LEFT  = 3,
-    MOVE_ROTATE_RIGHT = 4,
-    MOVE_STRAFE_RIGHT = 5,
-    MOVE_STRAFE_LEFT  = 6,
+    MOVE_NONE         = 0x00,
+    MOVE_FORWARD      = 0x01,
+    MOVE_BACKWARD     = 0x02,
+    MOVE_ROTATE_LEFT  = 0x04,
+    MOVE_ROTATE_RIGHT = 0x08,
+    MOVE_STRAFE_RIGHT = 0x10,
+    MOVE_STRAFE_LEFT  = 0x20,
 };
 
 class Camera
 {
     public:
         Camera(RenderDevice*);
+
+        void AddMoveType(MoveType);
+        void ClearMoveType(MoveType);
 
         void OnResize();
         void OnUpdate(const uint32);
@@ -49,6 +53,8 @@ class Camera
         vec3 _position;
         vec3 _right;
         vec3 _up;
+
+        MoveType _moveFlags;
 
         RenderDevice* _renderDevice;
 };
