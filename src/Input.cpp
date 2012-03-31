@@ -31,7 +31,10 @@ void Keyboard::CreateCallBacks()
 
 bool Keyboard::IsKeyPressed(int32 key)
 {
-    return bool(glfwGetKey(key) == GLFW_PRESS);
+    if (_keyStateMap.find(key) != _keyStateMap.end())
+        return _keyStateMap[key];
+    else
+        return false;
 }
 
 KeyStateCallBack* Keyboard::KeyPressCallBack = NULL;
@@ -47,6 +50,8 @@ void Keyboard::OnKeyState(int32 key, int32 state)
 
 void Keyboard::OnKeyPress(int32 key)
 {
+    _keyStateMap[key] = true;
+
     switch (key)
     {
         case GLFW_KEY_ESC:
@@ -76,5 +81,5 @@ void Keyboard::OnKeyPress(int32 key)
 
 void Keyboard::OnKeyRelease(int32 key)
 {
-
+    _keyStateMap[key] = false;
 }
