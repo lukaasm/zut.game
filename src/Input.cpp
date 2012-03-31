@@ -52,34 +52,76 @@ void Keyboard::OnKeyPress(int32 key)
 {
     _keyStateMap[key] = true;
 
+    const int32 moveKey[GLFW_KEY_LAST][2] =
+    {
+        { 'A', MOVE_STRAFE_LEFT  },
+        { 'D', MOVE_STRAFE_RIGHT },
+        { 'W', MOVE_FORWARD      },
+        { 'S', MOVE_BACKWARD     },
+        { 'E', MOVE_ROTATE_LEFT  },
+        { 'Q', MOVE_ROTATE_RIGHT }
+    };
+
+    MoveType moveFlag = MOVE_NONE;
     switch (key)
     {
         case GLFW_KEY_ESC:
             BaseApp::CloseWindow();
             break;
         case 'A':
-            _baseApp->GetRenderDevice()->GetCamera()->Move(MOVE_STRAFE_LEFT, 0.0f);
+            moveFlag = MOVE_STRAFE_LEFT;
             break;
         case 'D':
-            _baseApp->GetRenderDevice()->GetCamera()->Move(MOVE_STRAFE_RIGHT, 0.0f);
+            moveFlag = MOVE_STRAFE_RIGHT;
             break;
         case 'W':
-            _baseApp->GetRenderDevice()->GetCamera()->Move(MOVE_FORWARD, 1.0f);
+            moveFlag = MOVE_FORWARD;
             break;
         case 'S':
-            _baseApp->GetRenderDevice()->GetCamera()->Move(MOVE_BACKWARD, 1.0f);
-            break;
-        case 'Q':
-            _baseApp->GetRenderDevice()->GetCamera()->Move(MOVE_ROTATE_LEFT, 1.0f);
+            moveFlag = MOVE_BACKWARD;
             break;
         case 'E':
-            _baseApp->GetRenderDevice()->GetCamera()->Move(MOVE_ROTATE_RIGHT, 1.0f);
+            moveFlag = MOVE_ROTATE_LEFT;
+            break;
+        case 'Q':
+            moveFlag = MOVE_ROTATE_RIGHT;
             break;
     }
 
+    if (moveFlag != MOVE_NONE)
+        _baseApp->GetRenderDevice()->GetCamera()->AddMoveType(moveFlag);
 }
 
 void Keyboard::OnKeyRelease(int32 key)
 {
     _keyStateMap[key] = false;
+
+    MoveType moveFlag = MOVE_NONE;
+    switch (key)
+    {
+        case GLFW_KEY_ESC:
+            BaseApp::CloseWindow();
+            break;
+        case 'A':
+            moveFlag = MOVE_STRAFE_LEFT;
+            break;
+        case 'D':
+            moveFlag = MOVE_STRAFE_RIGHT;
+            break;
+        case 'W':
+            moveFlag = MOVE_FORWARD;
+            break;
+        case 'S':
+            moveFlag = MOVE_BACKWARD;
+            break;
+        case 'E':
+            moveFlag = MOVE_ROTATE_LEFT;
+            break;
+        case 'Q':
+            moveFlag = MOVE_ROTATE_RIGHT;
+            break;
+    }
+
+    if (moveFlag != MOVE_NONE)
+        _baseApp->GetRenderDevice()->GetCamera()->ClearMoveType(moveFlag);
 }
