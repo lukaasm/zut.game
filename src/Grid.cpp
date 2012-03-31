@@ -21,21 +21,6 @@ Grid::Grid(RenderDevice* renderDevice)
 
     vec3 vertices[160]; // _size*4
 
-    /*vertices[0] = vec3(0.0f, 0.0f, 0.0f);
-    vertices[1] = vec3(1.0f, 0.0f, 0.0f);
-    vertices[2] = vec3(1.0f, 1.0f, 0.0f);
-    vertices[3] = vec3(0.0f, 1.0f, 0.0f);
-    vertices[4] = vec3(0.0f, 0.0f, 0.0f);
-
-    vertices[5] = vec3(0.5f, 0.5f, 1.0f);
-    vertices[6] = vec3(1.5f, 0.5f, 1.0f);
-    vertices[7] = vec3(1.5f, 1.5f, 1.0f);
-    vertices[8] = vec3(0.5f, 1.5f, 1.0f);
-    vertices[9] = vec3(0.5f, 0.5f, 1.0f);
-
-    vertices[10] = vec3(0.0f, 0.0f, 0.0f);
-    vertices[11] = vec3(0.0f, 0.0f, -20.0f);
-    */
     for (uint32 x = 0; x < _size; x++)
     {
         vertices[x*2] = vec3(float(x), 0.0f, 0.0f);

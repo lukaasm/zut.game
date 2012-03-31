@@ -48,10 +48,18 @@ MoveType Keyboard::Key2MoveType(int32 key)
             return MOVE_FORWARD;
         case 'S':
             return MOVE_BACKWARD;
-        case 'E':
+        case GLFW_KEY_UP:
+            return MOVE_ROTATE_UP;
+        case GLFW_KEY_DOWN:
+            return MOVE_ROTATE_DOWN;
+        case GLFW_KEY_LEFT:
             return MOVE_ROTATE_LEFT;
-        case 'Q':
+        case GLFW_KEY_RIGHT:
             return MOVE_ROTATE_RIGHT;
+        case GLFW_KEY_SPACE:
+            return MOVE_UPWARD;
+        case GLFW_KEY_LCTRL:
+            return MOVE_DOWNWARD;
         default:
             return MOVE_NONE;
     }

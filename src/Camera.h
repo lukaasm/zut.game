@@ -15,13 +15,17 @@ class RenderDevice;
 
 enum MoveType
 {
-    MOVE_NONE         = 0x00,
-    MOVE_FORWARD      = 0x01,
-    MOVE_BACKWARD     = 0x02,
-    MOVE_ROTATE_LEFT  = 0x04,
-    MOVE_ROTATE_RIGHT = 0x08,
-    MOVE_STRAFE_RIGHT = 0x10,
-    MOVE_STRAFE_LEFT  = 0x20,
+    MOVE_NONE         = 0x000,
+    MOVE_FORWARD      = 0x001,
+    MOVE_BACKWARD     = 0x002,
+    MOVE_ROTATE_LEFT  = 0x004,
+    MOVE_ROTATE_RIGHT = 0x008,
+    MOVE_STRAFE_RIGHT = 0x010,
+    MOVE_STRAFE_LEFT  = 0x020,
+    MOVE_UPWARD       = 0x040,
+    MOVE_DOWNWARD     = 0x080,
+    MOVE_ROTATE_UP    = 0x100,
+    MOVE_ROTATE_DOWN  = 0x200,
 };
 
 class Camera
@@ -41,9 +45,6 @@ class Camera
 
         mat4 GetProjMatrix() const { return _projMatrix; }
         mat4 GetViewMatrix() const { return _viewMatrix; }
-
-        void RotateX(float);
-        void RotateY(float);
 
     private:
         mat4 _viewMatrix;
