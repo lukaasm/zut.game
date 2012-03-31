@@ -7,6 +7,8 @@
 
 #include "Common.h"
 
+#include <map>
+
 #include "CallBack.h"
 
 class BaseApp;
@@ -31,6 +33,9 @@ class Keyboard
         void OnKeyRelease(int32);
 
     private:
+        typedef std::map<int32, bool> KeysMap;
+        KeysMap _keyStateMap;
+
         BaseApp* _baseApp;
 };
 
