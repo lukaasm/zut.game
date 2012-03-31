@@ -10,7 +10,7 @@
 #include <map>
 
 #include "CallBack.h"
-// there is NOT enum predefinition, so whole header is needed :p
+// there is NO enum predefinition, so whole header is needed :p
 #include "Camera.h"
 
 class BaseApp;

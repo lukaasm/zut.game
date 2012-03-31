@@ -72,6 +72,9 @@ void Keyboard::OnKeyPress(int32 key)
 {
     _keyStateMap[key] = true;
 
+    if (key == GLFW_KEY_ESC)
+        BaseApp::CloseWindow();
+
     MoveType moveFlag = Keyboard::Key2MoveType(key);
     if (moveFlag != MOVE_NONE)
         _baseApp->GetRenderDevice()->GetCamera()->AddMoveType(moveFlag);
