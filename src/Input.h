@@ -10,6 +10,8 @@
 #include <map>
 
 #include "CallBack.h"
+// there is NOT enum predefinition, so whole header is needed :p
+#include "Camera.h"
 
 class BaseApp;
 class Keyboard;
@@ -24,6 +26,8 @@ class Keyboard
 
         void CreateCallBacks();
         bool IsKeyPressed(int32);
+
+        static MoveType Key2MoveType(int32);
 
         static KeyStateCallBack* KeyPressCallBack;
         static KeyStateCallBack* KeyReleaseCallBack;
