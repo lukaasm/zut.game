@@ -1,13 +1,16 @@
 #version 330 core
 
+#define ATTR_POSITION	0
+#define ATTR_COLOR		3
+
 uniform mat4 projMatrix;
 uniform mat4 viewMatrix;
 uniform mat4 modelMatrix;
 
-in vec3 in_Position;
-in vec3 in_Color;
-
 out vec3 pass_Color;
+
+layout(location = ATTR_POSITION) in vec3 in_Position;
+layout(location = ATTR_COLOR) in vec3 in_Color;
 
 void main(void)
 {

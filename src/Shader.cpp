@@ -6,6 +6,7 @@
 
 #include <cstdlib>
 #include <fstream>
+#include <iostream>
 #include <GL/glew.h>
 
 using namespace std;
@@ -68,6 +69,12 @@ void Shader::prepareShader(string shadName, uint32& subid, uint32& id)
     glShaderSource(subid, 1, &shadText, 0);
     glCompileShader(subid);
 
+/*    if (char* error = ValidiateShader(id))
+    {
+        cout << "SHADER ERROR: " << error << endl;
+        delete_array(error);
+    }*/
+
     glAttachShader(id, subid);
 }
 
@@ -79,4 +86,19 @@ void Shader::Bind()
 void Shader::Unbind()
 {
     glUseProgram(0);
+}
+
+char* Shader::ValidiateShader(uint32 id)
+{
+    const unsigned int BUFFER_SIZE = 512;
+    char * buffer = new char[BUFFER_SIZE];
+    memset(buffer, 0, BUFFER_SIZE);
+    GLsizei length = 0;
+
+    glGetShaderInfoLog(id, BUFFER_SIZE, &length, buffer);
+    if (length > 0)
+        return buffer;
+
+    delete_array(buffer)
+    return NULL;
 }

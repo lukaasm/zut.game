@@ -18,4 +18,6 @@ typedef unsigned long   uint64;
 #define delete_ptr(p) { delete p; p = NULL; }
 #define delete_array(p) { delete [] p; p = NULL; }
 
+#define BUFFER_OFFSET(i) ((char *)NULL + (i))
+
 #endif
