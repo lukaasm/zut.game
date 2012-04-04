@@ -18,6 +18,8 @@ class Shader
         void Bind();
         void Unbind();
 
+        char* ValidiateShader(uint32);
+
         uint32 GetId() const { return _id; }
 
         uint32 GetProjMatrixLocation() const { return _pLocation; }
