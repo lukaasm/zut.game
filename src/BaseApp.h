@@ -28,10 +28,10 @@ class BaseApp
         void PerformUpdate();
 
         void Init();
-        void Render();
         void Run();
 
-        void Update(const uint32);
+        void OnRender();
+        void OnUpdate(const uint32);
 
         static ResizeCallBack *ResizeCallback;
         static void ResizeWindow(int32, int32);

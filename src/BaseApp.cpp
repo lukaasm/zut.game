@@ -85,23 +85,19 @@ void BaseApp::Run()
 
     while (!Stopped())
     {
-        PerformUpdate();
+        const uint32 diff = uint32(glfwGetTime()*1000.0f);
+        if (diff >= UPDATE_INTERVAL)
+        {
+            OnUpdate(diff);
+            glfwSetTime(0);
+        }
 
-        Render();
+        OnRender();
 
         glfwSwapBuffers();
     }
 
     glfwTerminate();
-}
-
-void BaseApp::Render()
-{
-    GetRenderDevice()->Clear(0.0f, 0.0f, 0.0f, 0.0f);
-
-    GetRenderDevice()->OnRender();
-
-    _grid->OnRender();
 }
 
 ResizeCallBack* BaseApp::ResizeCallback = NULL;
@@ -129,19 +125,18 @@ void BaseApp::_closeWindow()
     _stop = true;
 }
 
-void BaseApp::Update(const uint32 diff)
+void BaseApp::OnUpdate(const uint32 diff)
 {
     GetRenderDevice()->OnUpdate(diff);
 }
 
-void BaseApp::PerformUpdate()
+void BaseApp::OnRender()
 {
-    const uint32 diff = uint32(glfwGetTime()*1000.0f);
-    if (diff >= UPDATE_INTERVAL)
-    {
-        Update(diff);
-        glfwSetTime(0);
-    }
+    GetRenderDevice()->Clear(0.0f, 0.0f, 0.0f, 0.0f);
+
+    GetRenderDevice()->OnRender();
+
+    _grid->OnRender();
 }
 
 int main()
