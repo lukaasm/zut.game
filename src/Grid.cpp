@@ -8,7 +8,7 @@
 #include <GL/glew.h>
 #include <glm/gtc/matrix_transform.hpp>
 
-#include "Entity.h"
+#include "GameObject.h"
 #include "RenderDevice.h"
 #include "Shader.h"
 

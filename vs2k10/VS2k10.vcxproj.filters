@@ -30,8 +30,11 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="Frame\Entities">
+    <Filter Include="Frame\GameObjects">
       <UniqueIdentifier>{c5c2562e-f095-4192-ba81-935fb5c1db3f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Frame\Mesh">
+      <UniqueIdentifier>{2fccdfaf-b6f6-4942-8239-1ada88bde809}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -62,8 +65,8 @@
     <ClInclude Include="..\src\Input.h">
       <Filter>Frame\Input</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\Entity.h">
-      <Filter>Frame\Entities</Filter>
+    <ClInclude Include="..\src\GameObject.h">
+      <Filter>Frame\GameObjects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
