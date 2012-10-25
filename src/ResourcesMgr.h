@@ -16,7 +16,7 @@ typedef std::hash_map<std::string, RenderData*> RenderDataMap;
 
 class ResourcesMgr
 {
-    INIT_SINGLETON(ResourcesMgr)
+    SINGLETON(ResourcesMgr)
 
     public:
         ~ResourcesMgr();

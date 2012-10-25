@@ -21,7 +21,7 @@ class Singleton
 template<class T>
 T* Singleton<T>::instance = nullptr;
 
-#define INIT_SINGLETON(a) friend class Singleton<a>; \
+#define SINGLETON(a) friend class Singleton<a>; \
                           a() {} \
                           a(a&);
 
