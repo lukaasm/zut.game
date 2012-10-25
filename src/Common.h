@@ -15,9 +15,9 @@ typedef unsigned short  uint16;
 typedef unsigned int    uint32;
 typedef unsigned long   uint64;
 
-#define delete_ptr(p) { delete p; p = NULL; }
-#define delete_array(p) { delete [] p; p = NULL; }
+#define delete_ptr(p) { delete p; p = nullptr; }
+#define delete_array(p) { delete [] p; p = nullptr; }
 
-#define BUFFER_OFFSET(i) ((char *)NULL + (i))
+#define BUFFER_OFFSET(i) ((char *)nullptr + i)
 
 #endif

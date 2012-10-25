@@ -14,6 +14,9 @@
     <Filter Include="Frame\RenderDevice">
       <UniqueIdentifier>{badbeb3f-e774-421d-bf6d-28ebdace9ab5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Frame\Grid">
+      <UniqueIdentifier>{6d030ae7-ccf5-4280-a91c-f2eb1a3afe86}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Frame\Shader">
       <UniqueIdentifier>{4da8a124-50b1-4642-bb26-d40cbadea580}</UniqueIdentifier>
     </Filter>
@@ -30,17 +33,13 @@
     <Filter Include="Frame\GameObjects">
       <UniqueIdentifier>{c5c2562e-f095-4192-ba81-935fb5c1db3f}</UniqueIdentifier>
     </Filter>
+<<<<<<< local
+    <Filter Include="Frame\Managers">
+      <UniqueIdentifier>{0bac51ff-f55a-4862-a7a8-2fa8bd751d27}</UniqueIdentifier>
+=======
     <Filter Include="Frame\Mesh">
       <UniqueIdentifier>{2fccdfaf-b6f6-4942-8239-1ada88bde809}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Frame\GameObjects\Grid">
-      <UniqueIdentifier>{6d030ae7-ccf5-4280-a91c-f2eb1a3afe86}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Frame\Managers">
-      <UniqueIdentifier>{c939f2d2-8b76-412a-9f04-8a3944cd91d0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Misc">
-      <UniqueIdentifier>{dce3ca2a-2e05-43fb-8345-34e6dd4d67f5}</UniqueIdentifier>
+>>>>>>> other
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -60,7 +59,7 @@
       <Filter>Frame\Other</Filter>
     </ClInclude>
     <ClInclude Include="..\src\Grid.h">
-      <Filter>Frame\GameObjects\Grid</Filter>
+      <Filter>Frame\Grid</Filter>
     </ClInclude>
     <ClInclude Include="..\src\Shader.h">
       <Filter>Frame\Shader</Filter>
@@ -74,16 +73,7 @@
     <ClInclude Include="..\src\GameObject.h">
       <Filter>Frame\GameObjects</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\GameObjectMgr.h">
-      <Filter>Frame\Managers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Singleton.h">
-      <Filter>Misc</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\ResourcesMgr.h">
-      <Filter>Frame\Managers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\SceneMgr.h">
       <Filter>Frame\Managers</Filter>
     </ClInclude>
   </ItemGroup>
@@ -105,7 +95,7 @@
       <Filter>Frame\RenderDevice</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Grid.cpp">
-      <Filter>Frame\GameObjects\Grid</Filter>
+      <Filter>Frame\Grid</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Shader.cpp">
       <Filter>Frame\Shader</Filter>
@@ -115,12 +105,6 @@
     </ClCompile>
     <ClCompile Include="..\src\Input.cpp">
       <Filter>Frame\Input</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\GameObject.cpp">
-      <Filter>Frame\GameObjects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\GameObjectMgr.cpp">
-      <Filter>Frame\Managers</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

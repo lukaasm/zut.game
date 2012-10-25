@@ -29,19 +29,22 @@ class RenderDevice
 
         void SetUniforms(Shader*, mat4 = mat4(1.0f));
 
-        Camera* GetCamera() const { return _camera; }
+        Camera* GetCamera() const { return camera; }
 
-        int32 GetWidth() const { return _width; }
-        int32 GetHeight() const { return _height; }
+        int32 GetWidth() const { return width; }
+        int32 GetHeight() const { return height; }
 
         mat4 GetViewMatrix() const;
         mat4 GetProjMatrix() const;
 
-    private:
-        int32 _width;
-        int32 _height;
+        void BindVertexArray(uint32);
+        void DrawLines(uint32, uint32, uint32);
 
-        Camera* _camera;
+    private:
+        int32 width;
+        int32 height;
+
+        Camera* camera;
 };
 
 #endif

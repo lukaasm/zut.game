@@ -100,5 +100,5 @@ char* Shader::ValidiateShader(uint32 id)
         return buffer;
 
     delete_array(buffer)
-    return NULL;
+    return nullptr;
 }

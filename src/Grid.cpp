@@ -14,10 +14,8 @@
 
 using namespace glm;
 
-Grid::Grid(RenderDevice* renderDevice)
+Grid::Grid() : GameObject()
 {
-    _renderDevice = renderDevice;
-
     _size = 40;
 
     Vertex vertices[160]; // _size*4
@@ -37,11 +35,13 @@ Grid::Grid(RenderDevice* renderDevice)
         vertices[x*2 +_size*2+1].color = vec3(0.0f, 1.0f, 0.0f);
     };
 
-    glGenVertexArrays(1, &_vao);
-    glBindVertexArray(_vao);
+    CreateRenderData();
+
+    glGenVertexArrays(1, &(renderData->vertexArray));
+    glBindVertexArray(renderData->vertexArray);
     {
-        glGenBuffers(1, &_vbo);
-        glBindBuffer(GL_ARRAY_BUFFER, _vbo);
+        glGenBuffers(1, &(renderData->vertexBuffer));
+        glBindBuffer(GL_ARRAY_BUFFER, renderData->vertexBuffer);
         glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
         {
             glVertexAttribPointer(VertexArray::Attrib::POSITION, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
@@ -62,17 +62,16 @@ Grid::~Grid()
     delete_ptr(_shader)
 }
 
-void Grid::OnRender()
+void Grid::OnRender(RenderDevice* rd)
 {
     _shader->Bind();
 
     // scale only local matrix
-    _modelMatrix = scale(mat4(1.0f), vec3(0.5f));
+    modelMatrix = scale(mat4(1.0f), vec3(0.5f));
 
-    _renderDevice->SetUniforms(_shader, _modelMatrix);
+    rd->SetUniforms(_shader, modelMatrix);
 
-    glBindVertexArray(_vao);
-    glDrawArrays(GL_LINES, 0, 4*_size);
+    rd->DrawLines(renderData->vertexArray, 0, 4*_size);
 
     _shader->Unbind();
 }

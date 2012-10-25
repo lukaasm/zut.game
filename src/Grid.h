@@ -8,29 +8,24 @@
 #include <glm/glm.hpp>
 
 #include "Common.h"
+#include "GameObject.h"
 
 using namespace glm;
 
 class RenderDevice;
 class Shader;
 
-class Grid
+class Grid : GameObject
 {
     public:
-        Grid(RenderDevice*);
+        Grid();
         ~Grid();
 
-        void OnRender();
+        void OnRender(RenderDevice*) override;
 
     private:
-        uint32 _vbo;
-        uint32 _vao;
-
         uint32 _size;
 
-        mat4 _modelMatrix;
-
-        RenderDevice* _renderDevice;
         Shader* _shader;
 };
 
