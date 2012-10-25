@@ -64,11 +64,6 @@ void RenderDevice::SetUniforms(Shader* shader, mat4 modelMatrix)
     glUniformMatrix4fv(shader->GetModelMatrixLocation(), 1, GL_FALSE, value_ptr(modelMatrix));
 }
 
-void RenderDevice::BindVertexArray(uint32 vao)
-{
-    glBindVertexArray(vao);
-}
-
 mat4 RenderDevice::GetProjMatrix() const
 {
     return GetCamera()->GetProjMatrix();

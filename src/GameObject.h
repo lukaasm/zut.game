@@ -43,12 +43,11 @@ class RenderDevice;
 class GameObject
 {
     public:
-        explicit GameObject() : renderData(nullptr) {}
+        explicit GameObject() {}
         
     //public:
-        virtual ~GameObject() { delete renderData; }
+        virtual ~GameObject() {}
 
-        virtual void CreateRenderData() { renderData = new RenderData(); }
         virtual void OnRender(RenderDevice*);
 
         void SetGuid(uint32 guid) { this->guid = guid; }
@@ -57,7 +56,6 @@ class GameObject
         uint32 guid;
 
         mat4 modelMatrix;
-        RenderData* renderData;
 };
 
 #endif
