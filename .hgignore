@@ -1,6 +1,5 @@
 syntax: glob
 
-bin/*.dll
 bin/*.exe
 bin/*.ilk
 bin/*.pdb
