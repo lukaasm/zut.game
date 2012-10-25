@@ -12,6 +12,7 @@
 #include "Grid.h"
 #include "Input.h"
 #include "RenderDevice.h"
+#include "ResourcesMgr.h"
 
 #define UPDATE_INTERVAL 50
 
@@ -81,6 +82,8 @@ void BaseApp::CreateCallBacks()
 
 void BaseApp::Init()
 {
+    sResourcesMgr->OnInit();
+
     GetRenderDevice()->OnInit();
 
     _grid = new Grid();

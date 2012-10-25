@@ -82,5 +82,5 @@ mat4 RenderDevice::GetViewMatrix() const
 void RenderDevice::DrawLines(uint32 vao, uint32 start, uint32 size)
 {
     glBindVertexArray(vao);
-    glDrawArrays(GL_LINE, start, size);
+    glDrawArrays(GL_LINES, start, size);
 }

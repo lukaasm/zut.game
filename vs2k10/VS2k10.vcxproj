@@ -86,6 +86,7 @@
     <ClCompile Include="..\src\Grid.cpp" />
     <ClCompile Include="..\src\Input.cpp" />
     <ClCompile Include="..\src\RenderDevice.cpp" />
+    <ClCompile Include="..\src\ResourcesMgr.cpp" />
     <ClCompile Include="..\src\Shader.cpp" />
   </ItemGroup>
   <ItemGroup>
