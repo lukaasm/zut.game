@@ -6,7 +6,7 @@
 
 class SceneMgr
 {
-    INIT_SINGLETON(SceneMgr)
+    SINGLETON(SceneMgr)
 
     public:
 
