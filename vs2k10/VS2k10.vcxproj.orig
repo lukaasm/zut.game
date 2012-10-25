@@ -48,7 +48,11 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
+<<<<<<< local
+      <AdditionalIncludeDirectories>../dep/glew/include;../dep/glfw/include;../dep/glm;</AdditionalIncludeDirectories>
+=======
       <AdditionalIncludeDirectories>../dep/glew/include;../dep/glfw/include;../dep/glm</AdditionalIncludeDirectories>
+>>>>>>> other
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -65,7 +69,11 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
+<<<<<<< local
+      <AdditionalIncludeDirectories>../dep/glew/include;../dep/glfw/include;../dep/glm;</AdditionalIncludeDirectories>
+=======
       <AdditionalIncludeDirectories>../dep/glew/include;../dep/glfw/include;../dep/glm</AdditionalIncludeDirectories>
+>>>>>>> other
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -81,8 +89,6 @@
   <ItemGroup>
     <ClCompile Include="..\src\BaseApp.cpp" />
     <ClCompile Include="..\src\Camera.cpp" />
-    <ClCompile Include="..\src\GameObjectMgr.cpp" />
-    <ClCompile Include="..\src\GameObject.cpp" />
     <ClCompile Include="..\src\Grid.cpp" />
     <ClCompile Include="..\src\Input.cpp" />
     <ClCompile Include="..\src\RenderDevice.cpp" />
@@ -94,14 +100,11 @@
     <ClInclude Include="..\src\Camera.h" />
     <ClInclude Include="..\src\Common.h" />
     <ClInclude Include="..\src\GameObject.h" />
-    <ClInclude Include="..\src\GameObjectMgr.h" />
     <ClInclude Include="..\src\Grid.h" />
     <ClInclude Include="..\src\Input.h" />
     <ClInclude Include="..\src\RenderDevice.h" />
     <ClInclude Include="..\src\ResourcesMgr.h" />
-    <ClInclude Include="..\src\SceneMgr.h" />
     <ClInclude Include="..\src\Shader.h" />
-    <ClInclude Include="..\src\Singleton.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>

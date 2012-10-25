@@ -65,8 +65,8 @@ MoveType Keyboard::Key2MoveType(int32 key)
     }
 }
 
-KeyStateCallBack* Keyboard::KeyPressCallBack = NULL;
-KeyStateCallBack* Keyboard::KeyReleaseCallBack = NULL;
+KeyStateCallBack* Keyboard::KeyPressCallBack = nullptr;
+KeyStateCallBack* Keyboard::KeyReleaseCallBack = nullptr;
 
 void Keyboard::OnKeyState(int32 key, int32 state)
 {

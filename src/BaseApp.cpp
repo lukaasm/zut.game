@@ -5,6 +5,7 @@
 #include "BaseApp.h"
 
 #include <cstdlib>
+#include <iostream>
 #include <GL/glew.h>
 #include <GL/glfw.h>
 
@@ -16,7 +17,7 @@
 
 BaseApp::BaseApp()
 {
-    _grid = NULL;
+    _grid = nullptr;
 
     _keyboard = new Keyboard(this);
     _renderDevice = new RenderDevice();
@@ -35,7 +36,10 @@ BaseApp::~BaseApp()
 void BaseApp::_createContext()
 {
     if (!glfwInit())
+    {
+        std::cout << "GLFW Init failed" << std::endl;
         exit(EXIT_FAILURE);
+    }
 
     // set OGL window render context which will allow us to use specific gl functions
     glfwOpenWindowHint(GLFW_WINDOW_NO_RESIZE, GL_TRUE);
@@ -56,8 +60,11 @@ void BaseApp::CreateWindow()
     glewExperimental = true;
     uint32 glewInitResult = glewInit();
     if (glewInitResult != GLEW_OK)
+    {
+        std::cout << "Error: " << glewGetErrorString(glewInitResult) << std::endl;
         exit(EXIT_FAILURE);
-
+    }
+    
     Init();
 }
 
@@ -76,7 +83,7 @@ void BaseApp::Init()
 {
     GetRenderDevice()->OnInit();
 
-    _grid = new Grid(GetRenderDevice());
+    _grid = new Grid();
 }
 
 void BaseApp::Run()
@@ -100,7 +107,7 @@ void BaseApp::Run()
     glfwTerminate();
 }
 
-ResizeCallBack* BaseApp::ResizeCallback = NULL;
+ResizeCallBack* BaseApp::ResizeCallback = nullptr;
 
 void BaseApp::ResizeWindow(int32 width, int32 height)
 {
@@ -112,7 +119,7 @@ void BaseApp::_resizeWindow(int32 width, int32 height)
     GetRenderDevice()->OnResize(width, height);
 }
 
-CloseCallBack* BaseApp::CloseCallback = NULL;
+CloseCallBack* BaseApp::CloseCallback = nullptr;
 
 int BaseApp::CloseWindow()
 {
@@ -136,7 +143,7 @@ void BaseApp::OnRender()
 
     GetRenderDevice()->OnRender();
 
-    _grid->OnRender();
+    _grid->OnRender(GetRenderDevice());
 }
 
 int main()

@@ -7,13 +7,16 @@
 
 #include <glm/glm.hpp>
 
+#include "Common.h"
+
+using namespace glm;
+
 namespace VertexArray
 {
     enum Attrib
     {
         POSITION = 0,
         COLOR    = 3,
-        TEXCOORD = 4
     };
 };
 
@@ -27,6 +30,34 @@ struct Vertex
 
     vec3 position;
     vec3 color;
+};
+
+struct RenderData
+{
+    uint32 vertexArray;
+    uint32 vertexBuffer;
+};
+
+class RenderDevice;
+
+class GameObject
+{
+    public:
+        explicit GameObject() : renderData(nullptr) {}
+        
+    //public:
+        virtual ~GameObject() { delete renderData; }
+
+        virtual void CreateRenderData() { renderData = new RenderData(); }
+        virtual void OnRender(RenderDevice*);
+
+        void SetGuid(uint32 guid) { this->guid = guid; }
+
+    protected:
+        uint32 guid;
+
+        mat4 modelMatrix;
+        RenderData* renderData;
 };
 
 #endif

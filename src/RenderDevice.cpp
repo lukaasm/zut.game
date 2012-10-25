@@ -14,12 +14,12 @@
 
 RenderDevice::RenderDevice()
 {
-    _camera = NULL;
+    camera = nullptr;
 }
 
 RenderDevice::~RenderDevice()
 {
-    delete_ptr(_camera)
+    delete_ptr(camera)
 }
 
 void RenderDevice::Clear(float r, float g, float b, float a)
@@ -30,7 +30,7 @@ void RenderDevice::Clear(float r, float g, float b, float a)
 
 void RenderDevice::OnInit()
 {
-    _camera = new Camera(this);
+    camera = new Camera(this);
 
     glEnable(GL_DEPTH_TEST);
 
@@ -44,8 +44,8 @@ void RenderDevice::OnRender()
 
 void RenderDevice::OnResize(int32 width, int32 height)
 {
-    _width = width;
-    _height = height;
+    this->width = width;
+    this->height = height;
 
     glViewport(0, 0, width, height);
 
@@ -64,6 +64,11 @@ void RenderDevice::SetUniforms(Shader* shader, mat4 modelMatrix)
     glUniformMatrix4fv(shader->GetModelMatrixLocation(), 1, GL_FALSE, value_ptr(modelMatrix));
 }
 
+void RenderDevice::BindVertexArray(uint32 vao)
+{
+    glBindVertexArray(vao);
+}
+
 mat4 RenderDevice::GetProjMatrix() const
 {
     return GetCamera()->GetProjMatrix();
@@ -72,4 +77,10 @@ mat4 RenderDevice::GetProjMatrix() const
 mat4 RenderDevice::GetViewMatrix() const
 {
     return GetCamera()->GetViewMatrix();
+}
+
+void RenderDevice::DrawLines(uint32 vao, uint32 start, uint32 size)
+{
+    glBindVertexArray(vao);
+    glDrawArrays(GL_LINE, start, size);
 }
