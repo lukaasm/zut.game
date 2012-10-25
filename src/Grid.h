@@ -24,8 +24,6 @@ class Grid : GameObject
         void OnRender(RenderDevice*) override;
 
     private:
-        uint32 _size;
-
         Shader* _shader;
 };
 
