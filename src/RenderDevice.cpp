@@ -10,16 +10,15 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include "Camera.h"
+#include "SceneMgr.h"
 #include "Shader.h"
 
 RenderDevice::RenderDevice()
 {
-    camera = nullptr;
 }
 
 RenderDevice::~RenderDevice()
 {
-    delete_ptr(camera)
 }
 
 void RenderDevice::Clear(float r, float g, float b, float a)
@@ -30,8 +29,6 @@ void RenderDevice::Clear(float r, float g, float b, float a)
 
 void RenderDevice::OnInit()
 {
-    camera = new Camera(this);
-
     glEnable(GL_DEPTH_TEST);
 
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
@@ -39,7 +36,6 @@ void RenderDevice::OnInit()
 
 void RenderDevice::OnRender()
 {
-    GetCamera()->LookAt();
 }
 
 void RenderDevice::OnResize(int32 width, int32 height)
@@ -48,13 +44,11 @@ void RenderDevice::OnResize(int32 width, int32 height)
     this->height = height;
 
     glViewport(0, 0, width, height);
-
-    GetCamera()->OnResize();
 }
 
 void RenderDevice::OnUpdate(const uint32 diff)
 {
-    GetCamera()->OnUpdate(diff);
+    camera = sSceneMgr->GetCamera();
 }
 
 void RenderDevice::SetUniforms(Shader* shader, mat4 modelMatrix)

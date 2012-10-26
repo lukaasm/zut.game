@@ -22,7 +22,7 @@ Shader::Shader(string vertName, string fragName)
     prepareShader(fragName, _fragShader, _id);
 
 
-    glBindAttribLocation(GetId(), 0, "in_Position");
+    glBindAttribLocation(GetId(), 0, "inposition");
     glBindAttribLocation(GetId(), 1, "in_Color");
 
     glLinkProgram(_id);
