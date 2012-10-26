@@ -62,3 +62,9 @@ void RenderDevice::DrawLines(uint32 vao, uint32 start, uint32 size)
     glBindVertexArray(vao);
     glDrawArrays(GL_LINES, start, size);
 }
+
+void RenderDevice::DrawTriangles(uint32 vao, uint32 start, uint32 size)
+{
+    glBindVertexArray(vao);
+    glDrawArrays(GL_TRIANGLES, start, size);
+}

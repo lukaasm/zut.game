@@ -34,6 +34,7 @@ class RenderDevice
 
         void BindVertexArray(uint32);
         void DrawLines(uint32, uint32, uint32);
+        void DrawTriangles(uint32, uint32, uint32);
 
     private:
         int32 width;

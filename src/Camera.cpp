@@ -15,8 +15,8 @@ using namespace glm;
 
 Camera::Camera()
 {
-    position = vec3(2.0f, 0.5f, 0.0f);
-    lookAt = vec3(2.0f, 0.5f, -5.0f);
+    position = vec3(5.0f, 0.5f, 0.0f);
+    lookAt = vec3(5.0f, 0.5f, -5.0f);
 
     up = vec3(0.0f, 1.0f, 0.0f);
     right = vec3(1.0f, 0.0f, 0.0f);

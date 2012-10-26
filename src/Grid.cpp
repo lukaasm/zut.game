@@ -16,28 +16,15 @@
 
 using namespace glm;
 
-Grid::Grid() : GameObject()
+Grid::Grid() : GameObject("grid")
 {
-    _shader = new Shader("../res/shaders/shader.vert", "../res/shaders/shader.frag");
-}
-
-Grid::~Grid()
-{
-    delete_ptr(_shader)
 }
 
 void Grid::OnRender(RenderDevice* rd)
 {
-    _shader->Bind();
-
     // scale only local matrix
     modelMatrix = scale(mat4(1.0f), vec3(0.5f));
 
-    Camera* camera = sSceneMgr->GetCamera();
-    rd->SetUniforms(_shader, modelMatrix, camera->GetProjMatrix(), camera->GetViewMatrix());
-
-    RenderData* renderData = sResourcesMgr->GetRenderDataForModel("grid");
-    rd->DrawLines(renderData->vertexArray, 0, 4*40);
-
-    _shader->Unbind();
+    RenderData* renderData = sResourcesMgr->GetRenderDataForModel(modelName);
+    rd->DrawLines(renderData->vertexArray, 0, renderData->size);
 }
