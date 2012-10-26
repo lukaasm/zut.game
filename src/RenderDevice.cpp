@@ -48,24 +48,13 @@ void RenderDevice::OnResize(int32 width, int32 height)
 
 void RenderDevice::OnUpdate(const uint32 diff)
 {
-    camera = sSceneMgr->GetCamera();
 }
 
-void RenderDevice::SetUniforms(Shader* shader, mat4 modelMatrix)
+void RenderDevice::SetUniforms(Shader* shader, mat4& modelMatrix, mat4& projMatrix, mat4& viewMatrix)
 {
-    glUniformMatrix4fv(shader->GetProjMatrixLocation(), 1, GL_FALSE, value_ptr(GetProjMatrix()));
-    glUniformMatrix4fv(shader->GetViewMatrixLocation(), 1, GL_FALSE, value_ptr(GetViewMatrix()));
+    glUniformMatrix4fv(shader->GetProjMatrixLocation(), 1, GL_FALSE, value_ptr(projMatrix));
+    glUniformMatrix4fv(shader->GetViewMatrixLocation(), 1, GL_FALSE, value_ptr(viewMatrix));
     glUniformMatrix4fv(shader->GetModelMatrixLocation(), 1, GL_FALSE, value_ptr(modelMatrix));
-}
-
-mat4 RenderDevice::GetProjMatrix() const
-{
-    return GetCamera()->GetProjMatrix();
-}
-
-mat4 RenderDevice::GetViewMatrix() const
-{
-    return GetCamera()->GetViewMatrix();
 }
 
 void RenderDevice::DrawLines(uint32 vao, uint32 start, uint32 size)

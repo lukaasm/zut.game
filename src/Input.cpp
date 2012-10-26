@@ -7,7 +7,7 @@
 #include <GL/glfw.h>
 
 #include "BaseApp.h"
-#include "RenderDevice.h"
+#include "SceneMgr.h"
 
 Keyboard::Keyboard(BaseApp* app)
 {
@@ -85,7 +85,7 @@ void Keyboard::OnKeyPress(int32 key)
 
     MoveType moveFlag = Keyboard::Key2MoveType(key);
     if (moveFlag != MOVE_NONE)
-        _baseApp->GetRenderDevice()->GetCamera()->AddMoveType(moveFlag);
+        sSceneMgr->GetCamera()->AddMoveType(moveFlag);
 }
 
 void Keyboard::OnKeyRelease(int32 key)
@@ -94,5 +94,5 @@ void Keyboard::OnKeyRelease(int32 key)
 
     MoveType moveFlag = Keyboard::Key2MoveType(key);
     if (moveFlag != MOVE_NONE)
-        _baseApp->GetRenderDevice()->GetCamera()->ClearMoveType(moveFlag);
+        sSceneMgr->GetCamera()->ClearMoveType(moveFlag);
 }
