@@ -19,12 +19,12 @@ enum MoveType
     MOVE_FORWARD      = 0x001,
     MOVE_BACKWARD     = 0x002,
     MOVE_ROTATE_LEFT  = 0x004,
-    MOVE_ROTATEright = 0x008,
-    MOVE_STRAFEright = 0x010,
+    MOVE_ROTATE_RIGHT = 0x008,
+    MOVE_STRAFE_RIGHT = 0x010,
     MOVE_STRAFE_LEFT  = 0x020,
-    MOVEupWARD       = 0x040,
+    MOVE_UPWARD       = 0x040,
     MOVE_DOWNWARD     = 0x080,
-    MOVE_ROTATEup    = 0x100,
+    MOVE_ROTATE_UP    = 0x100,
     MOVE_ROTATE_DOWN  = 0x200,
 };
 
