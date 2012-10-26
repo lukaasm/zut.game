@@ -56,7 +56,77 @@ void ResourcesMgr::loadModels()
     }
     glBindVertexArray(0);
 
+    renderData->size = 160;
+
     rendersData[name] = renderData;
+
+    genCube();
+}
+
+void ResourcesMgr::genCube()
+{
+    Vertex vert[6*6];
+    for (uint8 i = 0; i < 36; ++i)
+        vert[i].color = vec3(1.0f, 1.0f, 0.0f);
+
+    vert[0].position = vec3(-1.0f,-1.0f,-1.0f);
+    vert[1].position = vec3(-1.0f,-1.0f, 1.0f);
+    vert[2].position = vec3(-1.0f, 1.0f, 1.0f);
+    vert[3].position = vec3(1.0f, 1.0f,-1.0f);
+    vert[4].position = vec3(-1.0f,-1.0f,-1.0f);
+    vert[5].position = vec3(-1.0f, 1.0f,-1.0f);
+    vert[6].position = vec3(1.0f,-1.0f, 1.0f);
+    vert[7].position = vec3(-1.0f,-1.0f,-1.0f);
+    vert[8].position = vec3(1.0f,-1.0f,-1.0f);
+    vert[9].position = vec3(1.0f, 1.0f,-1.0f);
+    vert[10].position = vec3(1.0f,-1.0f,-1.0f);
+    vert[11].position = vec3(-1.0f,-1.0f,-1.0f);
+    vert[12].position = vec3(-1.0f,-1.0f,-1.0f);
+    vert[13].position = vec3(-1.0f, 1.0f, 1.0f);
+    vert[14].position = vec3(-1.0f, 1.0f,-1.0f);
+    vert[15].position = vec3(1.0f,-1.0f, 1.0f);
+    vert[16].position = vec3(-1.0f,-1.0f, 1.0f);
+    vert[17].position = vec3(-1.0f,-1.0f,-1.0f);
+    vert[18].position = vec3(-1.0f, 1.0f, 1.0f);
+    vert[19].position = vec3(-1.0f,-1.0f, 1.0f);
+    vert[20].position = vec3(1.0f,-1.0f, 1.0f);
+    vert[21].position = vec3(1.0f, 1.0f, 1.0f);
+    vert[22].position = vec3(1.0f,-1.0f,-1.0f);
+    vert[23].position = vec3(1.0f, 1.0f,-1.0f);
+    vert[24].position = vec3(1.0f,-1.0f,-1.0f);
+    vert[25].position = vec3(1.0f, 1.0f, 1.0f);
+    vert[26].position = vec3(1.0f,-1.0f, 1.0f);
+    vert[27].position = vec3(1.0f, 1.0f, 1.0f);
+    vert[28].position = vec3(1.0f, 1.0f,-1.0f);
+    vert[29].position = vec3(-1.0f, 1.0f,-1.0f);
+    vert[30].position = vec3(1.0f, 1.0f, 1.0f);
+    vert[31].position = vec3(-1.0f, 1.0f,-1.0f);
+    vert[32].position = vec3(-1.0f, 1.0f, 1.0f);
+    vert[33].position = vec3(1.0f, 1.0f, 1.0f);
+    vert[34].position = vec3(-1.0f, 1.0f, 1.0f);
+    vert[35].position = vec3(1.0f,-1.0f, 1.0f);
+
+    RenderData* renderData = new RenderData();
+    glGenVertexArrays(1, &(renderData->vertexArray));
+    glBindVertexArray(renderData->vertexArray);
+    {
+        glGenBuffers(1, &(renderData->vertexBuffer));
+        glBindBuffer(GL_ARRAY_BUFFER, renderData->vertexBuffer);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(vert), vert, GL_STATIC_DRAW);
+        {
+            glVertexAttribPointer(VertexArray::Attrib::POSITION, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
+            glVertexAttribPointer(VertexArray::Attrib::COLOR, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), BUFFER_OFFSET(sizeof(vec3)));
+        }
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+        glEnableVertexAttribArray(VertexArray::Attrib::POSITION);
+        glEnableVertexAttribArray(VertexArray::Attrib::COLOR);
+    }
+    glBindVertexArray(0);
+
+    renderData->size = 36;
+
+    rendersData["cube"] = renderData;
 }
 
 void ResourcesMgr::unloadModels()
@@ -66,6 +136,7 @@ void ResourcesMgr::unloadModels()
 
     rendersData.clear();
 }
+
 RenderData* ResourcesMgr::GetRenderDataForModel(std::string name)
 {
     if (rendersData.find(name.c_str()) != rendersData.end())

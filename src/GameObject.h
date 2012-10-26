@@ -6,6 +6,7 @@
 #define H_ENTITY
 
 #include <glm/glm.hpp>
+#include <string>
 
 #include "Common.h"
 
@@ -34,6 +35,8 @@ struct Vertex
 
 struct RenderData
 {
+    uint32 size;
+
     uint32 vertexArray;
     uint32 vertexBuffer;
 };
@@ -43,17 +46,21 @@ class RenderDevice;
 class GameObject
 {
     public:
-        explicit GameObject() {}
+        explicit GameObject(std::string model) : modelName(model) {}
         
     //public:
         virtual ~GameObject() {}
 
         virtual void OnRender(RenderDevice*);
 
+        mat4& GetModelMatrix() { return modelMatrix; }
+
         void SetGuid(uint32 guid) { this->guid = guid; }
 
     protected:
         uint32 guid;
+
+        std::string modelName;
 
         mat4 modelMatrix;
 };

@@ -15,16 +15,12 @@ using namespace glm;
 class RenderDevice;
 class Shader;
 
-class Grid : GameObject
+class Grid : public GameObject
 {
     public:
         Grid();
-        ~Grid();
 
         void OnRender(RenderDevice*) override;
-
-    private:
-        Shader* _shader;
 };
 
 #endif

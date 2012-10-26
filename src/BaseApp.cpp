@@ -9,7 +9,6 @@
 #include <GL/glew.h>
 #include <GL/glfw.h>
 
-#include "Grid.h"
 #include "Input.h"
 #include "RenderDevice.h"
 #include "ResourcesMgr.h"
@@ -19,8 +18,6 @@
 
 BaseApp::BaseApp()
 {
-    _grid = nullptr;
-
     _keyboard = new Keyboard(this);
     _renderDevice = new RenderDevice();
 }
@@ -30,7 +27,6 @@ BaseApp::~BaseApp()
     delete_ptr(BaseApp::CloseCallback)
     delete_ptr(BaseApp::ResizeCallback)
 
-    delete_ptr(_grid)
     delete_ptr(_keyboard)
     delete_ptr(_renderDevice)
 }
@@ -87,8 +83,6 @@ void BaseApp::Init()
     sSceneMgr->OnInit();
 
     GetRenderDevice()->OnInit();
-
-    _grid = new Grid();
 }
 
 void BaseApp::Run()
@@ -150,8 +144,7 @@ void BaseApp::OnRender()
     GetRenderDevice()->Clear(0.0f, 0.0f, 0.0f, 0.0f);
 
     GetRenderDevice()->OnRender();
-
-    _grid->OnRender(GetRenderDevice());
+    sSceneMgr->OnRender(GetRenderDevice());
 }
 
 int main()

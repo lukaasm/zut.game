@@ -32,6 +32,9 @@ class ResourcesMgr
 
         void unloadModels();
 
+        //temp
+        void genCube();
+
         RenderDataMap rendersData;
         //uint32 GetTexture(std::string);
         //uint32 GetShader(std::string);

@@ -9,7 +9,6 @@
 #include "Common.h"
 
 class BaseApp;
-class Grid;
 class Keyboard;
 class RenderDevice;
 
@@ -41,7 +40,6 @@ class BaseApp
         static int CloseWindow();
         void _closeWindow();
 
-
         bool Stopped() const { return _stop; }
 
         Keyboard* GetKeyboard() const { return _keyboard; }
@@ -52,7 +50,6 @@ class BaseApp
 
         bool _stop;
 
-        Grid* _grid;
         Keyboard* _keyboard;
         RenderDevice* _renderDevice;
 };
