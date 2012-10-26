@@ -87,6 +87,7 @@
     <ClCompile Include="..\src\Input.cpp" />
     <ClCompile Include="..\src\RenderDevice.cpp" />
     <ClCompile Include="..\src\ResourcesMgr.cpp" />
+    <ClCompile Include="..\src\SceneMgr.cpp" />
     <ClCompile Include="..\src\Shader.cpp" />
   </ItemGroup>
   <ItemGroup>

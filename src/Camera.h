@@ -19,45 +19,43 @@ enum MoveType
     MOVE_FORWARD      = 0x001,
     MOVE_BACKWARD     = 0x002,
     MOVE_ROTATE_LEFT  = 0x004,
-    MOVE_ROTATE_RIGHT = 0x008,
-    MOVE_STRAFE_RIGHT = 0x010,
+    MOVE_ROTATEright = 0x008,
+    MOVE_STRAFEright = 0x010,
     MOVE_STRAFE_LEFT  = 0x020,
-    MOVE_UPWARD       = 0x040,
+    MOVEupWARD       = 0x040,
     MOVE_DOWNWARD     = 0x080,
-    MOVE_ROTATE_UP    = 0x100,
+    MOVE_ROTATEup    = 0x100,
     MOVE_ROTATE_DOWN  = 0x200,
 };
 
 class Camera
 {
     public:
-        Camera(RenderDevice*);
+        Camera();
 
         void AddMoveType(MoveType);
         void ClearMoveType(MoveType);
 
-        void OnResize();
+        void OnResize(int32, int32);
         void OnUpdate(const uint32);
 
         void LookAt();
 
         void Move(MoveType, float);
 
-        mat4 GetProjMatrix() const { return _projMatrix; }
-        mat4 GetViewMatrix() const { return _viewMatrix; }
+        mat4 GetProjMatrix() const { return projMatrix; }
+        mat4 GetViewMatrix() const { return viewMatrix; }
 
     private:
-        mat4 _viewMatrix;
-        mat4 _projMatrix;
+        mat4 viewMatrix;
+        mat4 projMatrix;
 
-        vec3 _lookAt;
-        vec3 _position;
-        vec3 _right;
-        vec3 _up;
+        vec3 lookAt;
+        vec3 position;
+        vec3 right;
+        vec3 up;
 
-        MoveType _moveFlags;
-
-        RenderDevice* _renderDevice;
+        MoveType moveFlags;
 };
 
 #endif

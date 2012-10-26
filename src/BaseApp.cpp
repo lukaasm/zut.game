@@ -13,6 +13,7 @@
 #include "Input.h"
 #include "RenderDevice.h"
 #include "ResourcesMgr.h"
+#include "SceneMgr.h"
 
 #define UPDATE_INTERVAL 50
 
@@ -83,6 +84,7 @@ void BaseApp::CreateCallBacks()
 void BaseApp::Init()
 {
     sResourcesMgr->OnInit();
+    sSceneMgr->OnInit();
 
     GetRenderDevice()->OnInit();
 
@@ -120,6 +122,7 @@ void BaseApp::ResizeWindow(int32 width, int32 height)
 void BaseApp::_resizeWindow(int32 width, int32 height)
 {
     GetRenderDevice()->OnResize(width, height);
+    sSceneMgr->GetCamera()->OnResize(width, height);
 }
 
 CloseCallBack* BaseApp::CloseCallback = nullptr;
@@ -137,6 +140,8 @@ void BaseApp::_closeWindow()
 
 void BaseApp::OnUpdate(const uint32 diff)
 {
+    sSceneMgr->OnUpdate(diff);
+
     GetRenderDevice()->OnUpdate(diff);
 }
 

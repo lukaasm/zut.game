@@ -125,5 +125,8 @@
     <ClCompile Include="..\src\ResourcesMgr.cpp">
       <Filter>Frame\Managers</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\SceneMgr.cpp">
+      <Filter>Frame\Managers</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

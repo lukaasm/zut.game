@@ -13,27 +13,25 @@
 
 using namespace glm;
 
-Camera::Camera(RenderDevice* renderDevice)
+Camera::Camera()
 {
-    _renderDevice = renderDevice;
+    position = vec3(2.0f, 0.5f, 0.0f);
+    lookAt = vec3(2.0f, 0.5f, -5.0f);
 
-    _position = vec3(2.0f, 0.5f, 0.0f);
-    _lookAt = vec3(2.0f, 0.5f, -5.0f);
+    up = vec3(0.0f, 1.0f, 0.0f);
+    right = vec3(1.0f, 0.0f, 0.0f);
 
-    _up = vec3(0.0f, 1.0f, 0.0f);
-    _right = vec3(1.0f, 0.0f, 0.0f);
-
-    _moveFlags = MOVE_NONE;
+    moveFlags = MOVE_NONE;
 }
 
 void Camera::LookAt()
 {
-    _viewMatrix = lookAt(_position, _lookAt, _up);
+    viewMatrix = glm::lookAt(position, lookAt, up);
 }
 
-void Camera::OnResize()
+void Camera::OnResize(int32 width, int32 height)
 {
-    _projMatrix = perspective(60.0f, float(_renderDevice->GetWidth() / _renderDevice->GetHeight()), 0.1f, 100.f);
+    projMatrix = perspective(60.0f, float(width/height), 0.1f, 100.f);
 }
 
 void Camera::Move(MoveType type, float angleOrScale)
@@ -42,68 +40,68 @@ void Camera::Move(MoveType type, float angleOrScale)
     {
         case MOVE_FORWARD:
         {
-            vec3 offset = normalize(_lookAt - _position) * angleOrScale;
-            _position += offset;
-            _lookAt += offset;
+            vec3 offset = normalize(lookAt - position) * angleOrScale;
+            position += offset;
+            lookAt += offset;
             break;
         }
         case MOVE_BACKWARD:
         {
-            vec3 offset = normalize(_lookAt - _position) * angleOrScale;
-            _position -= offset;
-            _lookAt -= offset;
+            vec3 offset = normalize(lookAt - position) * angleOrScale;
+            position -= offset;
+            lookAt -= offset;
             break;
         }
-        case MOVE_UPWARD:
+        case MOVEupWARD:
         {
-            vec3 offset = normalize(_up) * angleOrScale;
-            _position += offset;
-            _lookAt += offset;
+            vec3 offset = normalize(up) * angleOrScale;
+            position += offset;
+            lookAt += offset;
             break;
         }
         case MOVE_DOWNWARD:
         {
-            vec3 offset = normalize(_up) * angleOrScale;
-            _position -= offset;
-            _lookAt -= offset;
+            vec3 offset = normalize(up) * angleOrScale;
+            position -= offset;
+            lookAt -= offset;
             break;
         }
         case MOVE_ROTATE_LEFT:
         {
-            _lookAt = rotate(_lookAt, angleOrScale, _up);
-            _right = cross(_lookAt, _up);
+            lookAt = rotate(lookAt, angleOrScale, up);
+            right = cross(lookAt, up);
             break;
         }
-        case MOVE_ROTATE_RIGHT:
+        case MOVE_ROTATEright:
         {
-            _lookAt = rotate(_lookAt, -angleOrScale, _up);
-            _right = cross(_lookAt, _up);
+            lookAt = rotate(lookAt, -angleOrScale, up);
+            right = cross(lookAt, up);
             break;
         }
-        case MOVE_ROTATE_UP:
+        case MOVE_ROTATEup:
         {
-            _lookAt = rotate(_lookAt, angleOrScale, _right);
-            _up = cross(_right, _lookAt);
+            lookAt = rotate(lookAt, angleOrScale, right);
+            up = cross(right, lookAt);
             break;
         }
         case MOVE_ROTATE_DOWN:
         {
-            _lookAt = rotate(_lookAt, -angleOrScale, _right);
-            _up = cross(_right, _lookAt);
+            lookAt = rotate(lookAt, -angleOrScale, right);
+            up = cross(right, lookAt);
             break;
         }
-        case MOVE_STRAFE_RIGHT:
+        case MOVE_STRAFEright:
         {
-            vec3 offset = normalize(_right) * angleOrScale;
-            _position += offset;
-            _lookAt += offset;
+            vec3 offset = normalize(right) * angleOrScale;
+            position += offset;
+            lookAt += offset;
             break;
         }
         case MOVE_STRAFE_LEFT:
         {
-            vec3 offset = normalize(_right) * angleOrScale;
-            _position -= offset;
-            _lookAt -= offset;
+            vec3 offset = normalize(right) * angleOrScale;
+            position -= offset;
+            lookAt -= offset;
             break;
         }
     }
@@ -113,66 +111,68 @@ void Camera::OnUpdate(const uint32 diff)
 {
     const float scale = 0.2f;
 
-    if (_moveFlags & MOVE_FORWARD)
+    if (moveFlags & MOVE_FORWARD)
         Move(MOVE_FORWARD, scale);
-    else if (_moveFlags & MOVE_BACKWARD)
+    else if (moveFlags & MOVE_BACKWARD)
         Move(MOVE_BACKWARD, scale);
 
-    if (_moveFlags & MOVE_UPWARD)
-        Move(MOVE_UPWARD, scale);
-    else if (_moveFlags & MOVE_DOWNWARD)
+    if (moveFlags & MOVEupWARD)
+        Move(MOVEupWARD, scale);
+    else if (moveFlags & MOVE_DOWNWARD)
         Move(MOVE_DOWNWARD, scale);
 
-    if (_moveFlags & MOVE_STRAFE_LEFT)
+    if (moveFlags & MOVE_STRAFE_LEFT)
         Move(MOVE_STRAFE_LEFT, scale);
-    else if (_moveFlags & MOVE_STRAFE_RIGHT)
-        Move(MOVE_STRAFE_RIGHT, scale);
+    else if (moveFlags & MOVE_STRAFEright)
+        Move(MOVE_STRAFEright, scale);
 
-    if (_moveFlags & MOVE_ROTATE_LEFT)
+    if (moveFlags & MOVE_ROTATE_LEFT)
         Move(MOVE_ROTATE_LEFT, 3.5f);
-    else if (_moveFlags & MOVE_ROTATE_RIGHT)
-        Move(MOVE_ROTATE_RIGHT, 3.5f);
+    else if (moveFlags & MOVE_ROTATEright)
+        Move(MOVE_ROTATEright, 3.5f);
 
-    if (_moveFlags & MOVE_ROTATE_UP)
-        Move(MOVE_ROTATE_UP, 3.5f);
-    else if (_moveFlags & MOVE_ROTATE_DOWN)
+    if (moveFlags & MOVE_ROTATEup)
+        Move(MOVE_ROTATEup, 3.5f);
+    else if (moveFlags & MOVE_ROTATE_DOWN)
         Move(MOVE_ROTATE_DOWN, 3.5f);
+
+    LookAt();
 }
 
 void Camera::AddMoveType(MoveType flag)
 {
     if (flag & MOVE_FORWARD)
-        _moveFlags = MoveType((_moveFlags & ~MOVE_BACKWARD) | flag);
+        moveFlags = MoveType((moveFlags & ~MOVE_BACKWARD) | flag);
 
     if (flag & MOVE_BACKWARD)
-        _moveFlags = MoveType((_moveFlags & ~MOVE_FORWARD) | flag);
+        moveFlags = MoveType((moveFlags & ~MOVE_FORWARD) | flag);
 
-    if (flag & MOVE_UPWARD)
-        _moveFlags = MoveType((_moveFlags & ~MOVE_DOWNWARD) | flag);
+    if (flag & MOVEupWARD)
+        moveFlags = MoveType((moveFlags & ~MOVE_DOWNWARD) | flag);
 
     if (flag & MOVE_DOWNWARD)
-        _moveFlags = MoveType((_moveFlags & ~MOVE_UPWARD) | flag);
+        moveFlags = MoveType((moveFlags & ~MOVEupWARD) | flag);
 
     if (flag & MOVE_ROTATE_LEFT)
-        _moveFlags = MoveType((_moveFlags & ~MOVE_ROTATE_RIGHT) | flag);
+        moveFlags = MoveType((moveFlags & ~MOVE_ROTATEright) | flag);
 
-    if (flag & MOVE_ROTATE_RIGHT)
-        _moveFlags = MoveType((_moveFlags & ~MOVE_ROTATE_LEFT) | flag);
+    if (flag & MOVE_ROTATEright)
+        moveFlags = MoveType((moveFlags & ~MOVE_ROTATE_LEFT) | flag);
 
-    if (flag & MOVE_ROTATE_UP)
-        _moveFlags = MoveType((_moveFlags & ~MOVE_ROTATE_DOWN) | flag);
+    if (flag & MOVE_ROTATEup)
+        moveFlags = MoveType((moveFlags & ~MOVE_ROTATE_DOWN) | flag);
 
     if (flag & MOVE_ROTATE_DOWN)
-        _moveFlags = MoveType((_moveFlags & ~MOVE_ROTATE_UP) | flag);
+        moveFlags = MoveType((moveFlags & ~MOVE_ROTATEup) | flag);
 
     if (flag & MOVE_STRAFE_LEFT)
-        _moveFlags = MoveType((_moveFlags & ~MOVE_STRAFE_RIGHT) | flag);
+        moveFlags = MoveType((moveFlags & ~MOVE_STRAFEright) | flag);
 
-    if (flag & MOVE_STRAFE_RIGHT)
-        _moveFlags = MoveType((_moveFlags & ~MOVE_STRAFE_LEFT) | flag);
+    if (flag & MOVE_STRAFEright)
+        moveFlags = MoveType((moveFlags & ~MOVE_STRAFE_LEFT) | flag);
 }
 
 void Camera::ClearMoveType(MoveType flag)
 {
-    _moveFlags = MoveType(_moveFlags & ~flag);
+    moveFlags = MoveType(moveFlags & ~flag);
 }
