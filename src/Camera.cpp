@@ -52,7 +52,7 @@ void Camera::Move(MoveType type, float angleOrScale)
             lookAt -= offset;
             break;
         }
-        case MOVEupWARD:
+        case MOVE_UPWARD:
         {
             vec3 offset = normalize(up) * angleOrScale;
             position += offset;
@@ -72,13 +72,13 @@ void Camera::Move(MoveType type, float angleOrScale)
             right = cross(lookAt, up);
             break;
         }
-        case MOVE_ROTATEright:
+        case MOVE_ROTATE_RIGHT:
         {
             lookAt = rotate(lookAt, -angleOrScale, up);
             right = cross(lookAt, up);
             break;
         }
-        case MOVE_ROTATEup:
+        case MOVE_ROTATE_UP:
         {
             lookAt = rotate(lookAt, angleOrScale, right);
             up = cross(right, lookAt);
@@ -90,7 +90,7 @@ void Camera::Move(MoveType type, float angleOrScale)
             up = cross(right, lookAt);
             break;
         }
-        case MOVE_STRAFEright:
+        case MOVE_STRAFE_RIGHT:
         {
             vec3 offset = normalize(right) * angleOrScale;
             position += offset;
@@ -116,23 +116,23 @@ void Camera::OnUpdate(const uint32 diff)
     else if (moveFlags & MOVE_BACKWARD)
         Move(MOVE_BACKWARD, scale);
 
-    if (moveFlags & MOVEupWARD)
-        Move(MOVEupWARD, scale);
+    if (moveFlags & MOVE_UPWARD)
+        Move(MOVE_UPWARD, scale);
     else if (moveFlags & MOVE_DOWNWARD)
         Move(MOVE_DOWNWARD, scale);
 
     if (moveFlags & MOVE_STRAFE_LEFT)
         Move(MOVE_STRAFE_LEFT, scale);
-    else if (moveFlags & MOVE_STRAFEright)
-        Move(MOVE_STRAFEright, scale);
+    else if (moveFlags & MOVE_STRAFE_RIGHT)
+        Move(MOVE_STRAFE_RIGHT, scale);
 
     if (moveFlags & MOVE_ROTATE_LEFT)
         Move(MOVE_ROTATE_LEFT, 3.5f);
-    else if (moveFlags & MOVE_ROTATEright)
-        Move(MOVE_ROTATEright, 3.5f);
+    else if (moveFlags & MOVE_ROTATE_RIGHT)
+        Move(MOVE_ROTATE_RIGHT, 3.5f);
 
-    if (moveFlags & MOVE_ROTATEup)
-        Move(MOVE_ROTATEup, 3.5f);
+    if (moveFlags & MOVE_ROTATE_UP)
+        Move(MOVE_ROTATE_UP, 3.5f);
     else if (moveFlags & MOVE_ROTATE_DOWN)
         Move(MOVE_ROTATE_DOWN, 3.5f);
 
@@ -147,28 +147,28 @@ void Camera::AddMoveType(MoveType flag)
     if (flag & MOVE_BACKWARD)
         moveFlags = MoveType((moveFlags & ~MOVE_FORWARD) | flag);
 
-    if (flag & MOVEupWARD)
+    if (flag & MOVE_UPWARD)
         moveFlags = MoveType((moveFlags & ~MOVE_DOWNWARD) | flag);
 
     if (flag & MOVE_DOWNWARD)
-        moveFlags = MoveType((moveFlags & ~MOVEupWARD) | flag);
+        moveFlags = MoveType((moveFlags & ~MOVE_UPWARD) | flag);
 
     if (flag & MOVE_ROTATE_LEFT)
-        moveFlags = MoveType((moveFlags & ~MOVE_ROTATEright) | flag);
+        moveFlags = MoveType((moveFlags & ~MOVE_ROTATE_RIGHT) | flag);
 
-    if (flag & MOVE_ROTATEright)
+    if (flag & MOVE_ROTATE_RIGHT)
         moveFlags = MoveType((moveFlags & ~MOVE_ROTATE_LEFT) | flag);
 
-    if (flag & MOVE_ROTATEup)
+    if (flag & MOVE_ROTATE_UP)
         moveFlags = MoveType((moveFlags & ~MOVE_ROTATE_DOWN) | flag);
 
     if (flag & MOVE_ROTATE_DOWN)
-        moveFlags = MoveType((moveFlags & ~MOVE_ROTATEup) | flag);
+        moveFlags = MoveType((moveFlags & ~MOVE_ROTATE_UP) | flag);
 
     if (flag & MOVE_STRAFE_LEFT)
-        moveFlags = MoveType((moveFlags & ~MOVE_STRAFEright) | flag);
+        moveFlags = MoveType((moveFlags & ~MOVE_STRAFE_RIGHT) | flag);
 
-    if (flag & MOVE_STRAFEright)
+    if (flag & MOVE_STRAFE_RIGHT)
         moveFlags = MoveType((moveFlags & ~MOVE_STRAFE_LEFT) | flag);
 }
 
