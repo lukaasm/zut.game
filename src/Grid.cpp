@@ -7,9 +7,11 @@
 #include <stdio.h>
 #include <glm/gtc/matrix_transform.hpp>
 
+#include "Camera.h"
 #include "GameObject.h"
 #include "RenderDevice.h"
 #include "ResourcesMgr.h"
+#include "SceneMgr.h"
 #include "Shader.h"
 
 using namespace glm;
@@ -31,7 +33,8 @@ void Grid::OnRender(RenderDevice* rd)
     // scale only local matrix
     modelMatrix = scale(mat4(1.0f), vec3(0.5f));
 
-    rd->SetUniforms(_shader, modelMatrix);
+    Camera* camera = sSceneMgr->GetCamera();
+    rd->SetUniforms(_shader, modelMatrix, camera->GetProjMatrix(), camera->GetViewMatrix());
 
     RenderData* renderData = sResourcesMgr->GetRenderDataForModel("grid");
     rd->DrawLines(renderData->vertexArray, 0, 4*40);
