@@ -6,6 +6,7 @@
 
 #include <GL/glew.h>
 #include <GL/glfw.h>
+
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
@@ -78,5 +79,5 @@ void RenderDevice::ActivateTexture(uint32 mode, uint32 textureId)
         return;
 
     glActiveTexture(mode);
-    glBindTexture(mode, textureId);
+    glBindTexture(GL_TEXTURE_2D, textureId);
 }
