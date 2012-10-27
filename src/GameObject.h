@@ -24,6 +24,15 @@ namespace VertexArray
 
 struct Vertex
 {
+    Vertex() {}
+    Vertex(Vertex const& org)
+    {
+        position = org.position;
+        uv = org.uv;
+        normal = org.normal;
+        color = org.color;
+    }
+
     vec3 position;
     vec2 uv;
     vec3 normal;

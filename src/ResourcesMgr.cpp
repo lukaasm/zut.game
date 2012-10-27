@@ -226,16 +226,17 @@ bool ResourcesMgr::loadOBJ(std::string fileName, std::vector<Vertex>& vert)
                 return false;
             }
 
-            vertIndices.push_back(vertexIndex[0]);
-            vertIndices.push_back(vertexIndex[1]);
-            vertIndices.push_back(vertexIndex[2]);
+            vertIndices.push_back(--vertexIndex[0]);
+            vertIndices.push_back(--vertexIndex[1]);
+            vertIndices.push_back(--vertexIndex[2]);
 
-            uvIndices.push_back(uvIndex[0]);
-            uvIndices.push_back(uvIndex[1]);
+            uvIndices.push_back(--uvIndex[0]);
+            uvIndices.push_back(--uvIndex[1]);
+            uvIndices.push_back(--uvIndex[2]);
 
-            normIndices.push_back(normalIndex[0]);
-            normIndices.push_back(normalIndex[1]);
-            normIndices.push_back(normalIndex[2]);
+            normIndices.push_back(--normalIndex[0]);
+            normIndices.push_back(--normalIndex[1]);
+            normIndices.push_back(--normalIndex[2]);
         }
         else
         {
@@ -248,14 +249,10 @@ bool ResourcesMgr::loadOBJ(std::string fileName, std::vector<Vertex>& vert)
 
     for (uint32 i = 0; i < vertIndices.size(); ++i)
     {
-        uint32 vertIndex = vertIndices[i];
-        uint32 uvIndex = uvIndices[i];
-        uint32 normIndex = normIndices[i];
-
         Vertex vertex;
-        vertex.position = temp_vertices[vertIndex-1];
-        vertex.uv = temp_uvs[uvIndex-1];
-        vertex.normal = temp_normals[normIndex-1];
+        vertex.position = temp_vertices[vertIndices[i]];
+        vertex.uv = temp_uvs[uvIndices[i]];
+        vertex.normal = temp_normals[normIndices[i]];
 
         vert.push_back(vertex);
     }
