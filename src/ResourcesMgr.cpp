@@ -270,4 +270,13 @@ void ResourcesMgr::loadTextures()
     }
 
     textures["test"] = textureId;
+
+    textureId = createTexture("../res/textures/cube.tga");
+    if (textureId == 0)
+    {
+        std::cout << "There is no such file." << std::endl;
+        return;
+    }
+
+    textures["cube"] = textureId;
 }

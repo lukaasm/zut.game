@@ -16,7 +16,7 @@ void SceneMgr::OnInit()
 
     gameObjectsMap[0] = new Grid();
 
-    GameObject* cube = new GameObject("cube", "");
+    GameObject* cube = new GameObject("cube", "cube");
 
     glm::mat4 model = cube->GetModelMatrix();
     model = glm::translate(model, glm::vec3(5.0f, 0.25f, -5.0f));
