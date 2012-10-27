@@ -13,6 +13,7 @@
 
 struct RenderData;
 typedef std::hash_map<std::string, RenderData*> RenderDataMap;
+typedef std::hash_map<std::string, uint32> TexturesMap;
 
 class ResourcesMgr
 {
@@ -24,9 +25,10 @@ class ResourcesMgr
         void OnInit();
 
         RenderData* GetRenderDataForModel(std::string);
+        uint32 GetTextureId(std::string);
 
     private:
-        void loadTextures() {}
+        void loadTextures();
         void loadModels();
         void loadShaders() {}
 
@@ -36,6 +38,7 @@ class ResourcesMgr
         void genCube();
 
         RenderDataMap rendersData;
+        TexturesMap textures;
         //uint32 GetTexture(std::string);
         //uint32 GetShader(std::string);
 };

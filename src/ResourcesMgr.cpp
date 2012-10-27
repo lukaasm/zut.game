@@ -1,6 +1,7 @@
 #include "ResourcesMgr.h"
 
 #include <GL/glew.h>
+#include <gli/gli.hpp>
 
 #include "GameObject.h"
 
@@ -143,4 +144,17 @@ RenderData* ResourcesMgr::GetRenderDataForModel(std::string name)
         return rendersData[name.c_str()];
 
     return nullptr;
+}
+
+uint32 ResourcesMgr::GetTextureId(std::string name)
+{
+    if (textures.find(name.c_str()) != textures.end())
+        return textures[name.c_str()];
+
+    return 0;
+}
+
+void ResourcesMgr::loadTextures()
+{
+
 }
