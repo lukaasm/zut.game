@@ -84,7 +84,8 @@ void Text2D::Print(RenderDevice* rd, std::string text, int x, int y, int fontSiz
 
     glBindVertexArray(0);
 
-    glDisable(GL_DEPTH);
+    glDisable(GL_DEPTH_TEST);
+
     // Bind shader
     shader->Bind();
 
@@ -94,4 +95,6 @@ void Text2D::Print(RenderDevice* rd, std::string text, int x, int y, int fontSiz
     rd->DrawTriangles(renderData->vertexArray, 0, renderData->size);
 
     shader->Unbind();
+
+    glEnable(GL_DEPTH_TEST);
 }
