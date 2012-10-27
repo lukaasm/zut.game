@@ -36,6 +36,7 @@ class ResourcesMgr
 
         //temp
         void genCube();
+        void genSquare();
 
         RenderDataMap rendersData;
         TexturesMap textures;

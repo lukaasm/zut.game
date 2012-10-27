@@ -31,6 +31,7 @@ class SceneMgr
         Camera* camera;
 
         Shader* tempShader;
+        Shader* notextShader;
 
         GameObjectsMap gameObjectsMap;
 

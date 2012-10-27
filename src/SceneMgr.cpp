@@ -13,6 +13,7 @@ void SceneMgr::OnInit()
     SetCamera(new Camera());
 
     tempShader = new Shader("../res/shaders/shader.vert", "../res/shaders/shader.frag"); 
+    notextShader = new Shader("../res/shaders/shader.vert", "../res/shaders/notexture.frag");
 
     gameObjectsMap[0] = new Grid();
 
@@ -38,6 +39,15 @@ void SceneMgr::OnInit()
     POPULATE_CUBE(4.625f, 0.875f, -5.0f, 4)
     POPULATE_CUBE(5.375f, 0.875f, -5.0f, 5)
     POPULATE_CUBE(5.0f, 0.875f+0.625f, -5.0f, 6)
+
+    GameObject* square = new GameObject("square");
+
+    model = square->GetModelMatrix();
+    model = glm::translate(model, glm::vec3(7.0f, 0.25f, -5.0f));
+
+    square->GetModelMatrix() = model;
+
+    gameObjectsMap[7] = square;
 }
 
 void SceneMgr::OnUpdate(uint32 diff)
@@ -47,15 +57,21 @@ void SceneMgr::OnUpdate(uint32 diff)
 
 void SceneMgr::OnRender(RenderDevice* rd)
 {
-    tempShader->Bind();
-
+    Shader* shader = nullptr;
     for (GameObjectsMap::const_iterator i = gameObjectsMap.begin(); i != gameObjectsMap.end(); ++i)
     {
-        rd->SetUniforms(tempShader, i->second->GetModelMatrix(), GetCamera()->GetProjMatrix(), GetCamera()->GetViewMatrix());
-        i->second->OnRender(rd);
-    }
+        if (i->first == 7) // for our 'test' square use fragment shader with texture usage
+            shader = tempShader;
+        else
+            shader = notextShader;
 
-    tempShader->Unbind();
+        shader->Bind();
+
+        rd->SetUniforms(shader, i->second->GetModelMatrix(), GetCamera()->GetProjMatrix(), GetCamera()->GetViewMatrix());
+        i->second->OnRender(rd);
+
+        shader->Unbind();
+    }
 }
 
 void SceneMgr::SetCamera(Camera* camera)
@@ -68,6 +84,7 @@ SceneMgr::~SceneMgr()
     for (GameObjectsMap::const_iterator i = gameObjectsMap.begin(); i != gameObjectsMap.end(); ++i)
         delete i->second;
 
+    delete notextShader;
     delete tempShader;
     delete camera;
 }

@@ -21,9 +21,9 @@ Shader::Shader(string vertName, string fragName)
     prepareShader(vertName, _vertShader, _id);
     prepareShader(fragName, _fragShader, _id);
 
-
-    glBindAttribLocation(GetId(), 0, "inposition");
-    glBindAttribLocation(GetId(), 1, "in_Color");
+    glBindAttribLocation(GetId(), 0, "in_Position");
+    glBindAttribLocation(GetId(), 1, "in_TexCoord");
+    glBindAttribLocation(GetId(), 3, "in_Color");
 
     glLinkProgram(_id);
 
