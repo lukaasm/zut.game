@@ -60,7 +60,9 @@ void SceneMgr::OnRender(RenderDevice* rd)
     for (GameObjectsMap::const_iterator i = gameObjectsMap.begin(); i != gameObjectsMap.end(); ++i)
     {
         shader->Bind();
+
         float textureFlag = i->second->GetTexture() != "" ? 1.0f : 0.0f;
+
         rd->SetUniforms(shader, i->second->GetModelMatrix(), GetCamera()->GetProjMatrix(), GetCamera()->GetViewMatrix(), textureFlag);
         i->second->OnRender(rd);
 
