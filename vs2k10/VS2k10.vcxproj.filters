@@ -30,9 +30,6 @@
     <Filter Include="Frame\GameObjects">
       <UniqueIdentifier>{c5c2562e-f095-4192-ba81-935fb5c1db3f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Frame\Mesh">
-      <UniqueIdentifier>{2fccdfaf-b6f6-4942-8239-1ada88bde809}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Frame\GameObjects\Grid">
       <UniqueIdentifier>{6d030ae7-ccf5-4280-a91c-f2eb1a3afe86}</UniqueIdentifier>
     </Filter>

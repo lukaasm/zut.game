@@ -17,6 +17,7 @@ namespace VertexArray
     enum Attrib
     {
         POSITION = 0,
+        TEXCOORD = 1,
         COLOR    = 3,
     };
 };
@@ -30,6 +31,7 @@ struct Vertex
     };
 
     vec3 position;
+    vec2 uv;
     vec3 color;
 };
 
