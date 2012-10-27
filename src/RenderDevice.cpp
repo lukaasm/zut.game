@@ -50,14 +50,14 @@ void RenderDevice::OnUpdate(const uint32 diff)
 {
 }
 
-void RenderDevice::SetUniforms(Shader* shader, mat4& modelMatrix, mat4& projMatrix, mat4& viewMatrix)
+void RenderDevice::SetUniforms(Shader* shader, mat4& modelMatrix, mat4& projMatrix, mat4& viewMatrix, float hasTexture)
 {
     glUniformMatrix4fv(shader->GetProjMatrixLocation(), 1, GL_FALSE, value_ptr(projMatrix));
     glUniformMatrix4fv(shader->GetViewMatrixLocation(), 1, GL_FALSE, value_ptr(viewMatrix));
     glUniformMatrix4fv(shader->GetModelMatrixLocation(), 1, GL_FALSE, value_ptr(modelMatrix));
 
-    uint32 textLoc = glGetUniformLocation(shader->GetId(), "base_texture");
-    glUniform1i(textLoc, 0);
+    glUniform1i(shader->textLoc, 0);
+    glUniform1f(shader->textEnabledLoc, hasTexture);
 }
 
 void RenderDevice::DrawLines(uint32 vao, uint32 start, uint32 size)
@@ -70,4 +70,13 @@ void RenderDevice::DrawTriangles(uint32 vao, uint32 start, uint32 size)
 {
     glBindVertexArray(vao);
     glDrawArrays(GL_TRIANGLES, start, size);
+}
+
+void RenderDevice::ActivateTexture(uint32 mode, uint32 textureId)
+{
+    if (textureId == 0)
+        return;
+
+    glActiveTexture(mode);
+    glBindTexture(mode, textureId);
 }

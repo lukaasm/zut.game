@@ -20,24 +20,28 @@ class Shader
 
         char* ValidiateShader(uint32);
 
-        uint32 GetId() const { return _id; }
+        uint32 GetId() const { return id; }
 
-        uint32 GetProjMatrixLocation() const { return _pLocation; }
-        uint32 GetViewMatrixLocation() const { return _vLocation; }
-        uint32 GetModelMatrixLocation() const { return _mLocation; }
+        uint32 GetProjMatrixLocation() const { return projLoc; }
+        uint32 GetViewMatrixLocation() const { return viewLoc; }
+        uint32 GetModelMatrixLocation() const { return modelLoc; }
 
     private:
         void prepareShader(std::string, uint32&, uint32&);
 
-        uint32 _id;
+        uint32 id;
 
-        uint32 _vertShader;
-        uint32 _fragShader;
+        uint32 vertShader;
+        uint32 fragShader;
 
         // matrixes locations for uniforms
-        uint32 _pLocation;
-        uint32 _vLocation;
-        uint32 _mLocation;
+        uint32 projLoc;
+        uint32 viewLoc;
+        uint32 modelLoc;
+
+    public:
+        uint32 textEnabledLoc;
+        uint32 textLoc;
 };
 
 #endif

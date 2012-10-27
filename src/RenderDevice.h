@@ -27,10 +27,12 @@ class RenderDevice
         void OnResize(int32, int32);
         void OnUpdate(const uint32);
 
-        void SetUniforms(Shader*, mat4&, mat4&, mat4&);
+        void SetUniforms(Shader*, mat4&, mat4&, mat4&, float);
 
         int32 GetWidth() const { return width; }
         int32 GetHeight() const { return height; }
+
+        void ActivateTexture(uint32, uint32);
 
         void BindVertexArray(uint32);
         void DrawLines(uint32, uint32, uint32);

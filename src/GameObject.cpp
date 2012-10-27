@@ -11,11 +11,7 @@
 
 void GameObject::OnRender(RenderDevice* rd)
 {
-    if (modelName.find("square") != std::string::npos)
-    {
-        glActiveTexture(GL_TEXTURE0 + 0);
-        glBindTexture(GL_TEXTURE_2D, sResourcesMgr->GetTextureId("test"));
-    }
+    rd->ActivateTexture(GL_TEXTURE0, sResourcesMgr->GetTextureId(textureName));
 
     RenderData* renderData = sResourcesMgr->GetRenderDataForModel(modelName);
     rd->DrawTriangles(renderData->vertexArray, 0 , renderData->size);
