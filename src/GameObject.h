@@ -24,14 +24,9 @@ namespace VertexArray
 
 struct Vertex
 {
-    Vertex(vec3 pos = vec3(0.0f, 0.0f, 0.0f), vec3 col = vec3(0.0f, 0.0f, 0.0f))
-    {
-        color = col;
-        position = pos;
-    };
-
     vec3 position;
     vec2 uv;
+    vec3 normal;
     vec3 color;
 };
 
