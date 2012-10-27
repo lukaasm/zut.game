@@ -37,6 +37,7 @@ class ResourcesMgr
         //temp
         void genCube();
         void genSquare();
+        uint32 createTexture(std::string);
 
         RenderDataMap rendersData;
         TexturesMap textures;

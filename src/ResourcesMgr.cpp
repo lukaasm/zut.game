@@ -2,8 +2,7 @@
 
 #include <iostream>
 #include <GL/glew.h>
-#include <gli/gli.hpp>
-#include <gli/gtx/gl_texture2d.hpp>
+#include <GL/glfw.h>
 
 #include "GameObject.h"
 
@@ -200,9 +199,27 @@ uint32 ResourcesMgr::GetTextureId(std::string name)
     return 0;
 }
 
+uint32 ResourcesMgr::createTexture(std::string fileName)
+{
+    if (fileName.find(".tga") == std::string::npos)
+        return 0;
+
+    uint32 textureId;
+    glGenTextures(1, &textureId);
+    glBindTexture(GL_TEXTURE_2D, textureId);
+
+    if (glfwLoadTexture2D(fileName.c_str(), GLFW_BUILD_MIPMAPS_BIT))
+    {
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        return textureId;
+    }
+    return 0;
+}
+
 void ResourcesMgr::loadTextures()
 {
-    uint32 textureId = gli::createTexture2D("../res/textures/test.tga");
+    uint32 textureId = createTexture("../res/textures/test.tga");
     if (textureId == 0)
     {
         std::cout << "There is no such file." << std::endl;
