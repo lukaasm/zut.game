@@ -58,8 +58,6 @@ void SceneMgr::OnUpdate(uint32 diff)
 
 void SceneMgr::OnRender(RenderDevice* rd)
 {
-    text2D.Print(rd, "Testowo - textgui", 100, 100, 25);
-
     Shader* shader = tempShader;
     for (GameObjectsMap::const_iterator i = gameObjectsMap.begin(); i != gameObjectsMap.end(); ++i)
     {
@@ -72,6 +70,8 @@ void SceneMgr::OnRender(RenderDevice* rd)
 
         shader->Unbind();
     }
+
+    text2D.Print(rd, "Testowo - textgui", 100, 100, 14);
 }
 
 void SceneMgr::SetCamera(Camera* camera)

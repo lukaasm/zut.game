@@ -30,10 +30,9 @@ class SceneMgr
 
     private:
         Text2D text2D;
-        Camera* camera;
 
+        Camera* camera;
         Shader* tempShader;
-        Shader* notextShader;
 
         GameObjectsMap gameObjectsMap;
 
