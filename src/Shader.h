@@ -22,9 +22,7 @@ class Shader
 
         uint32 GetId() const { return id; }
 
-        uint32 GetProjMatrixLocation() const { return projLoc; }
-        uint32 GetViewMatrixLocation() const { return viewLoc; }
-        uint32 GetModelMatrixLocation() const { return modelLoc; }
+        uint32 GetMVPMatrixLocation() const { return mvpLoc; }
 
     private:
         void prepareShader(std::string, uint32&, uint32&);
@@ -35,9 +33,7 @@ class Shader
         uint32 fragShader;
 
         // matrixes locations for uniforms
-        uint32 projLoc;
-        uint32 viewLoc;
-        uint32 modelLoc;
+        uint32 mvpLoc;
 
     public:
         uint32 textEnabledLoc;

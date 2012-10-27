@@ -12,12 +12,12 @@ void ResourcesMgr::OnInit()
 {
     loadTextures();
     loadModels();
-    loadTextures();
 }
 
 ResourcesMgr::~ResourcesMgr()
 {
     unloadModels();
+    unloadTextures();
 }
 
 void ResourcesMgr::loadModels()
@@ -143,7 +143,11 @@ void ResourcesMgr::genSquare()
 void ResourcesMgr::unloadModels()
 {
     for (RenderDataMap::iterator i = rendersData.begin(); i != rendersData.end(); ++i)
+    {
+        glDeleteVertexArrays(1, &(i->second->vertexArray));
+        glDeleteBuffers(1, &(i->second->vertexBuffer));
         delete i->second;
+    }
 
     rendersData.clear();
 }
@@ -279,4 +283,19 @@ void ResourcesMgr::loadTextures()
     }
 
     textures["cube"] = textureId;
+
+    textureId = createTexture("../res/textures/font.tga");
+    if (textureId == 0)
+    {
+        std::cout << "There is no such file." << std::endl;
+        return;
+    }
+
+    textures["font"] = textureId;
+}
+
+void ResourcesMgr::unloadTextures()
+{
+    for (TexturesMap::iterator i = textures.begin(); i != textures.end(); ++i)
+        glDeleteTextures(1, &(i->second));
 }

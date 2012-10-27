@@ -39,7 +39,7 @@ void SceneMgr::OnInit()
     POPULATE_CUBE(5.375f, 0.875f, -5.0f, 5)
     POPULATE_CUBE(5.0f, 0.875f+0.625f, -5.0f, 6)
 
-    GameObject* square = new GameObject("square", "test");
+    GameObject* square = new GameObject("square", "font");
 
     model = square->GetModelMatrix();
     model = glm::translate(model, glm::vec3(7.0f, 0.25f, -5.0f));
@@ -47,6 +47,8 @@ void SceneMgr::OnInit()
     square->GetModelMatrix() = model;
 
     gameObjectsMap[7] = square;
+
+    text2D.Init();
 }
 
 void SceneMgr::OnUpdate(uint32 diff)
@@ -56,6 +58,8 @@ void SceneMgr::OnUpdate(uint32 diff)
 
 void SceneMgr::OnRender(RenderDevice* rd)
 {
+    text2D.Print(rd, "Testowo - textgui", 100, 100, 25);
+
     Shader* shader = tempShader;
     for (GameObjectsMap::const_iterator i = gameObjectsMap.begin(); i != gameObjectsMap.end(); ++i)
     {
@@ -63,7 +67,7 @@ void SceneMgr::OnRender(RenderDevice* rd)
 
         float textureFlag = i->second->GetTexture() != "" ? 1.0f : 0.0f;
 
-        rd->SetUniforms(shader, i->second->GetModelMatrix(), GetCamera()->GetProjMatrix(), GetCamera()->GetViewMatrix(), textureFlag);
+        rd->SetUniforms(shader, GetCamera()->GetProjMatrix(), GetCamera()->GetViewMatrix(), i->second->GetModelMatrix(), textureFlag);
         i->second->OnRender(rd);
 
         shader->Unbind();

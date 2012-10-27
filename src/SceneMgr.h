@@ -5,6 +5,7 @@
 
 #include "Common.h"
 #include "Singleton.h"
+#include "Text2d.h"
 
 class Camera;
 class GameObject;
@@ -28,6 +29,7 @@ class SceneMgr
         void SetCamera(Camera*);
 
     private:
+        Text2D text2D;
         Camera* camera;
 
         Shader* tempShader;

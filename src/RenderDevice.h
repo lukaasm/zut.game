@@ -28,6 +28,7 @@ class RenderDevice
         void OnUpdate(const uint32);
 
         void SetUniforms(Shader*, mat4&, mat4&, mat4&, float);
+        void SetUniforms(Shader*);
 
         int32 GetWidth() const { return width; }
         int32 GetHeight() const { return height; }

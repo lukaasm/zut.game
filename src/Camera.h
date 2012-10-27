@@ -45,10 +45,12 @@ class Camera
 
         mat4 GetProjMatrix() const { return projMatrix; }
         mat4 GetViewMatrix() const { return viewMatrix; }
+        mat4 GetOrthoMatrix() const { return viewMatrix; }
 
     private:
         mat4 viewMatrix;
         mat4 projMatrix;
+        mat4 orthoMatrix;
 
         vec3 lookAt;
         vec3 position;
