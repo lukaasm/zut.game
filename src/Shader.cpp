@@ -13,33 +13,36 @@ using namespace std;
 
 Shader::Shader(string vertName, string fragName)
 {
-    _vertShader = 0;
-    _fragShader = 0;
+    vertShader = 0;
+    fragShader = 0;
 
-    _id = glCreateProgram();
+    id = glCreateProgram();
 
-    prepareShader(vertName, _vertShader, _id);
-    prepareShader(fragName, _fragShader, _id);
+    prepareShader(vertName, vertShader, id);
+    prepareShader(fragName, fragShader, id);
 
     glBindAttribLocation(GetId(), 0, "in_Position");
     glBindAttribLocation(GetId(), 1, "in_TexCoord");
     glBindAttribLocation(GetId(), 3, "in_Color");
 
-    glLinkProgram(_id);
+    glLinkProgram(id);
 
-    _pLocation = glGetUniformLocation(GetId(), "projMatrix");
-    _vLocation = glGetUniformLocation(GetId(), "viewMatrix");
-    _mLocation = glGetUniformLocation(GetId(), "modelMatrix");
+    projLoc = glGetUniformLocation(GetId(), "projMatrix");
+    viewLoc = glGetUniformLocation(GetId(), "viewMatrix");
+    modelLoc = glGetUniformLocation(GetId(), "modelMatrix");
+
+    textEnabledLoc = glGetUniformLocation(GetId(), "textureFlag");
+    textLoc = glGetUniformLocation(GetId(), "baseTexture");
 }
 
 Shader::~Shader()
 {
-    glDetachShader(_id, _fragShader);
-    glDetachShader(_id, _vertShader);
+    glDetachShader(id, fragShader);
+    glDetachShader(id, vertShader);
 
-    glDeleteShader(_fragShader);
-    glDeleteShader(_vertShader);
-    glDeleteProgram(_id);
+    glDeleteShader(fragShader);
+    glDeleteShader(vertShader);
+    glDeleteProgram(id);
 }
 
 void Shader::prepareShader(string shadName, uint32& subid, uint32& id)
@@ -80,7 +83,7 @@ void Shader::prepareShader(string shadName, uint32& subid, uint32& id)
 
 void Shader::Bind()
 {
-    glUseProgram(_id);
+    glUseProgram(id);
 }
 
 void Shader::Unbind()

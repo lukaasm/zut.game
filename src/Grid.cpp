@@ -16,7 +16,7 @@
 
 using namespace glm;
 
-Grid::Grid() : GameObject("grid")
+Grid::Grid() : GameObject("grid", "")
 {
 }
 

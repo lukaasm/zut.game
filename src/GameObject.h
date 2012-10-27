@@ -48,7 +48,7 @@ class RenderDevice;
 class GameObject
 {
     public:
-        explicit GameObject(std::string model) : modelName(model) {}
+        explicit GameObject(std::string model, std::string texture) : modelName(model), textureName(texture) {}
         
     //public:
         virtual ~GameObject() {}
@@ -59,10 +59,14 @@ class GameObject
 
         void SetGuid(uint32 guid) { this->guid = guid; }
 
+        std::string GetModel() const { return modelName; }
+        std::string GetTexture() const { return textureName; }
+
     protected:
         uint32 guid;
 
         std::string modelName;
+        std::string textureName;
 
         mat4 modelMatrix;
 };
