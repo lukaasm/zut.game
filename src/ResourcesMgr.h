@@ -12,6 +12,8 @@
 #include "Singleton.h"
 
 struct RenderData;
+struct Vertex;
+
 typedef std::hash_map<std::string, RenderData*> RenderDataMap;
 typedef std::hash_map<std::string, uint32> TexturesMap;
 
@@ -38,6 +40,8 @@ class ResourcesMgr
         void genCube();
         void genSquare();
         uint32 createTexture(std::string);
+
+        bool loadOBJ(std::string, std::vector<Vertex>&);
 
         RenderDataMap rendersData;
         TexturesMap textures;
