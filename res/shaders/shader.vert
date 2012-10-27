@@ -4,9 +4,7 @@
 #define ATTR_TEXCOORD   1
 #define ATTR_COLOR		3
 
-uniform mat4 projMatrix;
-uniform mat4 viewMatrix;
-uniform mat4 modelMatrix;
+uniform mat4 mvpMatrix;
 
 out vec3 pass_Color;
 out vec2 pass_TexCoord;
@@ -17,7 +15,7 @@ layout(location = ATTR_COLOR) in vec3 in_Color;
 
 void main(void)
 {
-     gl_Position = projMatrix * viewMatrix * modelMatrix * vec4(in_Position, 1.0);
-     pass_Color = in_Position;
-     pass_TexCoord = in_TexCoord;
+    gl_Position = mvpMatrix * vec4(in_Position, 1.0);
+    pass_Color = in_Position;
+    pass_TexCoord = in_TexCoord;
 }

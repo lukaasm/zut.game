@@ -83,6 +83,9 @@
     <ClInclude Include="..\src\SceneMgr.h">
       <Filter>Frame\Managers</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\Text2d.h">
+      <Filter>Frame\Other</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="VS2k10.rc">
@@ -124,6 +127,9 @@
     </ClCompile>
     <ClCompile Include="..\src\SceneMgr.cpp">
       <Filter>Frame\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Text2d.cpp">
+      <Filter>Frame\Other</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

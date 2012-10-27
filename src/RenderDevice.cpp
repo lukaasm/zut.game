@@ -51,15 +51,22 @@ void RenderDevice::OnUpdate(const uint32 diff)
 {
 }
 
-void RenderDevice::SetUniforms(Shader* shader, mat4& modelMatrix, mat4& projMatrix, mat4& viewMatrix, float hasTexture)
+void RenderDevice::SetUniforms(Shader* shader, mat4& projMatrix, mat4& viewMatrix, mat4& modelMatrix, float hasTexture)
 {
-    glUniformMatrix4fv(shader->GetProjMatrixLocation(), 1, GL_FALSE, value_ptr(projMatrix));
-    glUniformMatrix4fv(shader->GetViewMatrixLocation(), 1, GL_FALSE, value_ptr(viewMatrix));
-    glUniformMatrix4fv(shader->GetModelMatrixLocation(), 1, GL_FALSE, value_ptr(modelMatrix));
+    mat4 mvpMatrix = projMatrix * viewMatrix * modelMatrix;
+    glUniformMatrix4fv(shader->GetMVPMatrixLocation(), 1, GL_FALSE, value_ptr(mvpMatrix));
 
     glUniform1i(shader->textLoc, 0);
     glUniform1f(shader->textEnabledLoc, hasTexture);
 }
+
+// For Text2d render only
+void RenderDevice::SetUniforms(Shader* shader)
+{
+    glUniform1i(shader->textLoc, 0);
+    glUniform1f(shader->textEnabledLoc, float(1.0f));
+}
+
 
 void RenderDevice::DrawLines(uint32 vao, uint32 start, uint32 size)
 {

@@ -27,9 +27,7 @@ Shader::Shader(string vertName, string fragName)
 
     glLinkProgram(id);
 
-    projLoc = glGetUniformLocation(GetId(), "projMatrix");
-    viewLoc = glGetUniformLocation(GetId(), "viewMatrix");
-    modelLoc = glGetUniformLocation(GetId(), "modelMatrix");
+    mvpLoc = glGetUniformLocation(GetId(), "mvpMatrix");
 
     textEnabledLoc = glGetUniformLocation(GetId(), "textureFlag");
     textLoc = glGetUniformLocation(GetId(), "baseTexture");
@@ -72,11 +70,11 @@ void Shader::prepareShader(string shadName, uint32& subid, uint32& id)
     glShaderSource(subid, 1, &shadText, 0);
     glCompileShader(subid);
 
-/*    if (char* error = ValidiateShader(id))
+    if (char* error = ValidiateShader(id))
     {
         cout << "SHADER ERROR: " << error << endl;
         delete_array(error);
-    }*/
+    }
 
     glAttachShader(id, subid);
 }

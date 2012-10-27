@@ -35,6 +35,7 @@ class ResourcesMgr
         void loadShaders() {}
 
         void unloadModels();
+        void unloadTextures();
 
         //temp
         void genCube();
