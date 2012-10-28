@@ -25,7 +25,7 @@ void Text2D::Init()
     shader = new Shader("../res/shaders/font.vert", "../res/shaders/shader.frag");
 
     // Initialize texture
-    textureId = sResourcesMgr->GetTextureId("font");
+    textureId = sResourcesMgr->GetTextureId("font.tga");
 
     renderData = new RenderData;
 
