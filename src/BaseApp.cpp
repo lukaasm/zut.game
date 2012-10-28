@@ -14,7 +14,7 @@
 #include "ResourcesMgr.h"
 #include "SceneMgr.h"
 
-#define UPDATE_INTERVAL 50
+#define UPDATE_INTERVAL 35
 
 BaseApp::BaseApp()
 {
@@ -91,10 +91,12 @@ void BaseApp::Run()
 
     while (!Stopped())
     {
-        const uint32 diff = uint32(glfwGetTime()*1000.0f);
-        if (diff >= UPDATE_INTERVAL)
+        uint32 diff = uint32(glfwGetTime()*1000.0f);
+        while (diff >= UPDATE_INTERVAL)
         {
-            OnUpdate(diff);
+            OnUpdate(UPDATE_INTERVAL);
+            diff -= UPDATE_INTERVAL;
+
             glfwSetTime(0);
         }
 
