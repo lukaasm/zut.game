@@ -16,6 +16,6 @@ layout(location = ATTR_COLOR) in vec3 in_Color;
 void main(void)
 {
     gl_Position = mvpMatrix * vec4(in_Position, 1.0);
-    pass_Color = in_Position;
+    pass_Color = in_Color;
     pass_TexCoord = in_TexCoord;
 }

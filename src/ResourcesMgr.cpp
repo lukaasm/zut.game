@@ -26,21 +26,18 @@ void ResourcesMgr::loadModels()
     RenderData* renderData = new RenderData;
 
     uint32 _size = 40;
-    Vertex vertices[160]; // _size*4
+    Vertex vert[160]; // _size*4
+
+    for (uint32 i = 0; i < 160; ++i)
+        vert[i].color = vec3(0.5f, 0.0f, 0.3f);
 
     for (uint32 x = 0; x < _size; x++)
     {
-        vertices[x*2].position = vec3(float(x), 0.0f, 0.0f);
-        vertices[x*2 +1].position = vec3(float(x), 0.0f, -float(_size));
+        vert[x*2].position = vec3(float(x), 0.0f, 0.0f);
+        vert[x*2 +1].position = vec3(float(x), 0.0f, -float(_size));
 
-        vertices[x*2 +_size*2].position = vec3(0.0f, 0.0f, -float(x));
-        vertices[x*2 +_size*2+1].position = vec3(float(_size), 0.0f, -float(x));
-
-        vertices[x*2].color = vec3(0.0f, 1.0f, 0.0f);
-        vertices[x*2 +1].color = vec3(0.0f, 1.0f, 0.0f);
-
-        vertices[x*2 +_size*2].color = vec3(0.0f, 1.0f, 0.0f);
-        vertices[x*2 +_size*2+1].color = vec3(0.0f, 1.0f, 0.0f);
+        vert[x*2 +_size*2].position = vec3(0.0f, 0.0f, -float(x));
+        vert[x*2 +_size*2+1].position = vec3(float(_size), 0.0f, -float(x));
     };
 
     glGenVertexArrays(1, &(renderData->vertexArray));
@@ -48,10 +45,10 @@ void ResourcesMgr::loadModels()
     {
         glGenBuffers(1, &(renderData->vertexBuffer));
         glBindBuffer(GL_ARRAY_BUFFER, renderData->vertexBuffer);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(vert), vert, GL_STATIC_DRAW);
         {
             glVertexAttribPointer(VertexArray::Attrib::POSITION, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
-            glVertexAttribPointer(VertexArray::Attrib::COLOR, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), BUFFER_OFFSET(sizeof(vec3)));
+            glVertexAttribPointer(VertexArray::Attrib::COLOR, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), BUFFER_OFFSET(COLOR_VERTEX_POS));
         }
         glBindBuffer(GL_ARRAY_BUFFER, 0);
 
@@ -83,7 +80,7 @@ void ResourcesMgr::genCube()
         glBufferData(GL_ARRAY_BUFFER, vertexes.size()*sizeof(Vertex), &vertexes[0], GL_STATIC_DRAW);
         {
             glVertexAttribPointer(VertexArray::Attrib::POSITION, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
-            glVertexAttribPointer(VertexArray::Attrib::TEXCOORD, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), BUFFER_OFFSET(sizeof(vec3)));
+            glVertexAttribPointer(VertexArray::Attrib::TEXCOORD, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), BUFFER_OFFSET(UV_VERTEX_POS));
         }
         glBindBuffer(GL_ARRAY_BUFFER, 0);
 
@@ -192,7 +189,7 @@ bool ResourcesMgr::loadOBJ(std::string fileName, std::vector<Vertex>& vert)
     if (file == NULL)
         return false;
 
-    std::vector<vec3> temp_vertices, temp_normals;
+    std::vector<vec3> temp_vert, temp_normals;
     std::vector<vec2> temp_uvs;
 
     std::vector<uint32> vertIndices, uvIndices, normIndices;
@@ -207,7 +204,7 @@ bool ResourcesMgr::loadOBJ(std::string fileName, std::vector<Vertex>& vert)
         {
             vec3 vertex;
             fscanf(file, "%f %f %f\n", &vertex.x, &vertex.y, &vertex.z);
-            temp_vertices.push_back(vertex);
+            temp_vert.push_back(vertex);
         }
         else if (strcmp(lineHeader, "vt") == 0)
         {
@@ -254,7 +251,7 @@ bool ResourcesMgr::loadOBJ(std::string fileName, std::vector<Vertex>& vert)
     for (uint32 i = 0; i < vertIndices.size(); ++i)
     {
         Vertex vertex;
-        vertex.position = temp_vertices[vertIndices[i]];
+        vertex.position = temp_vert[vertIndices[i]];
         vertex.uv = temp_uvs[uvIndices[i]];
         vertex.normal = temp_normals[normIndices[i]];
 

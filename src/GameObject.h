@@ -39,6 +39,10 @@ struct Vertex
     vec3 color;
 };
 
+#define UV_VERTEX_POS sizeof(vec3)
+#define NORMAL_VERTEX_POS UV_VERTEX_POS + sizeof(vec2)
+#define COLOR_VERTEX_POS NORMAL_VERTEX_POS + sizeof(vec3)
+
 struct RenderData
 {
     uint32 size;

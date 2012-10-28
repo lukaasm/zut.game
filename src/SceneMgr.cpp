@@ -26,7 +26,7 @@ void SceneMgr::OnInit()
 
     gameObjectsMap[1] = cube;
 
-#define POPULATE_CUBE(a,b,c,d) cube = new GameObject("cube", ""); \
+#define POPULATE_CUBE(a,b,c,d) cube = new GameObject("cube", "cube"); \
     model = cube->GetModelMatrix(); \
     model = glm::translate(model, glm::vec3(a, b, c)); \
     model = glm::scale(model, glm::vec3(0.25f)); \
