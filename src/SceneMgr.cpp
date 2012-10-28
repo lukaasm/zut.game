@@ -16,7 +16,7 @@ void SceneMgr::OnInit()
 
     gameObjectsMap[0] = new Grid();
 
-    GameObject* cube = new GameObject("cube", "cube");
+    GameObject* cube = new GameObject("cube", "cube.tga");
 
     glm::mat4 model = cube->GetModelMatrix();
     model = glm::translate(model, glm::vec3(5.0f, 0.25f, -5.0f));
@@ -26,7 +26,7 @@ void SceneMgr::OnInit()
 
     gameObjectsMap[1] = cube;
 
-#define POPULATE_CUBE(a,b,c,d) cube = new GameObject("cube", "cube"); \
+#define POPULATE_CUBE(a,b,c,d) cube = new GameObject("cube", "cube.tga"); \
     model = cube->GetModelMatrix(); \
     model = glm::translate(model, glm::vec3(a, b, c)); \
     model = glm::scale(model, glm::vec3(0.25f)); \
@@ -39,7 +39,7 @@ void SceneMgr::OnInit()
     POPULATE_CUBE(5.375f, 0.875f, -5.0f, 5)
     POPULATE_CUBE(5.0f, 0.875f+0.625f, -5.0f, 6)
 
-    GameObject* square = new GameObject("square", "font");
+    GameObject* square = new GameObject("square", "test.tga");
 
     model = square->GetModelMatrix();
     model = glm::translate(model, glm::vec3(7.0f, 0.25f, -5.0f));
@@ -71,7 +71,7 @@ void SceneMgr::OnRender(RenderDevice* rd)
         shader->Unbind();
     }
 
-    text2D.Print(rd, "Testowo - textgui", 100, 100, 14);
+    text2D.Print(rd, "Texture Mapped Font: test :)", 100, 100, 10);
 }
 
 void SceneMgr::SetCamera(Camera* camera)
@@ -83,6 +83,8 @@ SceneMgr::~SceneMgr()
 {
     for (GameObjectsMap::const_iterator i = gameObjectsMap.begin(); i != gameObjectsMap.end(); ++i)
         delete i->second;
+
+    gameObjectsMap.clear();
 
     delete tempShader;
     delete camera;

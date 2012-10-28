@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <cstdio>
+#include <exception>
 
 #include <GL/glew.h>
 #include <GL/glfw.h>
@@ -261,38 +262,43 @@ bool ResourcesMgr::loadOBJ(std::string fileName, std::vector<Vertex>& vert)
     return true;
 }
 
+void ResourcesMgr::loadTexture(std::string fileName)
+{
+    if (GetTextureId(fileName))
+    {
+        std::string what = "Error: file: " + fileName + " were already loaded.";
+        throw std::exception(what.c_str());
+    }
+
+    uint32 textureId = createTexture("../res/textures/" + fileName);
+    if (textureId == 0)
+    {
+        std::string what = "Error: problem occurred while creating texture from file: " + fileName;
+        throw std::exception(what.c_str());
+    }
+
+    textures[fileName] = textureId;    
+}
+
 void ResourcesMgr::loadTextures()
 {
-    uint32 textureId = createTexture("../res/textures/test.tga");
-    if (textureId == 0)
+    try
     {
-        std::cout << "There is no such file." << std::endl;
-        return;
+        loadTexture("test.tga");
+        loadTexture("cube.tga");
+        loadTexture("font.tga");
     }
-
-    textures["test"] = textureId;
-
-    textureId = createTexture("../res/textures/cube.tga");
-    if (textureId == 0)
+    catch (std::exception& e)
     {
-        std::cout << "There is no such file." << std::endl;
-        return;
+    	std::cout << e.what() << std::endl;
+        // exit program
     }
-
-    textures["cube"] = textureId;
-
-    textureId = createTexture("../res/textures/font.tga");
-    if (textureId == 0)
-    {
-        std::cout << "There is no such file." << std::endl;
-        return;
-    }
-
-    textures["font"] = textureId;
 }
 
 void ResourcesMgr::unloadTextures()
 {
     for (TexturesMap::iterator i = textures.begin(); i != textures.end(); ++i)
         glDeleteTextures(1, &(i->second));
+
+    textures.clear();
 }

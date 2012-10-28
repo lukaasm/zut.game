@@ -24,8 +24,6 @@ class BaseApp
         void CreateWindow();
         void CreateCallBacks();
 
-        void PerformUpdate();
-
         void Init();
         void Run();
 
@@ -34,24 +32,24 @@ class BaseApp
 
         static ResizeCallBack *ResizeCallback;
         static void ResizeWindow(int32, int32);
-        void _resizeWindow(int32, int32);
 
         static CloseCallBack *CloseCallback;
         static int CloseWindow();
-        void _closeWindow();
 
-        bool Stopped() const { return _stop; }
+        bool Stopped() const { return stop; }
 
-        Keyboard* GetKeyboard() const { return _keyboard; }
-        RenderDevice* GetRenderDevice() const { return _renderDevice; }
+        Keyboard* GetKeyboard() const { return keyboard; }
+        RenderDevice* GetRenderDevice() const { return renderDevice; }
 
     private:
-        void _createContext();
+        void closeWindow();
+        void createContext();
+        void resizeWindow(int32, int32);
 
-        bool _stop;
+        bool stop;
 
-        Keyboard* _keyboard;
-        RenderDevice* _renderDevice;
+        Keyboard* keyboard;
+        RenderDevice* renderDevice;
 };
 
 #endif

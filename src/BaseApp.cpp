@@ -18,8 +18,8 @@
 
 BaseApp::BaseApp()
 {
-    _keyboard = new Keyboard(this);
-    _renderDevice = new RenderDevice();
+    keyboard = new Keyboard(this);
+    renderDevice = new RenderDevice();
 }
 
 BaseApp::~BaseApp()
@@ -27,11 +27,11 @@ BaseApp::~BaseApp()
     delete_ptr(BaseApp::CloseCallback)
     delete_ptr(BaseApp::ResizeCallback)
 
-    delete_ptr(_keyboard)
-    delete_ptr(_renderDevice)
+    delete_ptr(keyboard)
+    delete_ptr(renderDevice)
 }
 
-void BaseApp::_createContext()
+void BaseApp::createContext()
 {
     if (!glfwInit())
     {
@@ -48,11 +48,12 @@ void BaseApp::_createContext()
 
     // create our window
     glfwOpenWindow(1024, 768, 0, 0, 0, 0, 0, 0, GLFW_WINDOW);
+    glfwSetWindowTitle("WastedProject by lukaasm");
 }
 
 void BaseApp::CreateWindow()
 {
-    _createContext();
+    createContext();
 
     // needed for new context functions
     glewExperimental = true;
@@ -68,10 +69,10 @@ void BaseApp::CreateWindow()
 
 void BaseApp::CreateCallBacks()
 {
-    BaseApp::ResizeCallback = new ResizeCallBack(this, &BaseApp::_resizeWindow);
+    BaseApp::ResizeCallback = new ResizeCallBack(this, &BaseApp::resizeWindow);
     glfwSetWindowSizeCallback(BaseApp::ResizeWindow);
 
-    BaseApp::CloseCallback = new CloseCallBack(this, &BaseApp::_closeWindow);
+    BaseApp::CloseCallback = new CloseCallBack(this, &BaseApp::closeWindow);
     glfwSetWindowCloseCallback(BaseApp::CloseWindow);
 
     GetKeyboard()->CreateCallBacks();
@@ -87,7 +88,7 @@ void BaseApp::Init()
 
 void BaseApp::Run()
 {
-    _stop = false;
+    stop = false;
 
     while (!Stopped())
     {
@@ -115,7 +116,7 @@ void BaseApp::ResizeWindow(int32 width, int32 height)
     (*BaseApp::ResizeCallback)(width, height);
 }
 
-void BaseApp::_resizeWindow(int32 width, int32 height)
+void BaseApp::resizeWindow(int32 width, int32 height)
 {
     GetRenderDevice()->OnResize(width, height);
     sSceneMgr->GetCamera()->OnResize(width, height);
@@ -129,9 +130,9 @@ int BaseApp::CloseWindow()
     return 0;
 }
 
-void BaseApp::_closeWindow()
+void BaseApp::closeWindow()
 {
-    _stop = true;
+    stop = true;
 }
 
 void BaseApp::OnUpdate(const uint32 diff)

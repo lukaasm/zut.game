@@ -43,6 +43,7 @@ class ResourcesMgr
         uint32 createTexture(std::string);
 
         bool loadOBJ(std::string, std::vector<Vertex>&);
+        void loadTexture(std::string fileName);
 
         RenderDataMap rendersData;
         TexturesMap textures;
