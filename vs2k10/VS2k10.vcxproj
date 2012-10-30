@@ -82,7 +82,6 @@
   <ItemGroup>
     <ClCompile Include="..\src\BaseApp.cpp" />
     <ClCompile Include="..\src\Camera.cpp" />
-    <ClCompile Include="..\src\GameObjectMgr.cpp" />
     <ClCompile Include="..\src\GameObject.cpp" />
     <ClCompile Include="..\src\Grid.cpp" />
     <ClCompile Include="..\src\Input.cpp" />
@@ -98,7 +97,6 @@
     <ClInclude Include="..\src\Camera.h" />
     <ClInclude Include="..\src\Common.h" />
     <ClInclude Include="..\src\GameObject.h" />
-    <ClInclude Include="..\src\GameObjectMgr.h" />
     <ClInclude Include="..\src\Grid.h" />
     <ClInclude Include="..\src\Input.h" />
     <ClInclude Include="..\src\RenderDevice.h" />

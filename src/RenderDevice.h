@@ -20,10 +20,10 @@ class RenderDevice
         RenderDevice();
         ~RenderDevice();
 
-        void Clear(float, float, float, float);
-
         void OnInit();
-        void OnRender();
+
+        void OnRenderStart();
+        void OnRenderEnd();
         void OnResize(int32, int32);
         void OnUpdate(const uint32);
 

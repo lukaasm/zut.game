@@ -22,23 +22,6 @@ RenderDevice::~RenderDevice()
 {
 }
 
-void RenderDevice::Clear(float r, float g, float b, float a)
-{
-    glClearColor(r, g, b, a);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-}
-
-void RenderDevice::OnInit()
-{
-    glEnable(GL_DEPTH_TEST);
-
-    glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-}
-
-void RenderDevice::OnRender()
-{
-}
-
 void RenderDevice::OnResize(int32 width, int32 height)
 {
     this->width = width;
@@ -87,4 +70,22 @@ void RenderDevice::ActivateTexture(uint32 mode, uint32 textureId)
 
     glActiveTexture(mode);
     glBindTexture(GL_TEXTURE_2D, textureId);
+}
+
+void RenderDevice::OnRenderStart()
+{
+    glEnable(GL_DEPTH_TEST);
+
+    glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+}
+
+void RenderDevice::OnRenderEnd()
+{
+    glDisable(GL_DEPTH_TEST);
+}
+
+void RenderDevice::OnInit()
+{
+
 }
