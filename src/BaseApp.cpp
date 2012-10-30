@@ -14,9 +14,9 @@
 #include "ResourcesMgr.h"
 #include "SceneMgr.h"
 
-#define UPDATE_INTERVAL 35
+#define UPDATE_STEP 35
 
-BaseApp::BaseApp()
+BaseApp::BaseApp() : stop(false)
 {
     keyboard = new Keyboard(this);
     renderDevice = new RenderDevice();
@@ -88,17 +88,16 @@ void BaseApp::Init()
 
 void BaseApp::Run()
 {
-    stop = false;
-
+    uint32 accDiff = 0;
     while (!Stopped())
     {
-        uint32 diff = uint32(glfwGetTime()*1000.0f);
-        while (diff >= UPDATE_INTERVAL)
-        {
-            OnUpdate(UPDATE_INTERVAL);
-            diff -= UPDATE_INTERVAL;
+        accDiff += uint32(glfwGetTime()*1000.0f);
+        glfwSetTime(0);
 
-            glfwSetTime(0);
+        while (accDiff >= UPDATE_STEP)
+        {
+            OnUpdate(UPDATE_STEP);
+            accDiff -= UPDATE_STEP;
         }
 
         OnRender();
@@ -144,21 +143,23 @@ void BaseApp::OnUpdate(const uint32 diff)
 
 void BaseApp::OnRender()
 {
-    GetRenderDevice()->Clear(0.0f, 0.0f, 0.0f, 0.0f);
-
-    GetRenderDevice()->OnRender();
+    GetRenderDevice()->OnRenderStart();
     sSceneMgr->OnRender(GetRenderDevice());
+    GetRenderDevice()->OnRenderEnd();
 }
 
 int main()
 {
-    BaseApp *p = new BaseApp;
+    BaseApp *app = new BaseApp;
 
-    p->CreateWindow();
-    p->CreateCallBacks();
-    p->Run();
+    app->CreateWindow();
+    app->CreateCallBacks();
 
-    delete_ptr(p)
+    glfwSetTime(0);
+
+    app->Run();
+
+    delete_ptr(app)
 
     return 0;
 }

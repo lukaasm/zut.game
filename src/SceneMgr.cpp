@@ -71,7 +71,7 @@ void SceneMgr::OnRender(RenderDevice* rd)
         shader->Unbind();
     }
 
-    text2D.Print(rd, "Texture Mapped Font: test :)", 100, 100, 10);
+    text2D.Print(rd, "Controls: W,S,A,D + arrows for rotating", 100, 100, 10);
 }
 
 void SceneMgr::SetCamera(Camera* camera)

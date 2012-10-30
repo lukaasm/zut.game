@@ -71,9 +71,6 @@
     <ClInclude Include="..\src\GameObject.h">
       <Filter>Frame\GameObjects</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\GameObjectMgr.h">
-      <Filter>Frame\Managers</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\Singleton.h">
       <Filter>Misc</Filter>
     </ClInclude>
@@ -118,9 +115,6 @@
     </ClCompile>
     <ClCompile Include="..\src\GameObject.cpp">
       <Filter>Frame\GameObjects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\GameObjectMgr.cpp">
-      <Filter>Frame\Managers</Filter>
     </ClCompile>
     <ClCompile Include="..\src\ResourcesMgr.cpp">
       <Filter>Frame\Managers</Filter>
