@@ -16,17 +16,17 @@ void SceneMgr::OnInit()
 
     gameObjectsMap[0] = new Grid();
 
-    GameObject* cube = new GameObject("cube", "cube.tga");
+    GameObject* cube = new GameObject("cube.obj", "cube.tga");
 
     glm::mat4 model = cube->GetModelMatrix();
     model = glm::translate(model, glm::vec3(5.0f, 0.25f, -5.0f));
-    model = glm::scale(model, glm::vec3(0.25f));
+    model = glm::scale(model, glm::vec3(0.15f));
 
     cube->GetModelMatrix() = model;
 
     gameObjectsMap[1] = cube;
 
-#define POPULATE_CUBE(a,b,c,d) cube = new GameObject("cube", "cube.tga"); \
+#define POPULATE_CUBE(a,b,c,d) cube = new GameObject("cube.obj", "cube.tga"); \
     model = cube->GetModelMatrix(); \
     model = glm::translate(model, glm::vec3(a, b, c)); \
     model = glm::scale(model, glm::vec3(0.25f)); \
