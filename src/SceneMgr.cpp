@@ -2,10 +2,12 @@
 
 #include <glm/gtc/matrix_transform.hpp>
 
+#include "BoundingObject.h"
 #include "Camera.h"
 #include "GameObject.h"
 #include "Grid.h"
 #include "RenderDevice.h"
+#include "ResourcesMgr.h"
 #include "Shader.h"
 
 void SceneMgr::OnInit()
@@ -14,7 +16,7 @@ void SceneMgr::OnInit()
 
     tempShader = new Shader("../res/shaders/shader.vert", "../res/shaders/shader.frag"); 
 
-    gameObjectsMap[0] = new Grid();
+   // gameObjectsMap[0] = new Grid();
 
     GameObject* cube = new GameObject("cube.obj", "cube.tga");
     cube->SetPosition(glm::vec3(5.0f, 0.25f, -5.0f));
@@ -48,11 +50,13 @@ void SceneMgr::OnRender(RenderDevice* rd)
     {
         shader->Bind();
 
+        GameObject* ob = i->second;
         float textureFlag = i->second->GetTexture() != "" ? 1.0f : 0.0f;
 
-        rd->SetUniforms(shader, GetCamera()->GetProjMatrix(), GetCamera()->GetViewMatrix(), i->second->GetModelMatrix(), textureFlag);
+        rd->SetUniforms(shader, GetCamera()->GetProjMatrix(), GetCamera()->GetViewMatrix(), ob->GetModelMatrix(), textureFlag);
         i->second->OnRender(rd);
-
+        rd->SetUniforms(shader, GetCamera()->GetProjMatrix(), GetCamera()->GetViewMatrix(), ob->GetModelMatrix(), 0.0f);
+        sResourcesMgr->GetRenderDataForModel(ob->GetModel())->bounding->OnRender(rd);
         shader->Unbind();
     }
 

@@ -7,6 +7,7 @@
 #include <GL/glew.h>
 #include <GL/glfw.h>
 
+#include "BoundingObject.h"
 #include "GameObject.h"
 
 // warning C4482: nonstandard extension used: enum 'VertexArray::Attrib' used in qualified name
@@ -153,6 +154,11 @@ bool ResourcesMgr::loadModel(std::string fileName)
         glBindVertexArray(0);
 
         renderData->size = vertexes.size();
+
+        BoundingBox* box = new BoundingBox();
+        box->SetMinMax(vertexes);
+
+        renderData->bounding = box;
 
         rendersData[fileName] = renderData;
     }
