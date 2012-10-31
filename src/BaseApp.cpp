@@ -89,10 +89,12 @@ void BaseApp::Init()
 void BaseApp::Run()
 {
     uint32 accDiff = 0;
+    double start = glfwGetTime();
     while (!Stopped())
     {
-        accDiff += uint32(glfwGetTime()*1000.0f);
-        glfwSetTime(0);
+        double now = glfwGetTime();
+        accDiff += uint32(ceil((now - start)*1000.0f));
+        start = now;
 
         while (accDiff >= UPDATE_STEP)
         {

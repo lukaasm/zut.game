@@ -7,7 +7,7 @@ Frustum::Frustum()
 
 }
 
-void Frustum::calculate(mat4& viewMatrix, mat4& projMatrix)
+void Frustum::Calculate(mat4& viewMatrix, mat4& projMatrix)
 {
     const mat4 &v = viewMatrix;
     const mat4 &p = projMatrix;

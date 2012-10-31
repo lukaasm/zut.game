@@ -83,6 +83,9 @@
     <ClInclude Include="..\src\Text2d.h">
       <Filter>Frame\Other</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\Frustum.h">
+      <Filter>Frame\Camera</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="VS2k10.rc">
@@ -124,6 +127,9 @@
     </ClCompile>
     <ClCompile Include="..\src\Text2d.cpp">
       <Filter>Frame\Other</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Frustum.cpp">
+      <Filter>Frame\Camera</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

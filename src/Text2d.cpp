@@ -11,6 +11,9 @@
 #include "ResourcesMgr.h"
 #include "Shader.h"
 
+// warning C4482: nonstandard extension used: enum 'VertexArray::Attrib' used in qualified name
+#pragma warning(disable : 4482)
+
 Text2D::~Text2D()
 {
     // Delete buffers

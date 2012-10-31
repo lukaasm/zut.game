@@ -24,7 +24,7 @@ class Frustum
     public:
         Frustum();
 
-        void calculate(mat4& viewMatrix, mat4& projMatrix);
+        void Calculate(mat4& viewMatrix, mat4& projMatrix);
 
     private:
         Plane planes[MAX_PLANES];
