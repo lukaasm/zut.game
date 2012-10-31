@@ -8,6 +8,7 @@
 #include <glm/glm.hpp>
 
 #include "Common.h"
+#include "Frustum.h"
 
 using namespace glm;
 
@@ -47,16 +48,19 @@ class Camera
         mat4 GetViewMatrix() const { return viewMatrix; }
         mat4 GetOrthoMatrix() const { return viewMatrix; }
 
+        Frustum& GetFrustum() { return frustum; }
+
     private:
         mat4 viewMatrix;
         mat4 projMatrix;
-        mat4 orthoMatrix;
 
         vec3 lookAt;
         vec3 position;
+
         vec3 right;
         vec3 up;
 
+        Frustum frustum;
         MoveType moveFlags;
 };
 

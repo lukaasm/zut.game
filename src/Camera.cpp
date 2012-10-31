@@ -22,6 +22,8 @@ Camera::Camera()
     right = vec3(1.0f, 0.0f, 0.0f);
 
     moveFlags = MOVE_NONE;
+
+    LookAt();
 }
 
 void Camera::LookAt()
@@ -32,7 +34,7 @@ void Camera::LookAt()
 void Camera::OnResize(int32 width, int32 height)
 {
     projMatrix = perspective(60.0f, float(width/height), 0.1f, 100.0f);
-    orthoMatrix = ortho(0.0f, float(width), 0.0f, float(height), 0.1f, 100.0f);
+    frustum.Calculate(viewMatrix, projMatrix);
 }
 
 void Camera::Move(MoveType type, float angleOrScale)
@@ -137,7 +139,11 @@ void Camera::OnUpdate(const uint32 diff)
     else if (moveFlags & MOVE_ROTATE_DOWN)
         Move(MOVE_ROTATE_DOWN, 3.5f);
 
-    LookAt();
+    if (moveFlags != MOVE_NONE)
+    {
+        LookAt();
+        frustum.Calculate(viewMatrix, projMatrix);
+    }
 }
 
 void Camera::AddMoveType(MoveType flag)
