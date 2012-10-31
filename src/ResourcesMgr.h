@@ -37,12 +37,9 @@ class ResourcesMgr
         void unloadModels();
         void unloadTextures();
 
-        //temp
-        void genCube();
-        void genSquare();
         uint32 createTexture(std::string);
-
         bool loadOBJ(std::string, std::vector<Vertex>&);
+
         void loadTexture(std::string fileName);
         bool loadModel(std::string fileName);
 

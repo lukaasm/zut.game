@@ -63,9 +63,19 @@ class GameObject
 
         virtual void OnRender(RenderDevice*);
 
-        mat4& GetModelMatrix() { return modelMatrix; }
+        mat4 GetModelMatrix();
 
         void SetGuid(uint32 guid) { this->guid = guid; }
+
+        void SetPosition(vec3& pos)
+        {
+            position = pos;
+        }
+
+        void SetScale(vec3& scale)
+        {
+            this->scale = scale;
+        }
 
         std::string GetModel() const { return modelName; }
         std::string GetTexture() const { return textureName; }
@@ -76,7 +86,11 @@ class GameObject
         std::string modelName;
         std::string textureName;
 
-        mat4 modelMatrix;
+        vec3 scale;
+        vec3 position;
+
+        float rotationX;
+        //float rotationY;
 };
 
 #endif

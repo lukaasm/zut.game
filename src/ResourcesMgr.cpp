@@ -69,51 +69,6 @@ void ResourcesMgr::loadModels()
 
     loadModel("cube.obj");
     loadModel("trashbin.obj");
-
-    genSquare();
-}
-
-void ResourcesMgr::genSquare()
-{
-    Vertex vert[6];
-    for (uint8 i = 0; i < 6; ++i)
-        vert[i].color = vec3(1.0f, 1.0f, 0.0f);
-
-    vert[0].position = vec3(0.0f, 0.0f, 0.0f);
-    vert[0].uv = vec2(0.0f, 0.0f);
-    vert[1].position = vec3(1.0f, 0.0f, 0.0f);
-    vert[1].uv = vec2(1.0f, 0.0f);
-    vert[2].position = vec3(1.0f, 1.0f,0.0f);
-    vert[2].uv = vec2(1.0f, 1.0f);
-
-    vert[3].position = vec3(0.0f, 0.0f, 0.0f);
-    vert[3].uv = vec2(0.0f, 0.0f);
-    vert[4].position = vec3(0.0f, 1.0f, 0.0f);
-    vert[4].uv = vec2(0.0f, 1.0f);
-    vert[5].position = vec3(1.0f, 1.0f, 0.0f);
-    vert[5].uv = vec2(1.0f, 1.0f);
-
-    RenderData* renderData = new RenderData();
-    glGenVertexArrays(1, &(renderData->vertexArray));
-    glBindVertexArray(renderData->vertexArray);
-    {
-        glGenBuffers(1, &(renderData->vertexBuffer));
-        glBindBuffer(GL_ARRAY_BUFFER, renderData->vertexBuffer);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(vert), vert, GL_STATIC_DRAW);
-        {
-            glVertexAttribPointer(VertexArray::Attrib::POSITION, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
-            glVertexAttribPointer(VertexArray::Attrib::TEXCOORD, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), BUFFER_OFFSET(sizeof(vec3)));
-        }
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-        glEnableVertexAttribArray(VertexArray::Attrib::POSITION);
-        glEnableVertexAttribArray(VertexArray::Attrib::TEXCOORD);
-    }
-    glBindVertexArray(0);
-
-    renderData->size = 6;
-
-    rendersData["square"] = renderData;
 }
 
 void ResourcesMgr::unloadModels()

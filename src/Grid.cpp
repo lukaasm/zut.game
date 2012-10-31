@@ -18,13 +18,13 @@ using namespace glm;
 
 Grid::Grid() : GameObject("grid", "")
 {
+    SetPosition(vec3(-5.0f, 0.0f, 5.0f));
+    // scale only local matrix
+    SetScale(vec3(0.5f));
 }
 
 void Grid::OnRender(RenderDevice* rd)
 {
-    // scale only local matrix
-    modelMatrix = scale(mat4(1.0f), vec3(0.5f));
-
     RenderData* renderData = sResourcesMgr->GetRenderDataForModel(modelName);
     rd->DrawLines(renderData->vertexArray, 0, renderData->size);
 }
