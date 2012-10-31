@@ -17,20 +17,14 @@ void SceneMgr::OnInit()
     gameObjectsMap[0] = new Grid();
 
     GameObject* cube = new GameObject("cube.obj", "cube.tga");
-
-    glm::mat4 model = cube->GetModelMatrix();
-    model = glm::translate(model, glm::vec3(5.0f, 0.25f, -5.0f));
-    model = glm::scale(model, glm::vec3(0.15f));
-
-    cube->GetModelMatrix() = model;
+    cube->SetPosition(glm::vec3(5.0f, 0.25f, -5.0f));
+    cube->SetScale(glm::vec3(0.15f));
 
     gameObjectsMap[1] = cube;
 
 #define POPULATE_CUBE(a,b,c,d) cube = new GameObject("cube.obj", "cube.tga"); \
-    model = cube->GetModelMatrix(); \
-    model = glm::translate(model, glm::vec3(a, b, c)); \
-    model = glm::scale(model, glm::vec3(0.25f)); \
-    cube->GetModelMatrix() = model;\
+    cube->SetPosition(glm::vec3(a, b, c)); \
+    cube->SetScale(glm::vec3(0.25f)); \
     gameObjectsMap[d] = cube;
 
     POPULATE_CUBE(4.25f, 0.25f, -5.0f, 2)
@@ -38,15 +32,6 @@ void SceneMgr::OnInit()
     POPULATE_CUBE(4.625f, 0.875f, -5.0f, 4)
     POPULATE_CUBE(5.375f, 0.875f, -5.0f, 5)
     POPULATE_CUBE(5.0f, 0.875f+0.625f, -5.0f, 6)
-
-    GameObject* square = new GameObject("square", "test.tga");
-
-    model = square->GetModelMatrix();
-    model = glm::translate(model, glm::vec3(7.0f, 0.25f, -5.0f));
-
-    square->GetModelMatrix() = model;
-
-    gameObjectsMap[7] = square;
 
     text2D.Init();
 }
