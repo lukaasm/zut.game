@@ -67,37 +67,10 @@ void ResourcesMgr::loadModels()
 
     rendersData[name] = renderData;
 
-    genCube();
+    loadModel("cube.obj");
+    loadModel("trashbin.obj");
+
     genSquare();
-}
-
-void ResourcesMgr::genCube()
-{
-    std::vector<Vertex> vertexes;
-    if (!loadOBJ("../res/models/cube.obj", vertexes))
-        return;
-
-    RenderData* renderData = new RenderData();
-    glGenVertexArrays(1, &(renderData->vertexArray));
-    glBindVertexArray(renderData->vertexArray);
-    {
-        glGenBuffers(1, &(renderData->vertexBuffer));
-        glBindBuffer(GL_ARRAY_BUFFER, renderData->vertexBuffer);
-        glBufferData(GL_ARRAY_BUFFER, vertexes.size()*sizeof(Vertex), &vertexes[0], GL_STATIC_DRAW);
-        {
-            glVertexAttribPointer(VertexArray::Attrib::POSITION, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
-            glVertexAttribPointer(VertexArray::Attrib::TEXCOORD, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), BUFFER_OFFSET(UV_VERTEX_POS));
-        }
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-        glEnableVertexAttribArray(VertexArray::Attrib::POSITION);
-        glEnableVertexAttribArray(VertexArray::Attrib::TEXCOORD);
-    }
-    glBindVertexArray(0);
-
-    renderData->size = vertexes.size();
-
-    rendersData["cube"] = renderData;
 }
 
 void ResourcesMgr::genSquare()
@@ -189,8 +162,56 @@ uint32 ResourcesMgr::createTexture(std::string fileName)
     return 0;
 }
 
+bool ResourcesMgr::loadModel(std::string fileName)
+{
+    try
+    {
+        if (GetRenderDataForModel(fileName) != nullptr)
+        {
+            std::string what = "Error: file: " + fileName + " were already loaded.";
+            throw std::exception(what.c_str());
+        }
+
+        std::vector<Vertex> vertexes;
+        if (!loadOBJ("../res/models/" + fileName, vertexes))
+        {
+            std::string what = "Error: problem with loading file: " + fileName;
+            throw std::exception(what.c_str());
+        }
+
+        RenderData* renderData = new RenderData();
+        glGenVertexArrays(1, &(renderData->vertexArray));
+        glBindVertexArray(renderData->vertexArray);
+        {
+            glGenBuffers(1, &(renderData->vertexBuffer));
+            glBindBuffer(GL_ARRAY_BUFFER, renderData->vertexBuffer);
+            glBufferData(GL_ARRAY_BUFFER, vertexes.size()*sizeof(Vertex), &vertexes[0], GL_STATIC_DRAW);
+            {
+                glVertexAttribPointer(VertexArray::Attrib::POSITION, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
+                glVertexAttribPointer(VertexArray::Attrib::TEXCOORD, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), BUFFER_OFFSET(UV_VERTEX_POS));
+            }
+            glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+            glEnableVertexAttribArray(VertexArray::Attrib::POSITION);
+            glEnableVertexAttribArray(VertexArray::Attrib::TEXCOORD);
+        }
+        glBindVertexArray(0);
+
+        renderData->size = vertexes.size();
+
+        rendersData[fileName] = renderData;
+    }
+    catch (std::exception& e)
+    {
+        std::cout << e.what() << std::endl;
+    }
+}
+
 bool ResourcesMgr::loadOBJ(std::string fileName, std::vector<Vertex>& vert)
 {
+    if (fileName.find(".obj") == std::string::npos)
+        return false;
+
     FILE* file = fopen(fileName.c_str(), "r");
     if (file == NULL)
         return false;
@@ -269,35 +290,35 @@ bool ResourcesMgr::loadOBJ(std::string fileName, std::vector<Vertex>& vert)
 
 void ResourcesMgr::loadTexture(std::string fileName)
 {
-    if (GetTextureId(fileName))
+    try
     {
-        std::string what = "Error: file: " + fileName + " were already loaded.";
-        throw std::exception(what.c_str());
-    }
+        if (GetTextureId(fileName))
+        {
+            std::string what = "Error: file: " + fileName + " were already loaded.";
+            throw std::exception(what.c_str());
+        }
 
-    uint32 textureId = createTexture("../res/textures/" + fileName);
-    if (textureId == 0)
+        uint32 textureId = createTexture("../res/textures/" + fileName);
+        if (textureId == 0)
+        {
+            std::string what = "Error: problem occurred while creating texture from file: " + fileName;
+            throw std::exception(what.c_str());
+        }
+
+        textures[fileName] = textureId;
+    }
+    catch (std::exception& e)
     {
-        std::string what = "Error: problem occurred while creating texture from file: " + fileName;
-        throw std::exception(what.c_str());
+        std::cout << e.what() << std::endl;
+        // exit program
     }
-
-    textures[fileName] = textureId;    
 }
 
 void ResourcesMgr::loadTextures()
 {
-    try
-    {
-        loadTexture("test.tga");
-        loadTexture("cube.tga");
-        loadTexture("font.tga");
-    }
-    catch (std::exception& e)
-    {
-    	std::cout << e.what() << std::endl;
-        // exit program
-    }
+    loadTexture("test.tga");
+    loadTexture("cube.tga");
+    loadTexture("font.tga");
 }
 
 void ResourcesMgr::unloadTextures()

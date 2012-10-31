@@ -44,6 +44,7 @@ class ResourcesMgr
 
         bool loadOBJ(std::string, std::vector<Vertex>&);
         void loadTexture(std::string fileName);
+        bool loadModel(std::string fileName);
 
         RenderDataMap rendersData;
         TexturesMap textures;
