@@ -16,18 +16,20 @@ void SceneMgr::OnInit()
 
     tempShader = new Shader("../res/shaders/shader.vert", "../res/shaders/shader.frag"); 
 
-   // gameObjectsMap[0] = new Grid();
+    gameObjectsMap[0] = new Grid();
 
     GameObject* cube = new GameObject("cube.obj", "cube.tga");
     cube->SetPosition(glm::vec3(5.0f, 0.25f, -5.0f));
     cube->SetScale(glm::vec3(0.15f));
+    cube->SetBoundingObject(sResourcesMgr->GetRenderDataForModel(cube->GetModel())->bounding);
 
     gameObjectsMap[1] = cube;
 
 #define POPULATE_CUBE(a,b,c,d) cube = new GameObject("cube.obj", "cube.tga"); \
     cube->SetPosition(glm::vec3(a, b, c)); \
     cube->SetScale(glm::vec3(0.25f)); \
-    gameObjectsMap[d] = cube;
+    gameObjectsMap[d] = cube; \
+    cube->SetBoundingObject(sResourcesMgr->GetRenderDataForModel(cube->GetModel())->bounding);
 
     POPULATE_CUBE(4.25f, 0.25f, -5.0f, 2)
     POPULATE_CUBE(5.75f, 0.25f, -5.0f, 3)
@@ -51,13 +53,15 @@ void SceneMgr::OnRender(RenderDevice* rd)
         shader->Bind();
 
         GameObject* ob = i->second;
-        float textureFlag = i->second->GetTexture() != "" ? 1.0f : 0.0f;
 
-        rd->SetUniforms(shader, GetCamera()->GetProjMatrix(), GetCamera()->GetViewMatrix(), ob->GetModelMatrix(), textureFlag);
+        rd->SetUniforms(shader, GetCamera()->GetProjMatrix(), GetCamera()->GetViewMatrix(), ob->GetModelMatrix(), ob->IsTextured());
         i->second->OnRender(rd);
-        rd->SetUniforms(shader, GetCamera()->GetProjMatrix(), GetCamera()->GetViewMatrix(), ob->GetModelMatrix(), 0.0f);
-        //if (sResourcesMgr->GetRenderDataForModel(ob->GetModel())->bounding->IsInFrustum(GetCamera()->GetFrustum(), ob) != RESULT_OUTSIDE)
-        sResourcesMgr->GetRenderDataForModel(ob->GetModel())->bounding->OnRender(rd);
+
+        if (BoundingObject* bounds = ob->GetBoundingObject())
+        {
+            rd->SetUniforms(shader, GetCamera()->GetProjMatrix(), GetCamera()->GetViewMatrix(), ob->GetModelMatrix(), 0.0f);
+            bounds->OnRender(rd);
+        }
         shader->Unbind();
     }
 
