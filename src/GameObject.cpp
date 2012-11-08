@@ -4,7 +4,7 @@
 
 #include "GameObject.h"
 
-#include <gl/glew.h>
+#include <GL/glew.h>
 #include <glm/gtc/matrix_transform.hpp>
 
 #include "RenderDevice.h"
@@ -18,12 +18,12 @@ void GameObject::OnRender(RenderDevice* rd)
     rd->DrawTriangles(renderData->vertexArray, 0 , renderData->size);
 }
 
-mat4 GameObject::GetModelMatrix()
+glm::mat4 GameObject::GetModelMatrix()
 {
-    mat4 modelMatrix;
-    modelMatrix = translate(mat4(1.0f), position);
-    modelMatrix = rotate(modelMatrix, rotationX, vec3(1.0f, 0.0f, 0.0f));
-    //modelMatrix = rotate(modelMatrix, rotateY, vec3(0.0f, 1.0f, 0.0f));
+    glm::mat4 modelMatrix;
+    modelMatrix = glm::translate(glm::mat4(1.0f), position);
+    modelMatrix = glm::rotate(modelMatrix, rotationX, glm::vec3(1.0f, 0.0f, 0.0f));
+    //modelMatrix = glm::rotate(modelMatrix, rotateY, glm::vec3(0.0f, 1.0f, 0.0f));
     modelMatrix = glm::scale(modelMatrix, scale);
     return modelMatrix;
 }

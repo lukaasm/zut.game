@@ -14,6 +14,8 @@
 #include <hash_map>
 #endif
 
+#include <vector>
+
 #include "Common.h"
 #include "Singleton.h"
 

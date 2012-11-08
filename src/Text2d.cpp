@@ -33,14 +33,14 @@ void Text2D::Init()
     renderData = new RenderData;
 
     // Initialize VBO
-    glGenVertexArrays(1, &(renderData->vertexArray)); 
+    glGenVertexArrays(1, &(renderData->vertexArray));
     glGenBuffers(1, &(renderData->vertexBuffer));
 }
 
 struct FontVert
 {
-    vec2 pos;
-    vec2 uv;
+    glm::vec2 pos;
+    glm::vec2 uv;
 };
 
 #include <iostream>
@@ -59,12 +59,12 @@ void Text2D::Print(RenderDevice* rd, std::string text, int x, int y, int fontSiz
 
         FontVert vert[6] =
         {
-            { vec2(x+i*size     , y+size), vec2(uv_x           , 1.0f - uv_y) },
-            { vec2(x+i*size     , y     ), vec2(uv_x           , 1.0f - (uv_y + 1.0f/16.0f)) },
-            { vec2(x+i*size+size, y+size), vec2(uv_x+1.0f/16.0f, 1.0f - uv_y) },
-            { vec2(x+i*size+size, y     ), vec2(uv_x+1.0f/16.0f, 1.0f - (uv_y + 1.0f/16.0f)) },
-            { vec2(x+i*size+size, y+size), vec2(uv_x+1.0f/16.0f, 1.0f - uv_y) },
-            { vec2(x+i*size     , y     ), vec2(uv_x           , 1.0f - (uv_y + 1.0f/16.0f)) },
+            { glm::vec2(x+i*size     , y+size), glm::vec2(uv_x           , 1.0f - uv_y) },
+            { glm::vec2(x+i*size     , y     ), glm::vec2(uv_x           , 1.0f - (uv_y + 1.0f/16.0f)) },
+            { glm::vec2(x+i*size+size, y+size), glm::vec2(uv_x+1.0f/16.0f, 1.0f - uv_y) },
+            { glm::vec2(x+i*size+size, y     ), glm::vec2(uv_x+1.0f/16.0f, 1.0f - (uv_y + 1.0f/16.0f)) },
+            { glm::vec2(x+i*size+size, y+size), glm::vec2(uv_x+1.0f/16.0f, 1.0f - uv_y) },
+            { glm::vec2(x+i*size     , y     ), glm::vec2(uv_x           , 1.0f - (uv_y + 1.0f/16.0f)) },
         };
 
         for (uint8 j = 0; j < 6; ++j)
@@ -78,7 +78,7 @@ void Text2D::Print(RenderDevice* rd, std::string text, int x, int y, int fontSiz
     glBufferData(GL_ARRAY_BUFFER, sizeof(FontVert)*vertices.size(), &vertices[0], GL_DYNAMIC_DRAW);
     {
         glVertexAttribPointer(VertexArray::Attrib::POSITION, 2, GL_FLOAT, GL_FALSE, sizeof(FontVert), 0);
-        glVertexAttribPointer(VertexArray::Attrib::TEXCOORD, 2, GL_FLOAT, GL_FALSE, sizeof(FontVert), BUFFER_OFFSET(sizeof(vec2)));
+        glVertexAttribPointer(VertexArray::Attrib::TEXCOORD, 2, GL_FLOAT, GL_FALSE, sizeof(FontVert), BUFFER_OFFSET(sizeof(glm::vec2)));
     }
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 

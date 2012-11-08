@@ -34,10 +34,10 @@ void RenderDevice::OnUpdate(const uint32 diff)
 {
 }
 
-void RenderDevice::SetUniforms(Shader* shader, const mat4& projMatrix, const mat4& viewMatrix, const mat4& modelMatrix, float hasTexture)
+void RenderDevice::SetUniforms(Shader* shader, const glm::mat4& projMatrix, const glm::mat4& viewMatrix, const glm::mat4& modelMatrix, float hasTexture)
 {
-    mat4 mvpMatrix = projMatrix * viewMatrix * modelMatrix;
-    glUniformMatrix4fv(shader->GetMVPMatrixLocation(), 1, GL_FALSE, value_ptr(mvpMatrix));
+    glm::mat4 mvpMatrix = projMatrix * viewMatrix * modelMatrix;
+    glUniformMatrix4fv(shader->GetMVPMatrixLocation(), 1, GL_FALSE, glm::value_ptr(mvpMatrix));
 
     glUniform1i(shader->textLoc, 0);
     glUniform1f(shader->textEnabledLoc, hasTexture);

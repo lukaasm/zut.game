@@ -10,8 +10,6 @@
 
 #include "Common.h"
 
-using namespace glm;
-
 namespace VertexArray
 {
     enum Attrib
@@ -33,15 +31,15 @@ struct Vertex
         color = org.color;
     }
 
-    vec3 position;
-    vec2 uv;
-    vec3 normal;
-    vec3 color;
+    glm::vec3 position;
+    glm::vec2 uv;
+    glm::vec3 normal;
+    glm::vec3 color;
 };
 
-#define UV_VERTEX_POS sizeof(vec3)
-#define NORMAL_VERTEX_POS UV_VERTEX_POS + sizeof(vec2)
-#define COLOR_VERTEX_POS NORMAL_VERTEX_POS + sizeof(vec3)
+#define UV_VERTEX_POS sizeof(glm::vec3)
+#define NORMAL_VERTEX_POS UV_VERTEX_POS + sizeof(glm::vec2)
+#define COLOR_VERTEX_POS NORMAL_VERTEX_POS + sizeof(glm::vec3)
 
 class BoundingObject;
 class RenderDevice;
@@ -66,16 +64,16 @@ class GameObject
 
         virtual void OnRender(RenderDevice*);
 
-        mat4 GetModelMatrix();
+        glm::mat4 GetModelMatrix();
 
         void SetGuid(uint32 guid) { this->guid = guid; }
 
-        void SetPosition(const vec3& pos)
+        void SetPosition(const glm::vec3& pos)
         {
             position = pos;
         }
 
-        void SetScale(const vec3& scale)
+        void SetScale(const glm::vec3& scale)
         {
             this->scale = scale;
         }
@@ -89,8 +87,8 @@ class GameObject
         std::string modelName;
         std::string textureName;
 
-        vec3 scale;
-        vec3 position;
+        glm::vec3 scale;
+        glm::vec3 position;
 
         float rotationX;
         //float rotationY;

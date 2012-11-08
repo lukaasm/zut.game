@@ -3,8 +3,6 @@
 
 #include <glm/glm.hpp>
 
-using namespace glm;
-
 enum PlaneSides
 {
     PLANE_FRONT  = 0,
@@ -17,14 +15,14 @@ enum PlaneSides
     MAX_PLANES   = 6
 };
 
-typedef vec4 Plane;
+typedef glm::vec4 Plane;
 
 class Frustum
 {
     public:
         Frustum();
 
-        void Calculate(const mat4& viewMatrix, const mat4& projMatrix);
+        void Calculate(const glm::mat4& viewMatrix, const glm::mat4& projMatrix);
 
     private:
         Plane planes[MAX_PLANES];

@@ -41,10 +41,10 @@ void BaseApp::createContext()
 
     // set OGL window render context which will allow us to use specific gl functions
     glfwOpenWindowHint(GLFW_WINDOW_NO_RESIZE, GL_TRUE);
-    glfwOpenWindowHint(GLFW_OPENGL_VERSION_MAJOR, 3);
-    glfwOpenWindowHint(GLFW_OPENGL_VERSION_MINOR, 3);
-    glfwOpenWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-    glfwOpenWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+    //glfwOpenWindowHint(GLFW_OPENGL_VERSION_MAJOR, 3);
+    //glfwOpenWindowHint(GLFW_OPENGL_VERSION_MINOR, 3);
+    //glfwOpenWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    //glfwOpenWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
     // create our window
     glfwOpenWindow(1024, 768, 0, 0, 0, 0, 0, 0, GLFW_WINDOW);
@@ -63,7 +63,7 @@ void BaseApp::CreateWindow()
         std::cout << "Error: " << glewGetErrorString(glewInitResult) << std::endl;
         exit(EXIT_FAILURE);
     }
-    
+
     Init();
 }
 

@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <cstdio>
+#include <cstring>
 #include <exception>
 
 #include <GL/glew.h>
@@ -14,6 +15,24 @@
 #pragma warning(disable : 4482)
 // warning C4996: 'fscanf': This function or variable may be unsafe. Consider using fscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
 #pragma warning(disable : 4996)
+
+class Exception: public std::exception
+{
+public:
+    Exception(std::string & whatStr)
+        : std::exception()
+    {
+        m_whatStr = whatStr;
+    }
+
+    virtual const char* what() const throw()
+    {
+        return m_whatStr.c_str();
+    }
+
+private:
+    std::string m_whatStr;
+};
 
 void ResourcesMgr::OnInit()
 {
@@ -36,15 +55,15 @@ void ResourcesMgr::loadModels()
     Vertex vert[160]; // _size*4
 
     for (uint32 i = 0; i < 160; ++i)
-        vert[i].color = vec3(0.5f, 0.0f, 0.3f);
+        vert[i].color = glm::vec3(0.5f, 0.0f, 0.3f);
 
     for (uint32 x = 0; x < _size; x++)
     {
-        vert[x*2].position = vec3(float(x), 0.0f, 0.0f);
-        vert[x*2 +1].position = vec3(float(x), 0.0f, -float(_size));
+        vert[x*2].position = glm::vec3(float(x), 0.0f, 0.0f);
+        vert[x*2 +1].position = glm::vec3(float(x), 0.0f, -float(_size));
 
-        vert[x*2 +_size*2].position = vec3(0.0f, 0.0f, -float(x));
-        vert[x*2 +_size*2+1].position = vec3(float(_size), 0.0f, -float(x));
+        vert[x*2 +_size*2].position = glm::vec3(0.0f, 0.0f, -float(x));
+        vert[x*2 +_size*2+1].position = glm::vec3(float(_size), 0.0f, -float(x));
     };
 
     glGenVertexArrays(1, &(renderData->vertexArray));
@@ -125,14 +144,14 @@ bool ResourcesMgr::loadModel(std::string fileName)
         if (GetRenderDataForModel(fileName) != nullptr)
         {
             std::string what = "Error: file: " + fileName + " were already loaded.";
-            throw std::exception(what.c_str());
+            throw Exception(what);
         }
 
         std::vector<Vertex> vertexes;
         if (!loadOBJ("../res/models/" + fileName, vertexes))
         {
             std::string what = "Error: problem with loading file: " + fileName;
-            throw std::exception(what.c_str());
+            throw Exception(what);
         }
 
         RenderData* renderData = new RenderData();
@@ -166,6 +185,8 @@ bool ResourcesMgr::loadModel(std::string fileName)
     {
         std::cout << e.what() << std::endl;
     }
+
+    return true;
 }
 
 bool ResourcesMgr::loadOBJ(std::string fileName, std::vector<Vertex>& vert)
@@ -177,8 +198,8 @@ bool ResourcesMgr::loadOBJ(std::string fileName, std::vector<Vertex>& vert)
     if (file == NULL)
         return false;
 
-    std::vector<vec3> temp_vert, temp_normals;
-    std::vector<vec2> temp_uvs;
+    std::vector<glm::vec3> temp_vert, temp_normals;
+    std::vector<glm::vec2> temp_uvs;
 
     std::vector<uint32> vertIndices, uvIndices, normIndices;
     while (1)
@@ -190,19 +211,19 @@ bool ResourcesMgr::loadOBJ(std::string fileName, std::vector<Vertex>& vert)
 
         if (strcmp(lineHeader, "v") == 0)
         {
-            vec3 vertex;
+            glm::vec3 vertex;
             fscanf(file, "%f %f %f\n", &vertex.x, &vertex.y, &vertex.z);
             temp_vert.push_back(vertex);
         }
         else if (strcmp(lineHeader, "vt") == 0)
         {
-            vec2 uv;
+            glm::vec2 uv;
             fscanf(file, "%f %f\n", &uv.x, &uv.y);
             temp_uvs.push_back(uv);
         }
         else if (strcmp(lineHeader, "vn") == 0)
         {
-            vec3 normal;
+            glm::vec3 normal;
             fscanf(file, "%f %f %f\n", &normal.x, &normal.y, &normal.z);
             temp_normals.push_back(normal);
         }
@@ -256,14 +277,14 @@ void ResourcesMgr::loadTexture(std::string fileName)
         if (GetTextureId(fileName))
         {
             std::string what = "Error: file: " + fileName + " were already loaded.";
-            throw std::exception(what.c_str());
+            throw Exception(what);
         }
 
         uint32 textureId = createTexture("../res/textures/" + fileName);
         if (textureId == 0)
         {
             std::string what = "Error: problem occurred while creating texture from file: " + fileName;
-            throw std::exception(what.c_str());
+            throw Exception(what);
         }
 
         textures[fileName] = textureId;

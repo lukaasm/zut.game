@@ -10,8 +10,6 @@
 #include "Common.h"
 #include "Frustum.h"
 
-using namespace glm;
-
 class RenderDevice;
 
 enum MoveType
@@ -44,21 +42,21 @@ class Camera
 
         void Move(MoveType, float);
 
-        mat4 GetProjMatrix() const { return projMatrix; }
-        mat4 GetViewMatrix() const { return viewMatrix; }
-        mat4 GetOrthoMatrix() const { return viewMatrix; }
+        glm::mat4 GetProjMatrix() const { return projMatrix; }
+        glm::mat4 GetViewMatrix() const { return viewMatrix; }
+        glm::mat4 GetOrthoMatrix() const { return viewMatrix; }
 
         Frustum& GetFrustum() { return frustum; }
 
     private:
-        mat4 viewMatrix;
-        mat4 projMatrix;
+        glm::mat4 viewMatrix;
+        glm::mat4 projMatrix;
 
-        vec3 lookAt;
-        vec3 position;
+        glm::vec3 lookAt;
+        glm::vec3 position;
 
-        vec3 right;
-        vec3 up;
+        glm::vec3 right;
+        glm::vec3 up;
 
         Frustum frustum;
         MoveType moveFlags;

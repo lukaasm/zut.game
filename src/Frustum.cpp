@@ -7,12 +7,12 @@ Frustum::Frustum()
 
 }
 
-void Frustum::Calculate(const mat4& viewMatrix, const mat4& projMatrix)
+void Frustum::Calculate(const glm::mat4& viewMatrix, const glm::mat4& projMatrix)
 {
-    const mat4 &v = viewMatrix;
-    const mat4 &p = projMatrix;
+    const glm::mat4 &v = viewMatrix;
+    const glm::mat4 &p = projMatrix;
 
-    mat4 clipMatrix;
+    glm::mat4 clipMatrix;
 
     clipMatrix[0][0] = v[0][0]*p[0][0]+v[0][1]*p[1][0]+v[0][2]*p[2][0]+v[0][3]*p[3][0];
     clipMatrix[1][0] = v[0][0]*p[0][1]+v[0][1]*p[1][1]+v[0][2]*p[2][1]+v[0][3]*p[3][1];
@@ -62,5 +62,5 @@ void Frustum::Calculate(const mat4& viewMatrix, const mat4& projMatrix)
     planes[PLANE_FRONT].w = clipMatrix[3][3]+clipMatrix[2][3];
 
     for (uint8 i = 0; i < MAX_PLANES; ++i)
-        planes[i] = normalize(planes[i]);
+        planes[i] = glm::normalize(planes[i]);
 }
