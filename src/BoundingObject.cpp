@@ -7,7 +7,7 @@
 #include "GameObject.h"
 #include "RenderDevice.h"
 
-void BoundingBox::SetMinMax(VertexVector& vertexes)
+void BoundingBox::SetMinMax(const VertexVector& vertexes)
 {
     struct FindMinMax
     {
@@ -86,7 +86,7 @@ void BoundingBox::SetMinMax(VertexVector& vertexes)
     renderData->size = bbox.size();
 }
 
-bool BoundingBox::IsInFrustum(Frustum& frustum, GameObject* owner)
+bool BoundingBox::IsInFrustum(const Frustum& frustum, GameObject* owner)
 {
     mat4 modelMatrix = owner->GetModelMatrix();
     vec4 min = vec4(this->min, 1.0f) * modelMatrix;
@@ -100,7 +100,7 @@ void BoundingBox::OnRender(RenderDevice* rd)
     rd->DrawLines(renderData->vertexArray, 0, renderData->size);
 }
 
-bool BoundingSphere::IsInFrustum(Frustum& frustum, GameObject* owner)
+bool BoundingSphere::IsInFrustum(const Frustum& frustum, GameObject* owner)
 {
 
 }

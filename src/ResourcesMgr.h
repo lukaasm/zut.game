@@ -6,7 +6,13 @@
 #define H_RESOURCESMGR
 
 #include <string>
+
+#ifdef __GNUG__
+#include <unordered_map>
+#define hash_map unordered_map
+#else
 #include <hash_map>
+#endif
 
 #include "Common.h"
 #include "Singleton.h"
