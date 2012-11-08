@@ -35,6 +35,7 @@ void BoundingBox::SetMinMax(const VertexVector& vertexes)
     std::for_each(vertexes.begin(), vertexes.end(), FindMinMax(min, max));
     min -= 0.1;
     max += 0.1f;
+
     std::vector<glm::vec3> bbox;
     bbox.push_back(glm::vec3(min.x, min.y, min.z));
     bbox.push_back(glm::vec3(max.x, min.y, min.z));
@@ -86,21 +87,7 @@ void BoundingBox::SetMinMax(const VertexVector& vertexes)
     renderData->size = bbox.size();
 }
 
-bool BoundingBox::IsInFrustum(const Frustum& frustum, GameObject* owner)
-{
-    glm::mat4 modelMatrix = owner->GetModelMatrix();
-    glm::vec4 min = glm::vec4(this->min, 1.0f) * modelMatrix;
-    glm::vec4 max = glm::vec4(this->max, 1.0f) * modelMatrix;
-
-    return true;
-}
-
 void BoundingBox::OnRender(RenderDevice* rd)
 {
     rd->DrawLines(renderData->vertexArray, 0, renderData->size);
-}
-
-bool BoundingSphere::IsInFrustum(const Frustum& frustum, GameObject* owner)
-{
-
 }
