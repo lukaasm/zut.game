@@ -11,15 +11,13 @@
 
 #include "RenderDevice.h"
 
-using namespace glm;
-
 Camera::Camera()
 {
-    position = vec3(5.0f, 0.5f, 0.0f);
-    lookAt = vec3(5.0f, 0.5f, -4.0f);
+    position = glm::vec3(5.0f, 0.5f, 0.0f);
+    lookAt = glm::vec3(5.0f, 0.5f, -4.0f);
 
-    up = vec3(0.0f, 1.0f, 0.0f);
-    right = vec3(1.0f, 0.0f, 0.0f);
+    up = glm::vec3(0.0f, 1.0f, 0.0f);
+    right = glm::vec3(1.0f, 0.0f, 0.0f);
 
     moveFlags = MOVE_NONE;
 
@@ -33,7 +31,7 @@ void Camera::LookAt()
 
 void Camera::OnResize(int32 width, int32 height)
 {
-    projMatrix = perspective(60.0f, float(width/height), 0.1f, 100.0f);
+    projMatrix = glm::perspective(60.0f, float(width/height), 0.1f, 100.0f);
     frustum.Calculate(viewMatrix, projMatrix);
 }
 
@@ -43,70 +41,73 @@ void Camera::Move(MoveType type, float angleOrScale)
     {
         case MOVE_FORWARD:
         {
-            vec3 offset = normalize(lookAt - position) * angleOrScale;
+            glm::vec3 offset = glm::normalize(lookAt - position) * angleOrScale;
             position += offset;
             lookAt += offset;
             break;
         }
         case MOVE_BACKWARD:
         {
-            vec3 offset = normalize(lookAt - position) * angleOrScale;
+            glm::vec3 offset = glm::normalize(lookAt - position) * angleOrScale;
             position -= offset;
             lookAt -= offset;
             break;
         }
         case MOVE_UPWARD:
         {
-            vec3 offset = normalize(up) * angleOrScale;
+            glm::vec3 offset = glm::normalize(up) * angleOrScale;
             position += offset;
             lookAt += offset;
             break;
         }
         case MOVE_DOWNWARD:
         {
-            vec3 offset = normalize(up) * angleOrScale;
+            glm::vec3 offset = glm::normalize(up) * angleOrScale;
             position -= offset;
             lookAt -= offset;
             break;
         }
         case MOVE_ROTATE_LEFT:
         {
-            lookAt = rotate(lookAt, angleOrScale, up);
-            right = cross(lookAt, up);
+            lookAt = glm::rotate(lookAt, angleOrScale, up);
+            right = glm::cross(lookAt, up);
             break;
         }
         case MOVE_ROTATE_RIGHT:
         {
-            lookAt = rotate(lookAt, -angleOrScale, up);
-            right = cross(lookAt, up);
+            lookAt = glm::rotate(lookAt, -angleOrScale, up);
+            right = glm::cross(lookAt, up);
             break;
         }
         case MOVE_ROTATE_UP:
         {
-            lookAt = rotate(lookAt, angleOrScale, right);
-            up = cross(right, lookAt);
+            lookAt = glm::rotate(lookAt, angleOrScale, right);
+            up = glm::cross(right, lookAt);
             break;
         }
         case MOVE_ROTATE_DOWN:
         {
-            lookAt = rotate(lookAt, -angleOrScale, right);
-            up = cross(right, lookAt);
+            lookAt = glm::rotate(lookAt, -angleOrScale, right);
+            up = glm::cross(right, lookAt);
             break;
         }
         case MOVE_STRAFE_RIGHT:
         {
-            vec3 offset = normalize(right) * angleOrScale;
+            glm::vec3 offset = glm::normalize(right) * angleOrScale;
             position += offset;
             lookAt += offset;
             break;
         }
         case MOVE_STRAFE_LEFT:
         {
-            vec3 offset = normalize(right) * angleOrScale;
+            glm::vec3 offset = glm::normalize(right) * angleOrScale;
             position -= offset;
             lookAt -= offset;
             break;
         }
+        case MOVE_NONE:
+        default:
+            break;
     }
 }
 

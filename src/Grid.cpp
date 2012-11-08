@@ -14,13 +14,11 @@
 #include "SceneMgr.h"
 #include "Shader.h"
 
-using namespace glm;
-
 Grid::Grid() : GameObject("grid", "")
 {
-    SetPosition(vec3(-5.0f, 0.0f, 5.0f));
+    SetPosition(glm::vec3(-5.0f, 0.0f, 5.0f));
     // scale only local matrix
-    SetScale(vec3(0.5f));
+    SetScale(glm::vec3(0.5f));
 }
 
 void Grid::OnRender(RenderDevice* rd)

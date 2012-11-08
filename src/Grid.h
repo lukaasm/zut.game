@@ -10,8 +10,6 @@
 #include "Common.h"
 #include "GameObject.h"
 
-using namespace glm;
-
 class RenderDevice;
 class Shader;
 

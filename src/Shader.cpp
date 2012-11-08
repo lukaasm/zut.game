@@ -5,6 +5,7 @@
 #include "Shader.h"
 
 #include <cstdlib>
+#include <cstring>  // for memset
 #include <fstream>
 #include <iostream>
 #include <GL/glew.h>

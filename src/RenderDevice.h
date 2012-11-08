@@ -9,8 +9,6 @@
 
 #include "Common.h"
 
-using namespace glm;
-
 class Camera;
 class Shader;
 
@@ -27,7 +25,7 @@ class RenderDevice
         void OnResize(int32, int32);
         void OnUpdate(const uint32);
 
-        void SetUniforms(Shader*, const mat4&, const mat4&, const mat4&, float);
+        void SetUniforms(Shader*, const glm::mat4&, const glm::mat4&, const glm::mat4&, float);
         void SetUniforms(Shader*);
 
         int32 GetWidth() const { return width; }

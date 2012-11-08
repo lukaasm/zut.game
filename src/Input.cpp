@@ -7,6 +7,7 @@
 #include <GL/glfw.h>
 
 #include "BaseApp.h"
+#include "Common.h"
 #include "SceneMgr.h"
 
 Keyboard::Keyboard(BaseApp* app)
