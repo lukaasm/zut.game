@@ -16,4 +16,6 @@
 #define int32   glm::int32
 #define uint32  glm::uint32
 
+typedef glm::vec3 Position;
+
 #endif

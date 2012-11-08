@@ -18,7 +18,7 @@ void GameObject::OnRender(RenderDevice* rd)
     rd->DrawTriangles(renderData->vertexArray, 0 , renderData->size);
 }
 
-glm::mat4 GameObject::GetModelMatrix()
+glm::mat4 GameObject::GetModelMatrix() const
 {
     glm::mat4 modelMatrix;
     modelMatrix = glm::translate(glm::mat4(1.0f), position);
@@ -26,4 +26,24 @@ glm::mat4 GameObject::GetModelMatrix()
     //modelMatrix = glm::rotate(modelMatrix, rotateY, glm::vec3(0.0f, 1.0f, 0.0f));
     modelMatrix = glm::scale(modelMatrix, scale);
     return modelMatrix;
+}
+
+void GameObject::SetPosition(const Position& pos)
+{
+    position = pos;
+}
+
+void GameObject::SetScale(const glm::vec3& scale)
+{
+    this->scale = scale;
+}
+
+void GameObject::SetGuid(uint32 guid)
+{
+    this->guid = guid;
+}
+
+void GameObject::SetBoundingObject(BoundingObject* object)
+{
+    boundingObject = object;
 }

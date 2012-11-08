@@ -57,29 +57,24 @@ struct RenderData
 class GameObject
 {
     public:
-        explicit GameObject(std::string model, std::string texture) : modelName(model), textureName(texture) {}
-
-    //public:
+        explicit GameObject(std::string model, std::string texture) : modelName(model), textureName(texture), boundingObject(nullptr) {}
         virtual ~GameObject() {}
 
         virtual void OnRender(RenderDevice*);
 
-        glm::mat4 GetModelMatrix();
+        glm::mat4 GetModelMatrix() const;
 
-        void SetGuid(uint32 guid) { this->guid = guid; }
+        void SetGuid(uint32 guid);
+        void SetBoundingObject(BoundingObject* object);
+        BoundingObject* GetBoundingObject() const { return boundingObject; }
 
-        void SetPosition(const glm::vec3& pos)
-        {
-            position = pos;
-        }
-
-        void SetScale(const glm::vec3& scale)
-        {
-            this->scale = scale;
-        }
+        void SetPosition(const Position& pos);
+        void SetScale(const glm::vec3& scale);
 
         std::string GetModel() const { return modelName; }
         std::string GetTexture() const { return textureName; }
+
+        float IsTextured() const { return GetTexture() != "" ? 1.0f : 0.0f; }
 
     protected:
         uint32 guid;
@@ -92,6 +87,8 @@ class GameObject
 
         float rotationX;
         //float rotationY;
+
+        BoundingObject* boundingObject;
 };
 
 #endif
