@@ -56,6 +56,7 @@ void SceneMgr::OnRender(RenderDevice* rd)
         rd->SetUniforms(shader, GetCamera()->GetProjMatrix(), GetCamera()->GetViewMatrix(), ob->GetModelMatrix(), textureFlag);
         i->second->OnRender(rd);
         rd->SetUniforms(shader, GetCamera()->GetProjMatrix(), GetCamera()->GetViewMatrix(), ob->GetModelMatrix(), 0.0f);
+        //if (sResourcesMgr->GetRenderDataForModel(ob->GetModel())->bounding->IsInFrustum(GetCamera()->GetFrustum(), ob) != RESULT_OUTSIDE)
         sResourcesMgr->GetRenderDataForModel(ob->GetModel())->bounding->OnRender(rd);
         shader->Unbind();
     }
