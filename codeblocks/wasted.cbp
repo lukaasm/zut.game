@@ -29,15 +29,41 @@
 			</Target>
 		</Build>
 		<Compiler>
+			<Add option="-std=c++11" />
 			<Add option="-Wall" />
 		</Compiler>
 		<Linker>
 			<Add library="GL" />
 			<Add library="X11" />
 		</Linker>
-		<Unit filename="main.c">
-			<Option compilerVar="CC" />
-		</Unit>
+		<Unit filename="../src/BaseApp.cpp" />
+		<Unit filename="../src/BaseApp.h" />
+		<Unit filename="../src/BoundingObject.cpp" />
+		<Unit filename="../src/BoundingObject.h" />
+		<Unit filename="../src/CallBack.h" />
+		<Unit filename="../src/Camera.cpp" />
+		<Unit filename="../src/Camera.h" />
+		<Unit filename="../src/Common.h" />
+		<Unit filename="../src/Frustum.cpp" />
+		<Unit filename="../src/Frustum.h" />
+		<Unit filename="../src/GameObject.cpp" />
+		<Unit filename="../src/GameObject.h" />
+		<Unit filename="../src/GameObjectMgr.cpp" />
+		<Unit filename="../src/Grid.cpp" />
+		<Unit filename="../src/Grid.h" />
+		<Unit filename="../src/Input.cpp" />
+		<Unit filename="../src/Input.h" />
+		<Unit filename="../src/RenderDevice.cpp" />
+		<Unit filename="../src/RenderDevice.h" />
+		<Unit filename="../src/ResourcesMgr.cpp" />
+		<Unit filename="../src/ResourcesMgr.h" />
+		<Unit filename="../src/SceneMgr.cpp" />
+		<Unit filename="../src/SceneMgr.h" />
+		<Unit filename="../src/Shader.cpp" />
+		<Unit filename="../src/Shader.h" />
+		<Unit filename="../src/Singleton.h" />
+		<Unit filename="../src/Text2d.cpp" />
+		<Unit filename="../src/Text2d.h" />
 		<Extensions>
 			<envvars />
 			<code_completion />

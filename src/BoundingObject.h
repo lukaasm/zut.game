@@ -17,7 +17,7 @@ class BoundingObject
         GameObject* GetOwner() const { return owner; }
 
         virtual void OnRender(RenderDevice*) = 0;
-        virtual bool IsInFrustum(Frustum&, GameObject*) = 0;
+        virtual bool IsInFrustum(const Frustum&, GameObject*) = 0;
 
     private:
         GameObject* owner;
@@ -30,13 +30,13 @@ class BoundingSphere;
 class BoundingBox : public BoundingObject
 {
     public:
-        void SetMinMax(VertexVector&);
+        void SetMinMax(const VertexVector&);
 
         void OnRender(RenderDevice*);
-        bool Collision(BoundingBox& box) { return false; }
-        bool Collision(BoundingSphere& sphere) { return false; }
+        bool Collision(const BoundingBox& box) { return false; }
+        bool Collision(const BoundingSphere& sphere) { return false; }
 
-        bool IsInFrustum(Frustum& frustum, GameObject*) override;
+        bool IsInFrustum(const Frustum& frustum, GameObject*) override;
 
     private:
         glm::vec3 min;
@@ -48,10 +48,10 @@ class BoundingBox : public BoundingObject
 class BoundingSphere : public BoundingObject
 {
     public:
-        bool Collision(BoundingBox& box) { return false; }
-        bool Collision(BoundingSphere& sphere) { return false; }
+        bool Collision(const BoundingBox& box) { return false; }
+        bool Collision(const BoundingSphere& sphere) { return false; }
 
-        bool IsInFrustum(Frustum& frustum, GameObject*) override;
+        bool IsInFrustum(const Frustum& frustum, GameObject*) override;
 };
 
 #endif

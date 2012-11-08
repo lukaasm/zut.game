@@ -60,7 +60,7 @@ class GameObject
 {
     public:
         explicit GameObject(std::string model, std::string texture) : modelName(model), textureName(texture) {}
-        
+
     //public:
         virtual ~GameObject() {}
 
@@ -70,12 +70,12 @@ class GameObject
 
         void SetGuid(uint32 guid) { this->guid = guid; }
 
-        void SetPosition(vec3& pos)
+        void SetPosition(const vec3& pos)
         {
             position = pos;
         }
 
-        void SetScale(vec3& scale)
+        void SetScale(const vec3& scale)
         {
             this->scale = scale;
         }

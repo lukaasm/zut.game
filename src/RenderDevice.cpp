@@ -34,7 +34,7 @@ void RenderDevice::OnUpdate(const uint32 diff)
 {
 }
 
-void RenderDevice::SetUniforms(Shader* shader, mat4& projMatrix, mat4& viewMatrix, mat4& modelMatrix, float hasTexture)
+void RenderDevice::SetUniforms(Shader* shader, const mat4& projMatrix, const mat4& viewMatrix, const mat4& modelMatrix, float hasTexture)
 {
     mat4 mvpMatrix = projMatrix * viewMatrix * modelMatrix;
     glUniformMatrix4fv(shader->GetMVPMatrixLocation(), 1, GL_FALSE, value_ptr(mvpMatrix));
