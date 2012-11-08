@@ -32,7 +32,7 @@ void Camera::LookAt()
 void Camera::OnResize(int32 width, int32 height)
 {
     projMatrix = glm::perspective(60.0f, float(width/height), 0.1f, 100.0f);
-    frustum.Calculate(viewMatrix, projMatrix);
+    //frustum.Calculate(viewMatrix, projMatrix);
 }
 
 void Camera::Move(MoveType type, float angleOrScale)
@@ -143,7 +143,7 @@ void Camera::OnUpdate(const uint32 diff)
     if (moveFlags != MOVE_NONE)
     {
         LookAt();
-        frustum.Calculate(viewMatrix, projMatrix);
+        //frustum.Calculate(viewMatrix, projMatrix);
     }
 }
 

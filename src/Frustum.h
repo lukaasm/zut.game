@@ -19,6 +19,7 @@ typedef glm::vec4 Plane;
 
 class Frustum
 {
+    friend class BoundingBox;
     public:
         Frustum();
 
