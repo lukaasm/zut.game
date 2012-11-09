@@ -9,6 +9,7 @@
 
 #include "Camera.h"
 #include "GameObject.h"
+#include "ModelData.h"
 #include "RenderDevice.h"
 #include "ResourcesMgr.h"
 #include "SceneMgr.h"
@@ -23,6 +24,6 @@ Grid::Grid() : GameObject("grid", "")
 
 void Grid::OnRender(RenderDevice* rd)
 {
-    RenderData* renderData = sResourcesMgr->GetRenderDataForModel(modelName);
-    rd->DrawLines(renderData->vertexArray, 0, renderData->size);
+    ModelData* modelData = sResourcesMgr->GetModelData(modelName);
+    rd->DrawLines(modelData->vao);
 }

@@ -7,6 +7,7 @@
 #include <GL/glew.h>
 #include <glm/gtc/matrix_transform.hpp>
 
+#include "ModelData.h"
 #include "RenderDevice.h"
 #include "ResourcesMgr.h"
 
@@ -14,8 +15,8 @@ void GameObject::OnRender(RenderDevice* rd)
 {
     rd->ActivateTexture(GL_TEXTURE0, sResourcesMgr->GetTextureId(textureName));
 
-    RenderData* renderData = sResourcesMgr->GetRenderDataForModel(modelName);
-    rd->DrawTriangles(renderData->vertexArray, 0 , renderData->size);
+    ModelData* modelData = sResourcesMgr->GetModelData(modelName);
+    rd->DrawTriangles(modelData->vao);
 }
 
 glm::mat4 GameObject::GetModelMatrix() const

@@ -89,6 +89,12 @@
     <ClInclude Include="..\src\BoundingObject.h">
       <Filter>Frame\GameObjects</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\VertexArrayObject.h">
+      <Filter>Frame\Other</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\ModelData.h">
+      <Filter>Frame\Other</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="VS2k10.rc">
@@ -136,6 +142,12 @@
     </ClCompile>
     <ClCompile Include="..\src\BoundingObject.cpp">
       <Filter>Frame\GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\VertexArrayObject.cpp">
+      <Filter>Frame\Other</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ModelData.cpp">
+      <Filter>Frame\Other</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

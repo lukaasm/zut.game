@@ -13,6 +13,7 @@
 #include "Camera.h"
 #include "SceneMgr.h"
 #include "Shader.h"
+#include "VertexArrayObject.h"
 
 RenderDevice::RenderDevice()
 {
@@ -50,17 +51,18 @@ void RenderDevice::SetUniforms(Shader* shader)
     glUniform1f(shader->textEnabledLoc, float(1.0f));
 }
 
-
-void RenderDevice::DrawLines(uint32 vao, uint32 start, uint32 size)
+void RenderDevice::DrawLines(VertexArrayObject& vao)
 {
-    glBindVertexArray(vao);
-    glDrawArrays(GL_LINES, start, size);
+    vao.Bind(ID_VAO);
+    glDrawArrays(GL_LINES, 0, vao.ElementsCount());
+    vao.Unbind(ID_VAO);
 }
 
-void RenderDevice::DrawTriangles(uint32 vao, uint32 start, uint32 size)
+void RenderDevice::DrawTriangles(VertexArrayObject& vao)
 {
-    glBindVertexArray(vao);
-    glDrawArrays(GL_TRIANGLES, start, size);
+    vao.Bind(ID_VAO);
+    glDrawArrays(GL_TRIANGLES, 0, vao.ElementsCount());
+    vao.Unbind(ID_VAO);
 }
 
 void RenderDevice::ActivateTexture(uint32 mode, uint32 textureId)

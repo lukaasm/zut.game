@@ -87,11 +87,13 @@
     <ClCompile Include="..\src\GameObject.cpp" />
     <ClCompile Include="..\src\Grid.cpp" />
     <ClCompile Include="..\src\Input.cpp" />
+    <ClCompile Include="..\src\ModelData.cpp" />
     <ClCompile Include="..\src\RenderDevice.cpp" />
     <ClCompile Include="..\src\ResourcesMgr.cpp" />
     <ClCompile Include="..\src\SceneMgr.cpp" />
     <ClCompile Include="..\src\Shader.cpp" />
     <ClCompile Include="..\src\Text2d.cpp" />
+    <ClCompile Include="..\src\VertexArrayObject.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\BaseApp.h" />
@@ -103,12 +105,14 @@
     <ClInclude Include="..\src\GameObject.h" />
     <ClInclude Include="..\src\Grid.h" />
     <ClInclude Include="..\src\Input.h" />
+    <ClInclude Include="..\src\ModelData.h" />
     <ClInclude Include="..\src\RenderDevice.h" />
     <ClInclude Include="..\src\ResourcesMgr.h" />
     <ClInclude Include="..\src\SceneMgr.h" />
     <ClInclude Include="..\src\Shader.h" />
     <ClInclude Include="..\src\Singleton.h" />
     <ClInclude Include="..\src\Text2d.h" />
+    <ClInclude Include="..\src\VertexArrayObject.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>

@@ -4,13 +4,14 @@
 #include <glm/glm.hpp>
 #include <vector>
 
+#include "VertexArrayObject.h"
+
 class BoundingBox;
 class Frustum;
 //class GameObject;
 class RenderDevice;
 
 struct Vertex;
-struct RenderData;
 
 class BoundingObject
 {
@@ -48,7 +49,7 @@ class BoundingBox : public BoundingObject
         glm::vec3 min;
         glm::vec3 max;
 
-        RenderData* renderData;
+        VertexArrayObject vao;
 };
 /*
 class BoundingSphere : public BoundingObject

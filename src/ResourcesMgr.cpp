@@ -10,6 +10,8 @@
 
 #include "BoundingObject.h"
 #include "GameObject.h"
+#include "ModelData.h"
+#include "VertexArrayObject.h"
 
 // warning C4482: nonstandard extension used: enum 'VertexArray::Attrib' used in qualified name
 #pragma warning(disable : 4482)
@@ -18,20 +20,19 @@
 
 class Exception: public std::exception
 {
-public:
-    Exception(std::string & whatStr)
-        : std::exception()
-    {
-        m_whatStr = whatStr;
-    }
+    public:
+        Exception(std::string & whatStr) : std::exception()
+        {
+            m_whatStr = whatStr;
+        }
 
-    virtual const char* what() const throw()
-    {
-        return m_whatStr.c_str();
-    }
+        virtual const char* what() const throw()
+        {
+            return m_whatStr.c_str();
+        }
 
-private:
-    std::string m_whatStr;
+    private:
+        std::string m_whatStr;
 };
 
 void ResourcesMgr::OnInit()
@@ -49,7 +50,7 @@ ResourcesMgr::~ResourcesMgr()
 void ResourcesMgr::loadModels()
 {
     std::string name = "grid";
-    RenderData* renderData = new RenderData;
+    ModelData* modelData = new ModelData();
 
     uint32 _size = 40;
     Vertex vert[160]; // _size*4
@@ -66,26 +67,26 @@ void ResourcesMgr::loadModels()
         vert[x*2 +_size*2+1].position = glm::vec3(float(_size), 0.0f, -float(x));
     };
 
-    glGenVertexArrays(1, &(renderData->vertexArray));
-    glBindVertexArray(renderData->vertexArray);
-    {
-        glGenBuffers(1, &(renderData->vertexBuffer));
-        glBindBuffer(GL_ARRAY_BUFFER, renderData->vertexBuffer);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(vert), vert, GL_STATIC_DRAW);
-        {
-            glVertexAttribPointer(VertexArray::Attrib::POSITION, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
-            glVertexAttribPointer(VertexArray::Attrib::COLOR, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), BUFFER_OFFSET(COLOR_VERTEX_POS));
-        }
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
+    VertexArrayObject vao;
+    vao.CreateVertexArray();
+    vao.CreateVertexBuffer();
 
-        glEnableVertexAttribArray(VertexArray::Attrib::POSITION);
-        glEnableVertexAttribArray(VertexArray::Attrib::COLOR);
-    }
-    glBindVertexArray(0);
+    vao.Bind(ID_VAO);
+    vao.Bind(ID_VBO);
 
-    renderData->size = 160;
+    vao.FillBuffer(GL_STATIC_DRAW, vert, sizeof(vert));
 
-    rendersData[name] = renderData;
+    vao.EnableAttrib(VertexArray::Attrib::POSITION);
+    vao.AddAttribToBuffer(VertexArray::Attrib::POSITION, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
+    vao.EnableAttrib(VertexArray::Attrib::COLOR);
+    vao.AddAttribToBuffer(VertexArray::Attrib::COLOR, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), BUFFER_OFFSET(COLOR_VERTEX_POS));
+
+    vao.Unbind(ID_VBO);
+    vao.Unbind(ID_VAO);
+
+    vao.ElementsCount() = 160;
+
+    modelsData[name] = modelData;
 
     loadModel("cube.obj");
     loadModel("trashbin.obj");
@@ -93,20 +94,16 @@ void ResourcesMgr::loadModels()
 
 void ResourcesMgr::unloadModels()
 {
-    for (RenderDataMap::iterator i = rendersData.begin(); i != rendersData.end(); ++i)
-    {
-        glDeleteVertexArrays(1, &(i->second->vertexArray));
-        glDeleteBuffers(1, &(i->second->vertexBuffer));
+    for (ModelDataMap::iterator i = modelsData.begin(); i != modelsData.end(); ++i)
         delete i->second;
-    }
 
-    rendersData.clear();
+    modelsData.clear();
 }
 
-RenderData* ResourcesMgr::GetRenderDataForModel(std::string name)
+ModelData* ResourcesMgr::GetModelData(std::string name)
 {
-    if (rendersData.find(name.c_str()) != rendersData.end())
-        return rendersData[name.c_str()];
+    if (modelsData.find(name.c_str()) != modelsData.end())
+        return modelsData[name.c_str()];
 
     return nullptr;
 }
@@ -141,7 +138,7 @@ bool ResourcesMgr::loadModel(std::string fileName)
 {
     try
     {
-        if (GetRenderDataForModel(fileName) != nullptr)
+        if (GetModelData(fileName) != nullptr)
         {
             std::string what = "Error: file: " + fileName + " were already loaded.";
             throw Exception(what);
@@ -154,32 +151,30 @@ bool ResourcesMgr::loadModel(std::string fileName)
             throw Exception(what);
         }
 
-        RenderData* renderData = new RenderData();
-        glGenVertexArrays(1, &(renderData->vertexArray));
-        glBindVertexArray(renderData->vertexArray);
-        {
-            glGenBuffers(1, &(renderData->vertexBuffer));
-            glBindBuffer(GL_ARRAY_BUFFER, renderData->vertexBuffer);
-            glBufferData(GL_ARRAY_BUFFER, vertexes.size()*sizeof(Vertex), &vertexes[0], GL_STATIC_DRAW);
-            {
-                glVertexAttribPointer(VertexArray::Attrib::POSITION, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
-                glVertexAttribPointer(VertexArray::Attrib::TEXCOORD, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), BUFFER_OFFSET(UV_VERTEX_POS));
-            }
-            glBindBuffer(GL_ARRAY_BUFFER, 0);
+        ModelData* modelData = new ModelData();
+        VertexArrayObject& vao = modelData->vao;
+        vao.CreateVertexArray();
+        vao.CreateVertexBuffer();
 
-            glEnableVertexAttribArray(VertexArray::Attrib::POSITION);
-            glEnableVertexAttribArray(VertexArray::Attrib::TEXCOORD);
-        }
-        glBindVertexArray(0);
+        vao.Bind(ID_VAO);
+        vao.Bind(ID_VBO);
+        vao.FillBuffer(GL_STATIC_DRAW, &vertexes[0], vertexes.size()*sizeof(Vertex));
+        vao.EnableAttrib(VertexArray::Attrib::POSITION);
+        vao.AddAttribToBuffer(VertexArray::Attrib::POSITION, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
+        vao.EnableAttrib(VertexArray::Attrib::TEXCOORD);
+        vao.AddAttribToBuffer(VertexArray::Attrib::TEXCOORD, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), BUFFER_OFFSET(UV_VERTEX_POS));
 
-        renderData->size = vertexes.size();
+        vao.Unbind(ID_VBO);
+        vao.Unbind(ID_VAO);
+
+        vao.ElementsCount() = vertexes.size();
 
         BoundingBox* box = new BoundingBox();
         box->SetMinMax(vertexes);
 
-        renderData->bounding = box;
+        modelData->boundingObject = box;
 
-        rendersData[fileName] = renderData;
+        modelsData[fileName] = modelData;
     }
     catch (std::exception& e)
     {

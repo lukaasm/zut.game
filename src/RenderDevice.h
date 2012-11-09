@@ -11,6 +11,7 @@
 
 class Camera;
 class Shader;
+class VertexArrayObject;
 
 class RenderDevice
 {
@@ -33,9 +34,8 @@ class RenderDevice
 
         void ActivateTexture(uint32, uint32);
 
-        void BindVertexArray(uint32);
-        void DrawLines(uint32, uint32, uint32);
-        void DrawTriangles(uint32, uint32, uint32);
+        void DrawLines(VertexArrayObject&);
+        void DrawTriangles(VertexArrayObject&);
 
     private:
         int32 width;

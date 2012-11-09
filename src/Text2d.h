@@ -4,12 +4,11 @@
 #include <string>
 
 #include "Common.h"
+#include "VertexArrayObject.h"
 
 class Camera;
 class RenderDevice;
 class Shader;
-
-struct RenderData;
 
 class Text2D
 {
@@ -25,7 +24,7 @@ class Text2D
         uint32 textureId;
 
         Shader* shader;
-        RenderData* renderData;
+        VertexArrayObject vao;
 };
 
 #endif

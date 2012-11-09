@@ -6,6 +6,7 @@
 #include "Camera.h"
 #include "GameObject.h"
 #include "Grid.h"
+#include "ModelData.h"
 #include "RenderDevice.h"
 #include "ResourcesMgr.h"
 #include "Shader.h"
@@ -21,7 +22,7 @@ void SceneMgr::OnInit()
     GameObject* cube = new GameObject("cube.obj", "cube.tga");
     cube->SetPosition(glm::vec3(5.0f, 0.25f, -5.0f));
     cube->SetScale(glm::vec3(0.15f));
-    cube->SetBoundingObject(sResourcesMgr->GetRenderDataForModel(cube->GetModel())->bounding);
+    cube->SetBoundingObject(sResourcesMgr->GetModelData(cube->GetModel())->boundingObject);
 
     gameObjectsMap[1] = cube;
 
@@ -29,7 +30,7 @@ void SceneMgr::OnInit()
     cube->SetPosition(glm::vec3(a, b, c)); \
     cube->SetScale(glm::vec3(0.25f)); \
     gameObjectsMap[d] = cube; \
-    cube->SetBoundingObject(sResourcesMgr->GetRenderDataForModel(cube->GetModel())->bounding);
+    cube->SetBoundingObject(sResourcesMgr->GetModelData(cube->GetModel())->boundingObject);
 
     POPULATE_CUBE(4.25f, 0.25f, -5.0f, 2)
     POPULATE_CUBE(5.75f, 0.25f, -5.0f, 3)
