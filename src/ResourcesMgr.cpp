@@ -67,7 +67,8 @@ void ResourcesMgr::loadModels()
         vert[x*2 +_size*2+1].position = glm::vec3(float(_size), 0.0f, -float(x));
     };
 
-    VertexArrayObject vao;
+    VertexArrayObject& vao = modelData->vao;
+
     vao.CreateVertexArray();
     vao.CreateVertexBuffer();
 
