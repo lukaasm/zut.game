@@ -19,10 +19,10 @@
 #include "Common.h"
 #include "Singleton.h"
 
-struct RenderData;
 struct Vertex;
+struct ModelData;
 
-typedef std::hash_map<std::string, RenderData*> RenderDataMap;
+typedef std::hash_map<std::string, ModelData*> ModelDataMap;
 typedef std::hash_map<std::string, uint32> TexturesMap;
 
 class ResourcesMgr
@@ -34,7 +34,7 @@ class ResourcesMgr
 
         void OnInit();
 
-        RenderData* GetRenderDataForModel(std::string);
+        ModelData* GetModelData(std::string);
         uint32 GetTextureId(std::string);
 
     private:
@@ -51,7 +51,7 @@ class ResourcesMgr
         void loadTexture(std::string fileName);
         bool loadModel(std::string fileName);
 
-        RenderDataMap rendersData;
+        ModelDataMap modelsData;
         TexturesMap textures;
         //uint32 GetTexture(std::string);
         //uint32 GetShader(std::string);

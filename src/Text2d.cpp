@@ -9,6 +9,7 @@
 #include "GameObject.h"
 #include "RenderDevice.h"
 #include "ResourcesMgr.h"
+#include "VertexArrayObject.h"
 #include "Shader.h"
 
 // warning C4482: nonstandard extension used: enum 'VertexArray::Attrib' used in qualified name
@@ -16,25 +17,7 @@
 
 Text2D::~Text2D()
 {
-    // Delete buffers
-    glDeleteVertexArrays(1, &(renderData->vertexArray));
-    glDeleteBuffers(1, &(renderData->vertexBuffer));
-
     delete shader;
-}
-
-void Text2D::Init()
-{
-    shader = new Shader("../res/shaders/font.vert", "../res/shaders/shader.frag");
-
-    // Initialize texture
-    textureId = sResourcesMgr->GetTextureId("font.tga");
-
-    renderData = new RenderData;
-
-    // Initialize VBO
-    glGenVertexArrays(1, &(renderData->vertexArray));
-    glGenBuffers(1, &(renderData->vertexBuffer));
 }
 
 struct FontVert
@@ -43,7 +26,28 @@ struct FontVert
     glm::vec2 uv;
 };
 
-#include <iostream>
+void Text2D::Init()
+{
+    shader = new Shader("../res/shaders/font.vert", "../res/shaders/shader.frag");
+
+    // Initialize texture
+    textureId = sResourcesMgr->GetTextureId("font.tga");
+
+    // Initialize VBO
+    vao.CreateVertexArray();
+    vao.CreateVertexBuffer();
+
+    vao.Bind(ID_VAO);
+    vao.Bind(ID_VBO);
+    vao.EnableAttrib(VertexArray::Attrib::POSITION);
+    vao.AddAttribToBuffer(VertexArray::Attrib::POSITION, 2, GL_FLOAT, GL_FALSE, sizeof(FontVert), 0);
+
+    vao.EnableAttrib(VertexArray::Attrib::TEXCOORD);
+    vao.AddAttribToBuffer(VertexArray::Attrib::TEXCOORD, 2, GL_FLOAT, GL_FALSE, sizeof(FontVert), BUFFER_OFFSET(sizeof(glm::vec2)));
+
+    vao.Unbind(ID_VBO);
+    vao.Unbind(ID_VAO);
+}
 
 void Text2D::Print(RenderDevice* rd, std::string text, int x, int y, int fontSize)
 {
@@ -71,21 +75,15 @@ void Text2D::Print(RenderDevice* rd, std::string text, int x, int y, int fontSiz
             vertices.push_back(vert[j]);
     }
 
-    renderData->size = vertices.size();
+    vao.ElementsCount() = vertices.size();
 
-    glBindVertexArray(renderData->vertexArray);
-    glBindBuffer(GL_ARRAY_BUFFER, renderData->vertexBuffer);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(FontVert)*vertices.size(), &vertices[0], GL_DYNAMIC_DRAW);
-    {
-        glVertexAttribPointer(VertexArray::Attrib::POSITION, 2, GL_FLOAT, GL_FALSE, sizeof(FontVert), 0);
-        glVertexAttribPointer(VertexArray::Attrib::TEXCOORD, 2, GL_FLOAT, GL_FALSE, sizeof(FontVert), BUFFER_OFFSET(sizeof(glm::vec2)));
-    }
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    vao.Bind(ID_VAO);
+    vao.Bind(ID_VBO);
 
-    glEnableVertexAttribArray(VertexArray::Attrib::POSITION);
-    glEnableVertexAttribArray(VertexArray::Attrib::TEXCOORD);
+    vao.FillBuffer(GL_DYNAMIC_DRAW, &vertices[0], sizeof(FontVert)*vertices.size());
 
-    glBindVertexArray(0);
+    vao.Unbind(ID_VBO);
+    vao.Unbind(ID_VAO);
 
     glDisable(GL_DEPTH_TEST);
 
@@ -95,7 +93,7 @@ void Text2D::Print(RenderDevice* rd, std::string text, int x, int y, int fontSiz
     rd->ActivateTexture(GL_TEXTURE0, textureId);
     rd->SetUniforms(shader);
 
-    rd->DrawTriangles(renderData->vertexArray, 0, renderData->size);
+    rd->DrawTriangles(vao);
 
     shader->Unbind();
 

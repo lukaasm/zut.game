@@ -7,6 +7,9 @@
 #include "GameObject.h"
 #include "RenderDevice.h"
 
+// warning C4482: nonstandard extension used: enum 'VertexArray::Attrib' used in qualified name
+#pragma warning(disable : 4482)
+
 void BoundingBox::SetMinMax(const VertexVector& vertexes)
 {
     struct FindMinMax
@@ -66,28 +69,24 @@ void BoundingBox::SetMinMax(const VertexVector& vertexes)
     bbox.push_back(glm::vec3(max.x, min.y, min.z));
     bbox.push_back(glm::vec3(max.x, min.y, max.z));
 
-    renderData = new RenderData();
-    glGenVertexArrays(1, &(renderData->vertexArray));
-    glBindVertexArray(renderData->vertexArray);
-    {
-        glGenBuffers(1, &(renderData->vertexBuffer));
-        glBindBuffer(GL_ARRAY_BUFFER, renderData->vertexBuffer);
-        glBufferData(GL_ARRAY_BUFFER, bbox.size()*sizeof(glm::vec3), &bbox[0], GL_STATIC_DRAW);
-        {
-            glVertexAttribPointer(VertexArray::Attrib::POSITION, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), 0);
-            glVertexAttribPointer(VertexArray::Attrib::COLOR, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), 0);
-        }
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
+    vao.CreateVertexArray();
+    vao.CreateVertexBuffer();
 
-        glEnableVertexAttribArray(VertexArray::Attrib::POSITION);
-        glEnableVertexAttribArray(VertexArray::Attrib::COLOR);
-    }
-    glBindVertexArray(0);
+    vao.Bind(ID_VAO);
+    vao.Bind(ID_VBO);
+    vao.FillBuffer(GL_STATIC_DRAW, &bbox[0], bbox.size()*sizeof(glm::vec3));
+    vao.EnableAttrib(VertexArray::Attrib::POSITION);
+    vao.AddAttribToBuffer(VertexArray::Attrib::POSITION, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), 0);
+    vao.EnableAttrib(VertexArray::Attrib::COLOR);
+    vao.AddAttribToBuffer(VertexArray::Attrib::COLOR, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), 0);
 
-    renderData->size = bbox.size();
+    vao.Unbind(ID_VBO);
+    vao.Unbind(ID_VAO);
+
+    vao.ElementsCount() = bbox.size();
 }
 
 void BoundingBox::OnRender(RenderDevice* rd)
 {
-    rd->DrawLines(renderData->vertexArray, 0, renderData->size);
+    rd->DrawLines(vao);
 }
