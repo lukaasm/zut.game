@@ -57,10 +57,11 @@ struct RenderData
 class GameObject
 {
     public:
-        explicit GameObject(std::string model, std::string texture) : modelName(model), textureName(texture), boundingObject(nullptr) {}
+        explicit GameObject(std::string model, std::string texture) : coll(0.0f), modelName(model), textureName(texture), boundingObject(nullptr) {}
         virtual ~GameObject() {}
 
         virtual void OnRender(RenderDevice*);
+        virtual void OnUpdate(const uint32) {}
 
         glm::mat4 GetModelMatrix() const;
 
@@ -75,6 +76,7 @@ class GameObject
         std::string GetTexture() const { return textureName; }
 
         float IsTextured() const { return GetTexture() != "" ? 1.0f : 0.0f; }
+        float coll;
 
     protected:
         uint32 guid;

@@ -14,6 +14,7 @@
 
 class Camera;
 class GameObject;
+class Player;
 class RenderDevice;
 class Shader;
 
@@ -31,12 +32,17 @@ class SceneMgr
         void OnRender(RenderDevice*);
 
         Camera* GetCamera() { return camera; }
+        Player* GetPlayer() { return player; }
+
         void SetCamera(Camera*);
+        void CollisionTest();
 
     private:
         Text2D text2D;
 
         Camera* camera;
+        Player* player;
+
         Shader* tempShader;
 
         GameObjectsMap gameObjectsMap;

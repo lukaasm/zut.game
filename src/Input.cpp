@@ -86,7 +86,7 @@ void Keyboard::OnKeyPress(int32 key)
 
     MoveType moveFlag = Keyboard::Key2MoveType(key);
     if (moveFlag != MOVE_NONE)
-        sSceneMgr->GetCamera()->AddMoveType(moveFlag);
+        sSceneMgr->GetPlayer()->AddMoveType(moveFlag);
 }
 
 void Keyboard::OnKeyRelease(int32 key)
@@ -95,5 +95,5 @@ void Keyboard::OnKeyRelease(int32 key)
 
     MoveType moveFlag = Keyboard::Key2MoveType(key);
     if (moveFlag != MOVE_NONE)
-        sSceneMgr->GetCamera()->ClearMoveType(moveFlag);
+        sSceneMgr->GetPlayer()->ClearMoveType(moveFlag);
 }

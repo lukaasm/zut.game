@@ -95,6 +95,9 @@
     <ClInclude Include="..\src\ModelData.h">
       <Filter>Frame\Other</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\MovableObject.h">
+      <Filter>Frame\GameObjects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="VS2k10.rc">
@@ -148,6 +151,9 @@
     </ClCompile>
     <ClCompile Include="..\src\ModelData.cpp">
       <Filter>Frame\Other</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\MovableObject.cpp">
+      <Filter>Frame\GameObjects</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
