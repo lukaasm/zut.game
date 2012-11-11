@@ -9,6 +9,7 @@
 #include <GL/glew.h>
 #include <GL/glfw.h>
 
+#include "Camera.h"
 #include "Input.h"
 #include "RenderDevice.h"
 #include "ResourcesMgr.h"

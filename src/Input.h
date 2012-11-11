@@ -11,7 +11,7 @@
 
 #include "CallBack.h"
 // there is NO enum predefinition, so whole header is needed :p
-#include "Camera.h"
+#include "MovableObject.h"
 
 class BaseApp;
 class Keyboard;
