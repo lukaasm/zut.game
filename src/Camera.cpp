@@ -25,8 +25,8 @@ void Camera::OnUpdate(const uint32)
 void Camera::LookAt()
 {
     glm::vec3 pos = owner->position;
-    pos.z += 5.0f;
-    pos.y += 1.0f;
+    pos.z += 3.0f;
+    pos.y += 1.5f;
 
     viewMatrix = glm::lookAt(pos, owner->lookAt, owner->up);
 }

@@ -3,6 +3,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/vector_angle.hpp>
 
+/// FIX ALL VECTOR CALCULATIONS ( UP,RIGHT etc ) !!!!!!!!!!
 void Player::Move(MoveType type, float angleOrScale)
 {
     switch (type)
@@ -77,11 +78,17 @@ void Player::Move(MoveType type, float angleOrScale)
     default:
         break;
     }
+
+    if (position.y < (scale.y/2))
+    {
+       position.y = scale.y / 2;
+       lookAt.y = position.y;
+    }
 }
 
 void Player::OnUpdate(const uint32 diff)
 {
-    const float scale = 0.2f;
+    const float scale = 0.15f;
 
     if (moveFlags & MOVE_FORWARD)
         Move(MOVE_FORWARD, scale);
