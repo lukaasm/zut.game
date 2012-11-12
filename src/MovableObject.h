@@ -3,40 +3,53 @@
 
 #include "GameObject.h"
 
-enum MoveType
+enum MoveTypes
 {
-    MOVE_NONE         = 0x000,
-    MOVE_FORWARD      = 0x001,
-    MOVE_BACKWARD     = 0x002,
-    MOVE_ROTATE_LEFT  = 0x004,
-    MOVE_ROTATE_RIGHT = 0x008,
-    MOVE_STRAFE_RIGHT = 0x010,
-    MOVE_STRAFE_LEFT  = 0x020,
-    MOVE_UPWARD       = 0x040,
-    MOVE_DOWNWARD     = 0x080,
+    MOVE_TYPE_FORWARD       = 0,
+    MOVE_TYPE_BACKWARD      = 1,
+    MOVE_TYPE_ROTATE_LEFT   = 2,
+    MOVE_TYPE_ROTATE_RIGHT  = 3,
+    MOVE_TYPE_STRAFE_RIGHT  = 4,
+    MOVE_TYPE_STRAFE_LEFT   = 5,
+    MOVE_TYPE_UPWARD        = 6,
+    MOVE_TYPE_DOWNWARD      = 7,
+    MOVE_TYPE_NONE          = 8,
+
+    MAX_MOVE_TYPES          = 8
 };
 
-struct MoveFlag
+enum MoveFlags
 {
-    MoveType apply;
-    MoveType remove;
+    MOVE_FLAG_NONE          = 0x000,
+    MOVE_FLAG_FORWARD       = 0x001,
+    MOVE_FLAG_BACKWARD      = 0x002,
+    MOVE_FLAG_ROTATE_LEFT   = 0x004,
+    MOVE_FLAG_ROTATE_RIGHT  = 0x008,
+    MOVE_FLAG_STRAFE_RIGHT  = 0x010,
+    MOVE_FLAG_STRAFE_LEFT   = 0x020,
+    MOVE_FLAG_UPWARD        = 0x040,
+    MOVE_FLAG_DOWNWARD      = 0x080,
+};
+
+struct MoveInfo
+{
+    MoveFlags apply;
+    MoveFlags remove;
 
     float speed;
 };
 
-#define MAX_MOVE_FLAGS 8
-
-const MoveFlag moveflags[] =
+const MoveInfo moveInfos[] =
 {
-    { MOVE_FORWARD, MOVE_BACKWARD, 1.0f },
-    { MOVE_BACKWARD, MOVE_FORWARD, 0.6f },
-    { MOVE_STRAFE_LEFT, MOVE_STRAFE_RIGHT, 1.0f },
-    { MOVE_STRAFE_RIGHT, MOVE_STRAFE_LEFT, 1.0f },
-    { MOVE_ROTATE_LEFT, MOVE_ROTATE_RIGHT, 0.5f },
-    { MOVE_ROTATE_RIGHT, MOVE_ROTATE_LEFT, 0.5f },
-    { MOVE_UPWARD, MOVE_DOWNWARD, 1.0f },
-    { MOVE_DOWNWARD, MOVE_UPWARD, 1.0f },
-    { MOVE_NONE, MOVE_NONE, 0.0f }
+    { MOVE_FLAG_FORWARD,        MOVE_FLAG_BACKWARD,     1.0f },     // MOVE_TYPE_FORWARD
+    { MOVE_FLAG_BACKWARD,       MOVE_FLAG_FORWARD,      0.6f },     // MOVE_TYPE_BACKWARD
+    { MOVE_FLAG_STRAFE_LEFT,    MOVE_FLAG_STRAFE_RIGHT, 1.0f },     // MOVE_TYPE_STRAFE_LEFT
+    { MOVE_FLAG_STRAFE_RIGHT,   MOVE_FLAG_STRAFE_LEFT,  1.0f },     // MOVE_TYPE_STRAFE_RIGHT
+    { MOVE_FLAG_ROTATE_LEFT,    MOVE_FLAG_ROTATE_RIGHT, 0.5f },     // MOVE_TYPE_ROTATE_LEFT
+    { MOVE_FLAG_ROTATE_RIGHT,   MOVE_FLAG_ROTATE_LEFT,  0.5f },     // MOVE_TYPE_ROTATE_RIGHT
+    { MOVE_FLAG_UPWARD,         MOVE_FLAG_DOWNWARD,     1.0f },     // MOVE_TYPE_UPWARD
+    { MOVE_FLAG_DOWNWARD,       MOVE_FLAG_UPWARD,       1.0f },     // MOVE_TYPE_DOWNWARD
+    { MOVE_FLAG_NONE,           MOVE_FLAG_NONE,         0.0f }      // MOVE_TYPE_NONE/MAX_MOVE_TYPES
 };
 
 class Player : public GameObject
@@ -46,17 +59,17 @@ class Player : public GameObject
 
         Player();
 
-        void Move(MoveType, float);
-            
-        void AddMoveType(MoveFlag);
-        void ClearMoveType(MoveType);
+        void Move(MoveFlags, float);
+
+        void AddMoveType(MoveInfo);
+        void ClearMoveType(MoveFlags);
 
         bool IsControllable() const { return true; }
 
         void OnUpdate(const uint32 diff) override;
 
     private:
-        MoveType moveFlags;
+        MoveFlags moveFlags;
 
         glm::vec3 lookAt;
 

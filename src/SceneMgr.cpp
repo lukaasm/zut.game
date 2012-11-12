@@ -22,7 +22,7 @@ void SceneMgr::OnInit()
     SetCamera(new Camera());
     GetCamera()->SetOwner(player);
 
-    tempShader = new Shader("../res/shaders/shader.vert", "../res/shaders/shader.frag"); 
+    tempShader = new Shader("../res/shaders/shader.vert", "../res/shaders/shader.frag");
     uint8 guid = 0;
     gameObjectsMap[guid] = player;
 

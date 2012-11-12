@@ -53,9 +53,9 @@ class BoundingBox : public BoundingObject
         VertexArrayObject vao;
 };
 
-struct TestPoints 
+struct TestPoints
 {
-    TestPoints(BoundingBox& bb, glm::mat4& modelMatrix)
+    TestPoints(BoundingBox& bb, glm::mat4 modelMatrix)
     {
         glm::vec4 m1 = modelMatrix * glm::vec4(bb.min, 1.0f);
         glm::vec4 m2 = modelMatrix * glm::vec4(bb.max, 1.0f);
