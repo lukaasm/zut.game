@@ -9,7 +9,6 @@
 #include "Common.h"
 
 class BaseApp;
-class Keyboard;
 class RenderDevice;
 
 typedef CallBack<BaseApp, void, int32, int32 > ResizeCallBack;
@@ -38,7 +37,6 @@ class BaseApp
 
         bool Stopped() const { return stop; }
 
-        Keyboard* GetKeyboard() const { return keyboard; }
         RenderDevice* GetRenderDevice() const { return renderDevice; }
 
     private:
@@ -48,7 +46,6 @@ class BaseApp
 
         bool stop;
 
-        Keyboard* keyboard;
         RenderDevice* renderDevice;
 };
 

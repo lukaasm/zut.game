@@ -10,19 +10,16 @@
 #include "Common.h"
 #include "SceneMgr.h"
 
-Keyboard::Keyboard(BaseApp* app)
-{
-    _baseApp = app;
-}
-
 Keyboard::~Keyboard()
 {
     delete_ptr(KeyPressCallBack)
     delete_ptr(KeyReleaseCallBack)
 }
 
-void Keyboard::CreateCallBacks()
+void Keyboard::CreateCallBacks(BaseApp* baseApp)
 {
+    _baseApp = baseApp;
+
     KeyPressCallBack = new KeyStateCallBack(this, &Keyboard::OnKeyPress);
     KeyReleaseCallBack = new KeyStateCallBack(this, &Keyboard::OnKeyRelease);
 
@@ -37,32 +34,28 @@ bool Keyboard::IsKeyPressed(int32 key)
         return false;
 }
 
-MoveType Keyboard::Key2MoveType(int32 key)
+MoveFlag Keyboard::Key2MoveFlag(int32 key)
 {
     switch (key)
     {
         case 'A':
-            return MOVE_STRAFE_LEFT;
+            return moveflags[2];
         case 'D':
-            return MOVE_STRAFE_RIGHT;
+            return moveflags[3];
         case 'W':
-            return MOVE_FORWARD;
+            return moveflags[0];
         case 'S':
-            return MOVE_BACKWARD;
-        case GLFW_KEY_UP:
-            return MOVE_ROTATE_UP;
-        case GLFW_KEY_DOWN:
-            return MOVE_ROTATE_DOWN;
+            return moveflags[1];
         case GLFW_KEY_LEFT:
-            return MOVE_ROTATE_LEFT;
+            return moveflags[4];
         case GLFW_KEY_RIGHT:
-            return MOVE_ROTATE_RIGHT;
+            return moveflags[5];
         case GLFW_KEY_SPACE:
-            return MOVE_UPWARD;
+            return moveflags[6];
         case GLFW_KEY_LCTRL:
-            return MOVE_DOWNWARD;
+            return moveflags[7];
         default:
-            return MOVE_NONE;
+            return moveflags[8];
     }
 }
 
@@ -83,17 +76,9 @@ void Keyboard::OnKeyPress(int32 key)
 
     if (key == GLFW_KEY_ESC)
         BaseApp::CloseWindow();
-
-    MoveType moveFlag = Keyboard::Key2MoveType(key);
-    if (moveFlag != MOVE_NONE)
-        sSceneMgr->GetPlayer()->AddMoveType(moveFlag);
 }
 
 void Keyboard::OnKeyRelease(int32 key)
 {
     _keyStateMap[key] = false;
-
-    MoveType moveFlag = Keyboard::Key2MoveType(key);
-    if (moveFlag != MOVE_NONE)
-        sSceneMgr->GetPlayer()->ClearMoveType(moveFlag);
 }

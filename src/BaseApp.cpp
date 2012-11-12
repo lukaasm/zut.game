@@ -19,7 +19,6 @@
 
 BaseApp::BaseApp() : stop(false)
 {
-    keyboard = new Keyboard(this);
     renderDevice = new RenderDevice();
 }
 
@@ -28,7 +27,6 @@ BaseApp::~BaseApp()
     delete_ptr(BaseApp::CloseCallback)
     delete_ptr(BaseApp::ResizeCallback)
 
-    delete_ptr(keyboard)
     delete_ptr(renderDevice)
 }
 
@@ -76,7 +74,7 @@ void BaseApp::CreateCallBacks()
     BaseApp::CloseCallback = new CloseCallBack(this, &BaseApp::closeWindow);
     glfwSetWindowCloseCallback(BaseApp::CloseWindow);
 
-    GetKeyboard()->CreateCallBacks();
+    sKeyboard->CreateCallBacks(this);
 }
 
 void BaseApp::Init()

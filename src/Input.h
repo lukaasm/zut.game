@@ -12,6 +12,7 @@
 #include "CallBack.h"
 // there is NO enum predefinition, so whole header is needed :p
 #include "MovableObject.h"
+#include "Singleton.h"
 
 class BaseApp;
 class Keyboard;
@@ -20,14 +21,15 @@ typedef CallBack<Keyboard, void, int32 > KeyStateCallBack;
 
 class Keyboard
 {
+    SINGLETON(Keyboard)
+
     public:
-        Keyboard(BaseApp*);
         ~Keyboard();
 
-        void CreateCallBacks();
+        void CreateCallBacks(BaseApp*);
         bool IsKeyPressed(int32);
 
-        static MoveType Key2MoveType(int32);
+        static MoveFlag Key2MoveFlag(int32);
 
         static KeyStateCallBack* KeyPressCallBack;
         static KeyStateCallBack* KeyReleaseCallBack;
@@ -36,12 +38,17 @@ class Keyboard
         void OnKeyPress(int32);
         void OnKeyRelease(int32);
 
-    private:
         typedef std::map<int32, bool> KeysMap;
+
+        KeysMap& GetKeysMap() { return _keyStateMap; }
+                
+    private:
         KeysMap _keyStateMap;
 
         BaseApp* _baseApp;
 };
+
+#define sKeyboard Singleton<Keyboard>::Instance()
 
 namespace Mouse
 {
