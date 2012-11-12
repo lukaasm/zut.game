@@ -35,6 +35,11 @@
 		<Linker>
 			<Add library="GL" />
 			<Add library="X11" />
+			<Add library="Xrandr" />
+			<Add library="rt" />
+			<Add library="pthread" />
+			<Add library="glfw" />
+			<Add library="GLEW" />
 		</Linker>
 		<Unit filename="../src/BaseApp.cpp" />
 		<Unit filename="../src/BaseApp.h" />
@@ -48,11 +53,14 @@
 		<Unit filename="../src/Frustum.h" />
 		<Unit filename="../src/GameObject.cpp" />
 		<Unit filename="../src/GameObject.h" />
-		<Unit filename="../src/GameObjectMgr.cpp" />
 		<Unit filename="../src/Grid.cpp" />
 		<Unit filename="../src/Grid.h" />
 		<Unit filename="../src/Input.cpp" />
 		<Unit filename="../src/Input.h" />
+		<Unit filename="../src/ModelData.cpp" />
+		<Unit filename="../src/ModelData.h" />
+		<Unit filename="../src/MovableObject.cpp" />
+		<Unit filename="../src/MovableObject.h" />
 		<Unit filename="../src/RenderDevice.cpp" />
 		<Unit filename="../src/RenderDevice.h" />
 		<Unit filename="../src/ResourcesMgr.cpp" />
@@ -64,6 +72,8 @@
 		<Unit filename="../src/Singleton.h" />
 		<Unit filename="../src/Text2d.cpp" />
 		<Unit filename="../src/Text2d.h" />
+		<Unit filename="../src/VertexArrayObject.cpp" />
+		<Unit filename="../src/VertexArrayObject.h" />
 		<Extensions>
 			<envvars />
 			<code_completion />
