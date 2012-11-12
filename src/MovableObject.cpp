@@ -104,7 +104,7 @@ void Player::OnUpdate(const uint32 diff)
 
 void Player::AddMoveType(MoveFlag flag)
 {
-    moveFlags = MoveType((moveFlags | flag.apply) | (moveFlags & ~flag.remove));
+    moveFlags = MoveType((moveFlags | flag.apply) & ~flag.remove);
 }
 
 void Player::ClearMoveType(MoveType flag)
