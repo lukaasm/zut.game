@@ -7,67 +7,60 @@
 #include "Input.h"
 
 /// FIX ALL VECTOR CALCULATIONS ( UP,RIGHT etc ) !!!!!!!!!!
-void Player::Move(MoveFlags type, float angleOrScale)
+void Player::Move(MoveFlags flags, float angleOrScale)
 {
-    switch (type)
+    if (flags & MOVE_FLAG_FORWARD)
     {
-        case MOVE_FLAG_FORWARD:
-        {
-            glm::vec3 offset = glm::normalize(lookAt - position) * angleOrScale;
-            position += offset;
-            lookAt += offset;
-            break;
-        }
-        case MOVE_FLAG_BACKWARD:
-        {
-            glm::vec3 offset = glm::normalize(lookAt - position) * angleOrScale;
-            position -= offset;
-            lookAt -= offset;
-            break;
-        }
-        case MOVE_FLAG_UPWARD:
-        {
-            glm::vec3 offset = glm::normalize(up) * angleOrScale;
-            position += offset;
-            lookAt += offset;
-            break;
-        }
-        case MOVE_FLAG_DOWNWARD:
-        {
-            glm::vec3 offset = glm::normalize(up) * angleOrScale;
-            position -= offset;
-            lookAt -= offset;
-            break;
-        }
-        case MOVE_FLAG_ROTATE_LEFT:
-        {
-            lookAt = glm::rotate(lookAt, angleOrScale, up);
-            right = glm::cross(lookAt, up);
-            break;
-        }
-        case MOVE_FLAG_ROTATE_RIGHT:
-        {
-            lookAt = glm::rotate(lookAt, -angleOrScale, up);
-            right = glm::cross(lookAt, up);
-            break;
-        }
-        case MOVE_FLAG_STRAFE_RIGHT:
-        {
-            glm::vec3 offset = glm::normalize(right) * angleOrScale;
-            position += offset;
-            lookAt += offset;
-            break;
-        }
-        case MOVE_FLAG_STRAFE_LEFT:
-        {
-            glm::vec3 offset = glm::normalize(right) * angleOrScale;
-            position -= offset;
-            lookAt -= offset;
-            break;
-        }
-        case MOVE_FLAG_NONE:
-        default:
-            break;
+        glm::vec3 offset = glm::normalize(lookAt - position) * angleOrScale;
+        position += offset;
+        lookAt += offset;
+    }
+
+    if (flags & MOVE_FLAG_BACKWARD)
+    {
+        glm::vec3 offset = glm::normalize(lookAt - position) * angleOrScale;
+        position -= offset;
+        lookAt -= offset;
+    }
+
+    if (flags & MOVE_FLAG_UPWARD)
+    {
+        glm::vec3 offset = glm::normalize(up) * angleOrScale;
+        position += offset;
+        lookAt += offset;
+    }
+
+    if (flags & MOVE_FLAG_DOWNWARD)
+    {
+        glm::vec3 offset = glm::normalize(up) * angleOrScale;
+        position -= offset;
+        lookAt -= offset;
+    }
+
+    if (flags & MOVE_FLAG_ROTATE_LEFT)
+    {
+        lookAt = glm::rotate(lookAt, angleOrScale, up);
+        right = glm::cross(lookAt, up);
+    }
+
+    if (flags & MOVE_FLAG_ROTATE_RIGHT)
+    {
+        lookAt = glm::rotate(lookAt, -angleOrScale, up);
+        right = glm::cross(lookAt, up);
+    }
+
+    if (flags & MOVE_FLAG_STRAFE_RIGHT)
+    {
+        glm::vec3 offset = glm::normalize(right) * angleOrScale;
+        position += offset;
+        lookAt += offset;
+    }
+
+    if (flags & MOVE_FLAG_STRAFE_LEFT)
+    {
+        glm::vec3 offset = glm::normalize(right) * angleOrScale;
+        position -= offset;
+        lookAt -= offset;
     }
 
     if (position.y < (scale.y/2))
