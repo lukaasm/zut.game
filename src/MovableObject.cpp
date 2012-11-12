@@ -1,7 +1,10 @@
 #include "MovableObject.h"
+
 #include <glm/core/func_geometric.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/vector_angle.hpp>
+
+#include "Input.h"
 
 /// FIX ALL VECTOR CALCULATIONS ( UP,RIGHT etc ) !!!!!!!!!!
 void Player::Move(MoveType type, float angleOrScale)
@@ -48,18 +51,6 @@ void Player::Move(MoveType type, float angleOrScale)
             right = glm::cross(lookAt, up);
             break;
         }
-    case MOVE_ROTATE_UP:
-        {
-            lookAt = glm::rotate(lookAt, angleOrScale, right);
-            up = glm::cross(right, lookAt);
-            break;
-        }
-    case MOVE_ROTATE_DOWN:
-        {
-            lookAt = glm::rotate(lookAt, -angleOrScale, right);
-            up = glm::cross(right, lookAt);
-            break;
-        }
     case MOVE_STRAFE_RIGHT:
         {
             glm::vec3 offset = glm::normalize(right) * angleOrScale;
@@ -88,65 +79,32 @@ void Player::Move(MoveType type, float angleOrScale)
 
 void Player::OnUpdate(const uint32 diff)
 {
-    const float scale = 0.15f;
+    if (IsControllable())
+    {
+        for (Keyboard::KeysMap::const_iterator i = sKeyboard->GetKeysMap().begin(); i != sKeyboard->GetKeysMap().end(); ++i)
+        {
+            const MoveFlag& flag = Keyboard::Key2MoveFlag(i->first);
+            if (flag.apply == MOVE_NONE)
+                continue;
 
-    if (moveFlags & MOVE_FORWARD)
-        Move(MOVE_FORWARD, scale);
-    else if (moveFlags & MOVE_BACKWARD)
-        Move(MOVE_BACKWARD, scale);
+            if (i->second)
+                AddMoveType(flag);
+            else
+                ClearMoveType(flag.apply);
+        }
+    }
 
-    if (moveFlags & MOVE_UPWARD)
-        Move(MOVE_UPWARD, scale);
-    else if (moveFlags & MOVE_DOWNWARD)
-        Move(MOVE_DOWNWARD, scale);
-
-    if (moveFlags & MOVE_STRAFE_LEFT)
-        Move(MOVE_STRAFE_LEFT, scale);
-    else if (moveFlags & MOVE_STRAFE_RIGHT)
-        Move(MOVE_STRAFE_RIGHT, scale);
-
-    if (moveFlags & MOVE_ROTATE_LEFT)
-        Move(MOVE_ROTATE_LEFT, 3.5f);
-    else if (moveFlags & MOVE_ROTATE_RIGHT)
-        Move(MOVE_ROTATE_RIGHT, 3.5f);
-
-    if (moveFlags & MOVE_ROTATE_UP)
-        Move(MOVE_ROTATE_UP, 3.5f);
-    else if (moveFlags & MOVE_ROTATE_DOWN)
-        Move(MOVE_ROTATE_DOWN, 3.5f);
+    for (uint8 i = 0; i < MAX_MOVE_FLAGS; ++i)
+    {
+        const MoveFlag& flag = moveflags[i];
+        if (moveFlags & flag.apply)
+            Move(flag.apply, flag.speed);
+    }
 }
 
-void Player::AddMoveType(MoveType flag)
+void Player::AddMoveType(MoveFlag flag)
 {
-    if (flag & MOVE_FORWARD)
-        moveFlags = MoveType((moveFlags & ~MOVE_BACKWARD) | flag);
-
-    if (flag & MOVE_BACKWARD)
-        moveFlags = MoveType((moveFlags & ~MOVE_FORWARD) | flag);
-
-    if (flag & MOVE_UPWARD)
-        moveFlags = MoveType((moveFlags & ~MOVE_DOWNWARD) | flag);
-
-    if (flag & MOVE_DOWNWARD)
-        moveFlags = MoveType((moveFlags & ~MOVE_UPWARD) | flag);
-
-    if (flag & MOVE_ROTATE_LEFT)
-        moveFlags = MoveType((moveFlags & ~MOVE_ROTATE_RIGHT) | flag);
-
-    if (flag & MOVE_ROTATE_RIGHT)
-        moveFlags = MoveType((moveFlags & ~MOVE_ROTATE_LEFT) | flag);
-
-    if (flag & MOVE_ROTATE_UP)
-        moveFlags = MoveType((moveFlags & ~MOVE_ROTATE_DOWN) | flag);
-
-    if (flag & MOVE_ROTATE_DOWN)
-        moveFlags = MoveType((moveFlags & ~MOVE_ROTATE_UP) | flag);
-
-    if (flag & MOVE_STRAFE_LEFT)
-        moveFlags = MoveType((moveFlags & ~MOVE_STRAFE_RIGHT) | flag);
-
-    if (flag & MOVE_STRAFE_RIGHT)
-        moveFlags = MoveType((moveFlags & ~MOVE_STRAFE_LEFT) | flag);
+    moveFlags = MoveType((moveFlags | flag.apply) | (moveFlags & ~flag.remove));
 }
 
 void Player::ClearMoveType(MoveType flag)
