@@ -29,7 +29,7 @@ class Keyboard
         void CreateCallBacks(BaseApp*);
         bool IsKeyPressed(int32);
 
-        static MoveFlag Key2MoveFlag(int32);
+        static MoveInfo Key2MoveInfo(int32);
 
         static KeyStateCallBack* KeyPressCallBack;
         static KeyStateCallBack* KeyReleaseCallBack;
@@ -41,7 +41,7 @@ class Keyboard
         typedef std::map<int32, bool> KeysMap;
 
         KeysMap& GetKeysMap() { return _keyStateMap; }
-                
+
     private:
         KeysMap _keyStateMap;
 

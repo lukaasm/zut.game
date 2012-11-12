@@ -34,28 +34,28 @@ bool Keyboard::IsKeyPressed(int32 key)
         return false;
 }
 
-MoveFlag Keyboard::Key2MoveFlag(int32 key)
+MoveInfo Keyboard::Key2MoveInfo(int32 key)
 {
     switch (key)
     {
         case 'A':
-            return moveflags[2];
+            return moveInfos[MOVE_TYPE_STRAFE_LEFT];
         case 'D':
-            return moveflags[3];
+            return moveInfos[MOVE_TYPE_STRAFE_RIGHT];
         case 'W':
-            return moveflags[0];
+            return moveInfos[MOVE_TYPE_FORWARD];
         case 'S':
-            return moveflags[1];
+            return moveInfos[MOVE_TYPE_BACKWARD];
         case GLFW_KEY_LEFT:
-            return moveflags[4];
+            return moveInfos[MOVE_TYPE_ROTATE_LEFT];
         case GLFW_KEY_RIGHT:
-            return moveflags[5];
+            return moveInfos[MOVE_TYPE_ROTATE_RIGHT];
         case GLFW_KEY_SPACE:
-            return moveflags[6];
+            return moveInfos[MOVE_TYPE_UPWARD];
         case GLFW_KEY_LCTRL:
-            return moveflags[7];
+            return moveInfos[MOVE_TYPE_DOWNWARD];
         default:
-            return moveflags[8];
+            return moveInfos[MOVE_TYPE_NONE];
     }
 }
 

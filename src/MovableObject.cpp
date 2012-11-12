@@ -7,73 +7,73 @@
 #include "Input.h"
 
 /// FIX ALL VECTOR CALCULATIONS ( UP,RIGHT etc ) !!!!!!!!!!
-void Player::Move(MoveType type, float angleOrScale)
+void Player::Move(MoveFlags type, float angleOrScale)
 {
     switch (type)
     {
-    case MOVE_FORWARD:
+        case MOVE_FLAG_FORWARD:
         {
             glm::vec3 offset = glm::normalize(lookAt - position) * angleOrScale;
             position += offset;
             lookAt += offset;
             break;
         }
-    case MOVE_BACKWARD:
+        case MOVE_FLAG_BACKWARD:
         {
             glm::vec3 offset = glm::normalize(lookAt - position) * angleOrScale;
             position -= offset;
             lookAt -= offset;
             break;
         }
-    case MOVE_UPWARD:
+        case MOVE_FLAG_UPWARD:
         {
             glm::vec3 offset = glm::normalize(up) * angleOrScale;
             position += offset;
             lookAt += offset;
             break;
         }
-    case MOVE_DOWNWARD:
+        case MOVE_FLAG_DOWNWARD:
         {
             glm::vec3 offset = glm::normalize(up) * angleOrScale;
             position -= offset;
             lookAt -= offset;
             break;
         }
-    case MOVE_ROTATE_LEFT:
+        case MOVE_FLAG_ROTATE_LEFT:
         {
             lookAt = glm::rotate(lookAt, angleOrScale, up);
             right = glm::cross(lookAt, up);
             break;
         }
-    case MOVE_ROTATE_RIGHT:
+        case MOVE_FLAG_ROTATE_RIGHT:
         {
             lookAt = glm::rotate(lookAt, -angleOrScale, up);
             right = glm::cross(lookAt, up);
             break;
         }
-    case MOVE_STRAFE_RIGHT:
+        case MOVE_FLAG_STRAFE_RIGHT:
         {
             glm::vec3 offset = glm::normalize(right) * angleOrScale;
             position += offset;
             lookAt += offset;
             break;
         }
-    case MOVE_STRAFE_LEFT:
+        case MOVE_FLAG_STRAFE_LEFT:
         {
             glm::vec3 offset = glm::normalize(right) * angleOrScale;
             position -= offset;
             lookAt -= offset;
             break;
         }
-    case MOVE_NONE:
-    default:
-        break;
+        case MOVE_FLAG_NONE:
+        default:
+            break;
     }
 
     if (position.y < (scale.y/2))
     {
-       position.y = scale.y / 2;
-       lookAt.y = position.y;
+        position.y = scale.y / 2;
+        lookAt.y = position.y;
     }
 }
 
@@ -83,40 +83,40 @@ void Player::OnUpdate(const uint32 diff)
     {
         for (Keyboard::KeysMap::const_iterator i = sKeyboard->GetKeysMap().begin(); i != sKeyboard->GetKeysMap().end(); ++i)
         {
-            const MoveFlag& flag = Keyboard::Key2MoveFlag(i->first);
-            if (flag.apply == MOVE_NONE)
+            const MoveInfo& info = Keyboard::Key2MoveInfo(i->first);
+            if (info.apply == MOVE_FLAG_NONE)
                 continue;
 
             if (i->second)
-                AddMoveType(flag);
+                AddMoveType(info);
             else
-                ClearMoveType(flag.apply);
+                ClearMoveType(info.apply);
         }
     }
 
-    for (uint8 i = 0; i < MAX_MOVE_FLAGS; ++i)
+    for (uint8 i = 0; i < MAX_MOVE_TYPES; ++i)
     {
-        const MoveFlag& flag = moveflags[i];
-        if (moveFlags & flag.apply)
-            Move(flag.apply, flag.speed);
+        const MoveInfo& info = moveInfos[i];
+        if (moveFlags & info.apply)
+            Move(info.apply, info.speed);
     }
 }
 
-void Player::AddMoveType(MoveFlag flag)
+void Player::AddMoveType(MoveInfo flag)
 {
-    moveFlags = MoveType((moveFlags | flag.apply) & ~flag.remove);
+    moveFlags = MoveFlags((moveFlags | flag.apply) & ~flag.remove);
 }
 
-void Player::ClearMoveType(MoveType flag)
+void Player::ClearMoveType(MoveFlags flag)
 {
-    moveFlags = MoveType(moveFlags & ~flag);
+    moveFlags = MoveFlags(moveFlags & ~flag);
 }
 
 Player::Player() : GameObject("cube.obj", "cube.tga")
 {
     lookAt = glm::vec3(5.0f, 0.5f, -0.01f);
 
-    moveFlags = MOVE_NONE;
+    moveFlags = MOVE_FLAG_NONE;
 
     up = glm::vec3(0.0f, 1.0f, 0.0f);
     right = glm::vec3(1.0f, 0.0f, 0.0f);
