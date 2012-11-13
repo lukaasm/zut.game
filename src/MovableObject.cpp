@@ -7,60 +7,61 @@
 #include "Input.h"
 
 /// FIX ALL VECTOR CALCULATIONS ( UP,RIGHT etc ) !!!!!!!!!!
-void Player::Move(MoveFlags flags, float angleOrScale)
+void Player::Move()
 {
-    if (flags & MOVE_FLAG_FORWARD)
+
+    if (moveFlags & MOVE_FLAG_FORWARD)
     {
-        glm::vec3 offset = glm::normalize(lookAt - position) * angleOrScale;
+        glm::vec3 offset = glm::normalize(lookAt - position) * moveInfos[MOVE_TYPE_FORWARD].speed;
         position += offset;
         lookAt += offset;
     }
 
-    if (flags & MOVE_FLAG_BACKWARD)
+    if (moveFlags & MOVE_FLAG_BACKWARD)
     {
-        glm::vec3 offset = glm::normalize(lookAt - position) * angleOrScale;
+        glm::vec3 offset = glm::normalize(lookAt - position) * moveInfos[MOVE_TYPE_BACKWARD].speed;
         position -= offset;
         lookAt -= offset;
     }
 
-    if (flags & MOVE_FLAG_UPWARD)
+    if (moveFlags & MOVE_FLAG_UPWARD)
     {
-        glm::vec3 offset = glm::normalize(up) * angleOrScale;
+        glm::vec3 offset = glm::normalize(up) * moveInfos[MOVE_TYPE_UPWARD].speed;
         position += offset;
         lookAt += offset;
     }
 
-    if (flags & MOVE_FLAG_DOWNWARD)
+    if (moveFlags & MOVE_FLAG_DOWNWARD)
     {
-        glm::vec3 offset = glm::normalize(up) * angleOrScale;
+        glm::vec3 offset = glm::normalize(up) * moveInfos[MOVE_TYPE_DOWNWARD].speed;
         position -= offset;
         lookAt -= offset;
     }
 
-    if (flags & MOVE_FLAG_ROTATE_LEFT)
+    if (moveFlags & MOVE_FLAG_STRAFE_RIGHT)
     {
-        lookAt = glm::rotate(lookAt, angleOrScale, up);
+        glm::vec3 offset = glm::normalize(right) * moveInfos[MOVE_TYPE_STRAFE_RIGHT].speed;
+        position += offset;
+        lookAt += offset;
+    }
+
+    if (moveFlags & MOVE_FLAG_STRAFE_LEFT)
+    {
+        glm::vec3 offset = glm::normalize(right) * moveInfos[MOVE_TYPE_STRAFE_LEFT].speed;
+        position -= offset;
+        lookAt -= offset;
+    }
+
+    if (moveFlags & MOVE_FLAG_ROTATE_LEFT)
+    {
+        lookAt = glm::rotate(lookAt, moveInfos[MOVE_TYPE_ROTATE_LEFT].speed, up);
         right = glm::cross(lookAt, up);
     }
 
-    if (flags & MOVE_FLAG_ROTATE_RIGHT)
+    if (moveFlags & MOVE_FLAG_ROTATE_RIGHT)
     {
-        lookAt = glm::rotate(lookAt, -angleOrScale, up);
+        lookAt = glm::rotate(lookAt, -moveInfos[MOVE_TYPE_ROTATE_RIGHT].speed, up);
         right = glm::cross(lookAt, up);
-    }
-
-    if (flags & MOVE_FLAG_STRAFE_RIGHT)
-    {
-        glm::vec3 offset = glm::normalize(right) * angleOrScale;
-        position += offset;
-        lookAt += offset;
-    }
-
-    if (flags & MOVE_FLAG_STRAFE_LEFT)
-    {
-        glm::vec3 offset = glm::normalize(right) * angleOrScale;
-        position -= offset;
-        lookAt -= offset;
     }
 
     if (position.y < (scale.y/2))
@@ -87,12 +88,7 @@ void Player::OnUpdate(const uint32 diff)
         }
     }
 
-    for (uint8 i = 0; i < MAX_MOVE_TYPES; ++i)
-    {
-        const MoveInfo& info = moveInfos[i];
-        if (moveFlags & info.apply)
-            Move(info.apply, info.speed);
-    }
+    Move();
 }
 
 void Player::AddMoveType(MoveInfo flag)
