@@ -10,8 +10,9 @@
 #include <map>
 
 #include "CallBack.h"
+
 // there is NO enum predefinition, so whole header is needed :p
-#include "MovableObject.h"
+#include "DynamicObject.h"
 #include "Singleton.h"
 
 class BaseApp;

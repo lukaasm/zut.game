@@ -4,10 +4,11 @@
 
 #include "BoundingObject.h"
 #include "Camera.h"
+#include "DynamicObject.h"
 #include "GameObject.h"
 #include "Grid.h"
 #include "ModelData.h"
-#include "MovableObject.h"
+#include "Player.h"
 #include "RenderDevice.h"
 #include "ResourcesMgr.h"
 #include "Shader.h"

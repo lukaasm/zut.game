@@ -9,7 +9,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/vector_angle.hpp>
 
-#include "MovableObject.h"
+#include "DynamicObject.h"
 #include "RenderDevice.h"
 
 Camera::Camera()
