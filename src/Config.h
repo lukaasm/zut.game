@@ -3,6 +3,8 @@
 
 #include <hash_map>
 #include <string>
+#include <sstream>
+#include <algorithm>
 
 #include "Singleton.h"
 
@@ -18,10 +20,24 @@ class Config
         T Get(std::string key);
 
     private:
-        void parseLine(std::string&);
+        void parseLine(std::string);
 
         ConfigItemsMap itemsMap;
 };
+
+template<class T>
+T Config::Get(std::string key)
+{
+    T out;
+    auto i = itemsMap.find(key);
+
+    std::stringstream istr(i != itemsMap.end() ? i->second : "1");
+    if (istr >> out)
+        return out;
+
+    throw std::exception();
+}
+
 
 #define sConfig Singleton<Config>::Instance()
 #endif
