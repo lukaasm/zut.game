@@ -4,8 +4,11 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/vector_angle.hpp>
 
+#include "SceneMgr.h"
+
 void DynamicObject::Move()
 {
+    Position original = position;
     if (moveFlags & MOVE_FLAG_FORWARD)
     {
         glm::vec3 offset = lookDirection * moveInfos[MOVE_TYPE_FORWARD].speed;
@@ -58,6 +61,10 @@ void DynamicObject::Move()
 
     if (position.y < (scale.y/2))
         position.y = scale.y / 2;
+
+    sSceneMgr->CollisionTest(this);
+    if (coll == 1.0f)
+        SetPosition(original);
 }
 
 void DynamicObject::OnUpdate(const uint32 & diff)

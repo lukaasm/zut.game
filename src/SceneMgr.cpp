@@ -56,14 +56,14 @@ void SceneMgr::OnUpdate(const uint32 & diff)
     player->OnUpdate(diff);
     GetCamera()->OnUpdate(diff);
 
-    CollisionTest();
+    //CollisionTest();
 }
 
-void SceneMgr::CollisionTest()
+void SceneMgr::CollisionTest(GameObject* object)
 {
     player->coll = 0.0f;
 
-    TestPoints a(reinterpret_cast<BoundingBox&>(*(player->GetBoundingObject())), player->GetModelMatrix());
+    TestPoints a(reinterpret_cast<BoundingBox&>(*(object->GetBoundingObject())), object->GetModelMatrix());
     for (GameObjectsMap::const_iterator i = gameObjectsMap.begin(); i != gameObjectsMap.end(); ++i)
     {
         if (i->second == player || i->second->GetBoundingObject() == nullptr)
