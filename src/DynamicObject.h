@@ -3,6 +3,9 @@
 
 #include "GameObject.h"
 
+#include <functional>
+#include <vector>
+
 enum MoveTypes
 {
     MOVE_TYPE_FORWARD       = 0,
@@ -52,6 +55,11 @@ const MoveInfo moveInfos[] =
     { MOVE_FLAG_NONE,           MOVE_FLAG_NONE,         0.0f }      // MOVE_TYPE_NONE/MAX_MOVE_TYPES
 };
 
+class DynamicObject;
+
+typedef std::function<void (DynamicObject&)> Script;
+typedef std::vector<Script> ScriptsMap;
+
 class DynamicObject : public GameObject
 {
     friend class Camera;
@@ -66,9 +74,11 @@ class DynamicObject : public GameObject
         void AddMoveType(MoveInfo);
         void ClearMoveType(MoveFlags);
 
-        virtual bool IsControllable() const { return true; }
+        virtual bool IsControllable() const { return false; }
 
         virtual void OnUpdate(const uint32 &) override;
+
+        ScriptsMap scripts;
 
     private:
         MoveFlags moveFlags;

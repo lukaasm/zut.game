@@ -80,6 +80,9 @@ void DynamicObject::OnUpdate(const uint32 & diff)
     Move();
 
     GameObject::OnUpdate(diff);
+
+    for (auto i = scripts.begin(); i != scripts.end(); ++i)
+        (*i)(*this);
 }
 
 void DynamicObject::AddMoveType(MoveInfo flag)
