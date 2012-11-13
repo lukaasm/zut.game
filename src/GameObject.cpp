@@ -48,3 +48,11 @@ void GameObject::SetBoundingObject(BoundingObject* object)
 {
     boundingObject = object;
 }
+
+glm::mat4 GameObject::GetAAModelMatrix() const
+{
+    glm::mat4 modelMatrix;
+    modelMatrix = glm::translate(glm::mat4(1.0f), position);
+    modelMatrix = glm::scale(modelMatrix, scale);
+    return modelMatrix;
+}
