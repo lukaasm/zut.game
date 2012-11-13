@@ -95,7 +95,10 @@
     <ClInclude Include="..\src\ModelData.h">
       <Filter>Frame\Other</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\MovableObject.h">
+    <ClInclude Include="..\src\Player.h">
+      <Filter>Frame\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\DynamicObject.h">
       <Filter>Frame\GameObjects</Filter>
     </ClInclude>
   </ItemGroup>
@@ -152,7 +155,10 @@
     <ClCompile Include="..\src\ModelData.cpp">
       <Filter>Frame\Other</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\MovableObject.cpp">
+    <ClCompile Include="..\src\Player.cpp">
+      <Filter>Frame\GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\DynamicObject.cpp">
       <Filter>Frame\GameObjects</Filter>
     </ClCompile>
   </ItemGroup>
