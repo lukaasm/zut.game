@@ -61,6 +61,8 @@ class DynamicObject : public GameObject
 
         void Move();
 
+        void RedoMoveOnCollision(Position&, Position&);
+
         void AddMoveType(MoveInfo);
         void ClearMoveType(MoveFlags);
 
