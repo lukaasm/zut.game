@@ -13,36 +13,48 @@ void DynamicObject::Move()
     {
         glm::vec3 offset = lookDirection * moveInfos[MOVE_TYPE_FORWARD].speed;
         position += offset;
+
+        RedoMoveOnCollision(original, offset);
     }
 
     if (moveFlags & MOVE_FLAG_BACKWARD)
     {
         glm::vec3 offset = lookDirection * moveInfos[MOVE_TYPE_BACKWARD].speed;
         position -= offset;
+
+        RedoMoveOnCollision(original, offset);
     }
 
     if (moveFlags & MOVE_FLAG_UPWARD)
     {
         glm::vec3 offset = up * moveInfos[MOVE_TYPE_UPWARD].speed;
         position += offset;
+
+        RedoMoveOnCollision(original, offset);
     }
 
     if (moveFlags & MOVE_FLAG_DOWNWARD)
     {
         glm::vec3 offset = up * moveInfos[MOVE_TYPE_DOWNWARD].speed;
         position -= offset;
+
+        RedoMoveOnCollision(original, offset);
     }
 
     if (moveFlags & MOVE_FLAG_STRAFE_RIGHT)
     {
         glm::vec3 offset = right * moveInfos[MOVE_TYPE_STRAFE_RIGHT].speed;
         position += offset;
+
+        RedoMoveOnCollision(original, offset);
     }
 
     if (moveFlags & MOVE_FLAG_STRAFE_LEFT)
     {
         glm::vec3 offset = right * moveInfos[MOVE_TYPE_STRAFE_LEFT].speed;
         position -= offset;
+
+        RedoMoveOnCollision(original, offset);
     }
 
     if (moveFlags & MOVE_FLAG_ROTATE_LEFT)
@@ -61,10 +73,6 @@ void DynamicObject::Move()
 
     if (position.y < (scale.y/2))
         position.y = scale.y / 2;
-
-    sSceneMgr->CollisionTest(this);
-    if (coll == 1.0f)
-        SetPosition(original);
 }
 
 void DynamicObject::OnUpdate(const uint32 & diff)
@@ -92,4 +100,13 @@ DynamicObject::DynamicObject() : GameObject("cube.obj", "cube.tga")
 
     up = glm::vec3(0.0f, 1.0f, 0.0f);
     right = glm::vec3(1.0f, 0.0f, 0.0f);
+}
+
+void DynamicObject::RedoMoveOnCollision(Position& original, Position& offset)
+{
+    sSceneMgr->CollisionTest(this);
+    if (coll == 1.0f)
+        SetPosition(original);
+    else
+        original += offset;
 }
