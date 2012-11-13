@@ -57,7 +57,7 @@ struct RenderData
 class GameObject
 {
     public:
-        explicit GameObject(std::string model, std::string texture) : coll(0.0f), modelName(model), textureName(texture), boundingObject(nullptr), rotationX(0.0f), rotationY(0.0f) {}
+        explicit GameObject(std::string model, std::string texture) : coll(0.0f), modelName(model), textureName(texture), rotationX(0.0f), rotationY(0.0f), boundingObject(nullptr) {}
         virtual ~GameObject() {}
 
         virtual void OnRender(RenderDevice*);
