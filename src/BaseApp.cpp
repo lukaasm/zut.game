@@ -10,6 +10,7 @@
 #include <GL/glfw.h>
 
 #include "Camera.h"
+#include "Config.h"
 #include "Input.h"
 #include "RenderDevice.h"
 #include "ResourcesMgr.h"
@@ -151,6 +152,8 @@ void BaseApp::OnRender()
 
 int main()
 {
+    sConfig->LoadFile("config.ini");
+
     BaseApp *app = new BaseApp;
 
     app->CreateWindow();
