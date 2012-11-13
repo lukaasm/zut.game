@@ -31,7 +31,7 @@ T Config::Get(std::string key)
     T out;
     auto i = itemsMap.find(key);
 
-    std::stringstream istr(i != itemsMap.end() ? i->second : "1");
+    std::stringstream istr(i != itemsMap.end() ? i->second : "-1");
     if (istr >> out)
         return out;
 
