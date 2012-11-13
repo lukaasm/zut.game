@@ -94,7 +94,7 @@ void SceneMgr::OnRender(RenderDevice* rd)
 
         if (BoundingObject* bounds = ob->GetBoundingObject())
         {
-            rd->SetUniforms(shader, GetCamera()->GetProjMatrix(), GetCamera()->GetViewMatrix(), ob->GetModelMatrix(), ob->coll);
+            rd->SetUniforms(shader, GetCamera()->GetProjMatrix(), GetCamera()->GetViewMatrix(), ob->GetAAModelMatrix(), ob->coll);
             bounds->OnRender(rd);
         }
         shader->Unbind();

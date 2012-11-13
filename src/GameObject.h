@@ -64,6 +64,7 @@ class GameObject
         virtual void OnUpdate(const uint32 &) {}
 
         glm::mat4 GetModelMatrix() const;
+        glm::mat4 GetAAModelMatrix() const;
 
         void SetGuid(uint32 guid);
         void SetBoundingObject(BoundingObject* object);
