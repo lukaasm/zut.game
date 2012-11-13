@@ -50,13 +50,14 @@ void SceneMgr::OnInit()
     text2D.Init();
 }
 
-void SceneMgr::OnUpdate(uint32 diff)
+void SceneMgr::OnUpdate(const uint32 & diff)
 {
     player->OnUpdate(diff);
     GetCamera()->OnUpdate(diff);
 
     CollisionTest();
 }
+
 void SceneMgr::CollisionTest()
 {
     player->coll = 0.0f;

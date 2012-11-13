@@ -61,7 +61,7 @@ class GameObject
         virtual ~GameObject() {}
 
         virtual void OnRender(RenderDevice*);
-        virtual void OnUpdate(const uint32) {}
+        virtual void OnUpdate(const uint32 &) {}
 
         glm::mat4 GetModelMatrix() const;
 
@@ -74,6 +74,8 @@ class GameObject
 
         std::string GetModel() const { return modelName; }
         std::string GetTexture() const { return textureName; }
+
+        virtual bool IsControllable() const { return false; }
 
         float IsTextured() const { return GetTexture() != "" ? 1.0f : 0.0f; }
         float coll;

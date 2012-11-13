@@ -17,10 +17,12 @@
 
 RenderDevice::RenderDevice()
 {
+
 }
 
 RenderDevice::~RenderDevice()
 {
+
 }
 
 void RenderDevice::OnResize(int32 width, int32 height)
@@ -31,8 +33,9 @@ void RenderDevice::OnResize(int32 width, int32 height)
     glViewport(0, 0, width, height);
 }
 
-void RenderDevice::OnUpdate(const uint32 diff)
+void RenderDevice::OnUpdate(const uint32 & diff)
 {
+
 }
 
 void RenderDevice::SetUniforms(Shader* shader, const glm::mat4& projMatrix, const glm::mat4& viewMatrix, const glm::mat4& modelMatrix, float hasTexture)

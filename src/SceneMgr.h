@@ -28,7 +28,7 @@ class SceneMgr
         ~SceneMgr();
 
         void OnInit();
-        void OnUpdate(uint32 diff);
+        void OnUpdate(const uint32 & diff);
         void OnRender(RenderDevice*);
 
         Camera* GetCamera() { return camera; }
@@ -46,7 +46,6 @@ class SceneMgr
         Shader* tempShader;
 
         GameObjectsMap gameObjectsMap;
-
 };
 
 #define sSceneMgr Singleton<SceneMgr>::Instance()

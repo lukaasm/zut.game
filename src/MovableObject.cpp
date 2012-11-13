@@ -6,7 +6,7 @@
 
 #include "Input.h"
 
-void Player::Move()
+void DynamicObject::Move()
 {
     if (moveFlags & MOVE_FLAG_FORWARD)
     {
@@ -62,37 +62,24 @@ void Player::Move()
         position.y = scale.y / 2;
 }
 
-void Player::OnUpdate(const uint32 diff)
+void DynamicObject::OnUpdate(const uint32 & diff)
 {
-    if (IsControllable())
-    {
-        for (Keyboard::KeysMap::const_iterator i = sKeyboard->GetKeysMap().begin(); i != sKeyboard->GetKeysMap().end(); ++i)
-        {
-            const MoveInfo& info = Keyboard::Key2MoveInfo(i->first);
-            if (info.apply == MOVE_FLAG_NONE)
-                continue;
-
-            if (i->second)
-                AddMoveType(info);
-            else
-                ClearMoveType(info.apply);
-        }
-    }
-
     Move();
+
+    GameObject::OnUpdate(diff);
 }
 
-void Player::AddMoveType(MoveInfo flag)
+void DynamicObject::AddMoveType(MoveInfo flag)
 {
     moveFlags = MoveFlags((moveFlags | flag.apply) & ~flag.remove);
 }
 
-void Player::ClearMoveType(MoveFlags flag)
+void DynamicObject::ClearMoveType(MoveFlags flag)
 {
     moveFlags = MoveFlags(moveFlags & ~flag);
 }
 
-Player::Player() : GameObject("cube.obj", "cube.tga")
+DynamicObject::DynamicObject() : GameObject("cube.obj", "cube.tga")
 {
     lookDirection = glm::vec3(0.0f, 0.0f, -1.0f);
 

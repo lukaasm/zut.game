@@ -11,7 +11,7 @@
 //#include "Frustum.h"
 
 class RenderDevice;
-class Player;
+class DynamicObject;
 
 class Camera
 {
@@ -19,21 +19,21 @@ class Camera
         Camera();
 
         void OnResize(int32, int32);
-        void OnUpdate(const uint32);
+        void OnUpdate(const uint32 &);
 
         void LookAt();
-        void SetOwner(Player* p) { owner = p; }
+        void SetOwner(DynamicObject* p) { owner = p; }
 
         glm::mat4 GetProjMatrix() const { return projMatrix; }
         glm::mat4 GetViewMatrix() const { return viewMatrix; }
-        
+
         //Frustum& GetFrustum() { return frustum; }
 
     private:
         glm::mat4 viewMatrix;
         glm::mat4 projMatrix;
 
-        Player* owner;
+        DynamicObject* owner;
         //Frustum frustum;
 };
 
