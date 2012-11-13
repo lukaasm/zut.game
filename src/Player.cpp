@@ -1,5 +1,7 @@
 #include "Player.h"
 
+#include "Input.h"
+
 void Player::OnUpdate(const uint32 & diff)
 {
     if (IsControllable())
