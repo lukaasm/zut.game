@@ -41,6 +41,11 @@
 			<Add library="glfw" />
 			<Add library="GLEW" />
 		</Linker>
+		<Unit filename="../res/models/cube.obj" />
+		<Unit filename="../res/models/trashbin.obj" />
+		<Unit filename="../res/shaders/font.vert" />
+		<Unit filename="../res/shaders/shader.frag" />
+		<Unit filename="../res/shaders/shader.vert" />
 		<Unit filename="../src/BaseApp.cpp" />
 		<Unit filename="../src/BaseApp.h" />
 		<Unit filename="../src/BoundingObject.cpp" />
@@ -49,6 +54,8 @@
 		<Unit filename="../src/Camera.cpp" />
 		<Unit filename="../src/Camera.h" />
 		<Unit filename="../src/Common.h" />
+		<Unit filename="../src/DynamicObject.cpp" />
+		<Unit filename="../src/DynamicObject.h" />
 		<Unit filename="../src/Frustum.cpp" />
 		<Unit filename="../src/Frustum.h" />
 		<Unit filename="../src/GameObject.cpp" />
@@ -59,8 +66,8 @@
 		<Unit filename="../src/Input.h" />
 		<Unit filename="../src/ModelData.cpp" />
 		<Unit filename="../src/ModelData.h" />
-		<Unit filename="../src/MovableObject.cpp" />
-		<Unit filename="../src/MovableObject.h" />
+		<Unit filename="../src/Player.cpp" />
+		<Unit filename="../src/Player.h" />
 		<Unit filename="../src/RenderDevice.cpp" />
 		<Unit filename="../src/RenderDevice.h" />
 		<Unit filename="../src/ResourcesMgr.cpp" />
