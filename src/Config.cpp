@@ -2,8 +2,6 @@
 
 #include <fstream>
 #include <iostream>
-#include <sstream>
-#include <algorithm>
 
 #include "Common.h"
 
@@ -13,51 +11,31 @@ void Config::LoadFile(std::string fileName)
     {
         std::ifstream file(fileName);
         if (!file.is_open())
-            throw std::exception();
+            throw std::exception("can NOT open config file.");
 
         const uint32 LINE_SIZE = 50;
         char line[LINE_SIZE];
 
-        while(!file.eof())
+        while (!file.eof())
         {
             file.getline(line, LINE_SIZE, ';');
-            parseLine(std::string(line));
+            parseLine(line);
         }
     }
     catch (std::exception& e)
     {
-
+        std::cout << "[Exception]: " << e.what() << std::endl;
     }
-
-    for (auto i = itemsMap.begin(); i != itemsMap.end(); ++i)
-        std::cout << i->first << "=" << i->second << std::endl;  
-
-    std::cout << Get<int>("test") << std::endl;
 }
 
-void Config::parseLine(std::string& line)
+void Config::parseLine(std::string line)
 {
     auto end = std::remove_if(line.begin(), line.end(), [](char& c) { return c == ' ' || c == '\n';});
     line.erase(end, line.end());
 
-    if (size_t pos = line.find("="))
-    {
-        if (pos == std::string::npos)
-            throw std::exception();
+    auto pos = line.find("=");
+    if (pos == std::string::npos)
+        return;
 
-        itemsMap[line.substr(0, pos)] = line.substr(pos+1);
-    }
-}
-
-template<class T>
-T Config::Get(std::string key)
-{
-    T out;
-    auto i = itemsMap.find(key);
-
-    std::stringstream istr(i != itemsMap.end() ? i->second : "NULL");
-    if (istr >> out)
-        return out;
-
-    throw std::exception();
+    itemsMap[line.substr(0, pos)] = line.substr(pos+1);
 }
