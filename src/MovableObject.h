@@ -59,7 +59,7 @@ class Player : public GameObject
 
         Player();
 
-        void Move(MoveFlags, float);
+        void Move();
 
         void AddMoveType(MoveInfo);
         void ClearMoveType(MoveFlags);
