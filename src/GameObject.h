@@ -57,7 +57,7 @@ struct RenderData
 class GameObject
 {
     public:
-        explicit GameObject(std::string model, std::string texture) : coll(0.0f), modelName(model), textureName(texture), boundingObject(nullptr) {}
+        explicit GameObject(std::string model, std::string texture) : coll(0.0f), modelName(model), textureName(texture), boundingObject(nullptr), rotationX(0.0f), rotationY(0.0f) {}
         virtual ~GameObject() {}
 
         virtual void OnRender(RenderDevice*);
@@ -78,6 +78,9 @@ class GameObject
         float IsTextured() const { return GetTexture() != "" ? 1.0f : 0.0f; }
         float coll;
 
+        float GetRotationX() const { return rotationX; }
+        float GetRotationY() const { return rotationY; }
+
     protected:
         uint32 guid;
 
@@ -88,7 +91,7 @@ class GameObject
         glm::vec3 position;
 
         float rotationX;
-        //float rotationY;
+        float rotationY;
 
         BoundingObject* boundingObject;
 };

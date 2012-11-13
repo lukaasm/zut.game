@@ -6,69 +6,60 @@
 
 #include "Input.h"
 
-/// FIX ALL VECTOR CALCULATIONS ( UP,RIGHT etc ) !!!!!!!!!!
 void Player::Move()
 {
-
     if (moveFlags & MOVE_FLAG_FORWARD)
     {
-        glm::vec3 offset = glm::normalize(lookAt - position) * moveInfos[MOVE_TYPE_FORWARD].speed;
+        glm::vec3 offset = lookDirection * moveInfos[MOVE_TYPE_FORWARD].speed;
         position += offset;
-        lookAt += offset;
     }
 
     if (moveFlags & MOVE_FLAG_BACKWARD)
     {
-        glm::vec3 offset = glm::normalize(lookAt - position) * moveInfos[MOVE_TYPE_BACKWARD].speed;
+        glm::vec3 offset = lookDirection * moveInfos[MOVE_TYPE_BACKWARD].speed;
         position -= offset;
-        lookAt -= offset;
     }
 
     if (moveFlags & MOVE_FLAG_UPWARD)
     {
-        glm::vec3 offset = glm::normalize(up) * moveInfos[MOVE_TYPE_UPWARD].speed;
+        glm::vec3 offset = up * moveInfos[MOVE_TYPE_UPWARD].speed;
         position += offset;
-        lookAt += offset;
     }
 
     if (moveFlags & MOVE_FLAG_DOWNWARD)
     {
-        glm::vec3 offset = glm::normalize(up) * moveInfos[MOVE_TYPE_DOWNWARD].speed;
+        glm::vec3 offset = up * moveInfos[MOVE_TYPE_DOWNWARD].speed;
         position -= offset;
-        lookAt -= offset;
     }
 
     if (moveFlags & MOVE_FLAG_STRAFE_RIGHT)
     {
-        glm::vec3 offset = glm::normalize(right) * moveInfos[MOVE_TYPE_STRAFE_RIGHT].speed;
+        glm::vec3 offset = right * moveInfos[MOVE_TYPE_STRAFE_RIGHT].speed;
         position += offset;
-        lookAt += offset;
     }
 
     if (moveFlags & MOVE_FLAG_STRAFE_LEFT)
     {
-        glm::vec3 offset = glm::normalize(right) * moveInfos[MOVE_TYPE_STRAFE_LEFT].speed;
+        glm::vec3 offset = right * moveInfos[MOVE_TYPE_STRAFE_LEFT].speed;
         position -= offset;
-        lookAt -= offset;
     }
 
     if (moveFlags & MOVE_FLAG_ROTATE_LEFT)
     {
-        lookAt = glm::rotate(lookAt, moveInfos[MOVE_TYPE_ROTATE_LEFT].speed, up);
-        right = glm::cross(lookAt, up);
+        lookDirection = glm::rotate(lookDirection, moveInfos[MOVE_TYPE_ROTATE_LEFT].speed, up);
+        right = glm::normalize(glm::cross(lookDirection, up));
+        rotationY += moveInfos[MOVE_TYPE_ROTATE_LEFT].speed;
     }
 
     if (moveFlags & MOVE_FLAG_ROTATE_RIGHT)
     {
-        lookAt = glm::rotate(lookAt, -moveInfos[MOVE_TYPE_ROTATE_RIGHT].speed, up);
-        right = glm::cross(lookAt, up);
+        lookDirection = glm::rotate(lookDirection, -moveInfos[MOVE_TYPE_ROTATE_RIGHT].speed, up);
+        right = glm::normalize(glm::cross(lookDirection, up));
+        rotationY -= moveInfos[MOVE_TYPE_ROTATE_RIGHT].speed;
     }
 
     if (position.y < (scale.y/2))
-    {
         position.y = scale.y / 2;
-        lookAt.y = position.y;
-    }
 }
 
 void Player::OnUpdate(const uint32 diff)
@@ -103,7 +94,7 @@ void Player::ClearMoveType(MoveFlags flag)
 
 Player::Player() : GameObject("cube.obj", "cube.tga")
 {
-    lookAt = glm::vec3(5.0f, 0.5f, -0.01f);
+    lookDirection = glm::vec3(0.0f, 0.0f, -1.0f);
 
     moveFlags = MOVE_FLAG_NONE;
 
