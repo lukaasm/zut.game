@@ -17,7 +17,7 @@ Camera::Camera()
     //LookAt();
 }
 
-void Camera::OnUpdate(const uint32)
+void Camera::OnUpdate(const uint32 &)
 {
     LookAt();
 }

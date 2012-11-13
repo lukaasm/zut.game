@@ -52,21 +52,21 @@ const MoveInfo moveInfos[] =
     { MOVE_FLAG_NONE,           MOVE_FLAG_NONE,         0.0f }      // MOVE_TYPE_NONE/MAX_MOVE_TYPES
 };
 
-class Player : public GameObject
+class DynamicObject : public GameObject
 {
     friend class Camera;
     public:
 
-        Player();
+        DynamicObject();
 
         void Move();
 
         void AddMoveType(MoveInfo);
         void ClearMoveType(MoveFlags);
 
-        bool IsControllable() const { return true; }
+        virtual bool IsControllable() const { return true; }
 
-        void OnUpdate(const uint32 diff) override;
+        virtual void OnUpdate(const uint32 &) override;
 
     private:
         MoveFlags moveFlags;
