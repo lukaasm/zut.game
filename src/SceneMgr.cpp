@@ -61,18 +61,18 @@ void SceneMgr::OnUpdate(const uint32 & diff)
 
 void SceneMgr::CollisionTest(GameObject* object)
 {
-    player->coll = 0.0f;
+    object->coll = 0.0f;
 
     TestPoints a(reinterpret_cast<BoundingBox&>(*(object->GetBoundingObject())), object->GetModelMatrix());
     for (GameObjectsMap::const_iterator i = gameObjectsMap.begin(); i != gameObjectsMap.end(); ++i)
     {
-        if (i->second == player || i->second->GetBoundingObject() == nullptr)
+        if (i->second == object || i->second->GetBoundingObject() == nullptr)
             continue;
 
         TestPoints b(reinterpret_cast<BoundingBox&>(*(i->second->GetBoundingObject())), i->second->GetModelMatrix());
         if (BoundingBox::Intersection(a, b))
         {
-            player->coll = 1.0f;
+            object->coll = 1.0f;
             i->second->coll = 1.0f;
         }
         else
