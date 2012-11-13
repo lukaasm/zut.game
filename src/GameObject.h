@@ -44,16 +44,6 @@ struct Vertex
 class BoundingObject;
 class RenderDevice;
 
-struct RenderData
-{
-    uint32 size;
-
-    uint32 vertexArray;
-    uint32 vertexBuffer;
-
-    BoundingObject* bounding;
-};
-
 class GameObject
 {
     public:

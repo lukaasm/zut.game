@@ -9,6 +9,7 @@ public:
     Player() : DynamicObject() {}
     ~Player() {}
 
+    virtual bool IsControllable() const override { return true; }
     virtual void OnUpdate(const uint32 &) override;
 private:
 

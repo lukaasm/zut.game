@@ -48,15 +48,25 @@ void SceneMgr::OnInit()
     POPULATE_CUBE(5.375f, 0.875f, -5.0f)
     POPULATE_CUBE(5.0f, 0.875f+0.625f, -5.0f)
 
+    DynamicObject* ccube = new DynamicObject();
+    ccube->SetPosition(glm::vec3(5.0f, 0.875f+1.5f, -5.0f));
+    ccube->SetScale(glm::vec3(0.25f));
+    gameObjectsMap[++guid] = ccube;
+    ccube->SetBoundingObject(sResourcesMgr->GetModelData(cube->GetModel())->boundingObject);
+
+    ccube->scripts.push_back([](DynamicObject& ob){ ob.SetScale(ob.coll ? glm::vec3(0.5f) : glm::vec3(0.25f)); });
+
+    //ccube->AddMoveType(moveInfos[MOVE_TYPE_ROTATE_LEFT]);
+
     text2D.Init();
 }
 
 void SceneMgr::OnUpdate(const uint32 & diff)
 {
-    player->OnUpdate(diff);
-    GetCamera()->OnUpdate(diff);
+    for (auto i = gameObjectsMap.begin(); i != gameObjectsMap.end(); ++i)
+        i->second->OnUpdate(diff);
 
-    //CollisionTest();
+    GetCamera()->OnUpdate(diff);
 }
 
 void SceneMgr::CollisionTest(GameObject* object)
@@ -64,7 +74,7 @@ void SceneMgr::CollisionTest(GameObject* object)
     object->coll = 0.0f;
 
     TestPoints a(reinterpret_cast<BoundingBox&>(*(object->GetBoundingObject())), object->GetModelMatrix());
-    for (GameObjectsMap::const_iterator i = gameObjectsMap.begin(); i != gameObjectsMap.end(); ++i)
+    for (auto i = gameObjectsMap.begin(); i != gameObjectsMap.end(); ++i)
     {
         if (i->second == object || i->second->GetBoundingObject() == nullptr)
             continue;
