@@ -71,7 +71,7 @@ class Player : public GameObject
     private:
         MoveFlags moveFlags;
 
-        glm::vec3 lookAt;
+        glm::vec3 lookDirection;
 
         glm::vec3 right;
         glm::vec3 up;

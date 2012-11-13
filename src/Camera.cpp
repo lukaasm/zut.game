@@ -24,11 +24,15 @@ void Camera::OnUpdate(const uint32)
 
 void Camera::LookAt()
 {
-    glm::vec3 pos = owner->position;
-    pos.z += 3.0f;
-    pos.y += 1.5f;
+    // rotate own base position
+    glm::vec3 pos = glm::vec3(0.0f, 1.5f, 3.0f);
+    pos = glm::rotate(pos, owner->GetRotationX(), owner->up);
+    pos = glm::rotate(pos, owner->GetRotationY(), owner->up);
+    // move to owner position
+    pos += owner->position;
 
-    viewMatrix = glm::lookAt(pos, owner->lookAt, owner->up);
+    // and finally look at owner direction
+    viewMatrix = glm::lookAt(pos, owner->position + owner->lookDirection, owner->up);
 }
 
 void Camera::OnResize(int32 width, int32 height)
