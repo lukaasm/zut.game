@@ -34,8 +34,10 @@ class SceneMgr
         Camera* GetCamera() { return camera; }
         Player* GetPlayer() { return player; }
 
+        GameObjectsMap& GetGameObjects() { return gameObjectsMap; }
+
         void SetCamera(Camera*);
-        void CollisionTest();
+        void CollisionTest(GameObject*);
 
     private:
         Text2D text2D;
