@@ -4,6 +4,7 @@
 #include <iostream>
 
 #include "Common.h"
+#include "Exception.h"
 
 void Config::LoadFile(std::string fileName)
 {
@@ -11,7 +12,7 @@ void Config::LoadFile(std::string fileName)
     {
         std::ifstream file(fileName);
         if (!file.is_open())
-            throw std::exception("can NOT open config file.");
+            throw Exception("can NOT open config file.");
 
         const uint32 LINE_SIZE = 50;
         char line[LINE_SIZE];

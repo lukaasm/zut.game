@@ -1,7 +1,13 @@
 #ifndef H_CONFIG
 #define H_CONFIG
 
+#ifdef __GNUG__
+#include <unordered_map>
+#define hash_map unordered_map
+#else
 #include <hash_map>
+#endif
+
 #include <string>
 #include <sstream>
 #include <algorithm>

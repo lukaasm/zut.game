@@ -3,12 +3,12 @@
 #include <iostream>
 #include <cstdio>
 #include <cstring>
-#include <exception>
 
 #include <GL/glew.h>
 #include <GL/glfw.h>
 
 #include "BoundingObject.h"
+#include "Exception.h"
 #include "GameObject.h"
 #include "ModelData.h"
 #include "VertexArrayObject.h"
@@ -17,23 +17,6 @@
 #pragma warning(disable : 4482)
 // warning C4996: 'fscanf': This function or variable may be unsafe. Consider using fscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
 #pragma warning(disable : 4996)
-
-class Exception: public std::exception
-{
-    public:
-        Exception(std::string & whatStr) : std::exception()
-        {
-            m_whatStr = whatStr;
-        }
-
-        virtual const char* what() const throw()
-        {
-            return m_whatStr.c_str();
-        }
-
-    private:
-        std::string m_whatStr;
-};
 
 void ResourcesMgr::OnInit()
 {
