@@ -54,8 +54,11 @@
 		<Unit filename="../src/Camera.cpp" />
 		<Unit filename="../src/Camera.h" />
 		<Unit filename="../src/Common.h" />
+		<Unit filename="../src/Config.cpp" />
+		<Unit filename="../src/Config.h" />
 		<Unit filename="../src/DynamicObject.cpp" />
 		<Unit filename="../src/DynamicObject.h" />
+		<Unit filename="../src/Exception.h" />
 		<Unit filename="../src/Frustum.cpp" />
 		<Unit filename="../src/Frustum.h" />
 		<Unit filename="../src/GameObject.cpp" />

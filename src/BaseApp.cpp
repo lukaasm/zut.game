@@ -47,8 +47,8 @@ void BaseApp::createContext()
     glfwOpenWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
     // create our window
-    int width = sConfig->Get<int>("width");
-    int height = sConfig->Get<int>("height");
+    int width = sConfig->GetDefault("width", 800);
+    int height = sConfig->GetDefault("height", 600);
 
     glfwOpenWindow(width, height, 0, 0, 0, 0, 0, 0, GLFW_WINDOW);
     glfwSetWindowTitle("WastedProject by lukaasm");
