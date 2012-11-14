@@ -24,6 +24,8 @@ class Config
 
         template<class T>
         T Get(std::string key);
+        template<class T>
+        T GetDefault(std::string key, T dflt);
 
     private:
         void parseLine(std::string);
@@ -44,6 +46,21 @@ T Config::Get(std::string key)
     throw std::exception();
 }
 
+template<class T>
+T Config::GetDefault(std::string key, T dflt)
+{
+    T out;
+    auto i = itemsMap.find(key);
+
+    if (i != itemsMap.end())
+    {
+        std::stringstream istr(i->second);
+        istr >> out;
+        return out;
+    }
+
+    return dflt;
+}
 
 #define sConfig Singleton<Config>::Instance()
 #endif
