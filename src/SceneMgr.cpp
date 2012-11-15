@@ -73,13 +73,13 @@ void SceneMgr::CollisionTest(GameObject* object)
 {
     object->coll = 0.0f;
 
-    TestPoints a(reinterpret_cast<BoundingBox&>(*(object->GetBoundingObject())), object->GetModelMatrix());
+    TestPoints a(reinterpret_cast<BoundingBox&>(*(object->GetBoundingObject())), object->GetAAModelMatrix());
     for (auto i = gameObjectsMap.begin(); i != gameObjectsMap.end(); ++i)
     {
         if (i->second == object || i->second->GetBoundingObject() == nullptr)
             continue;
 
-        TestPoints b(reinterpret_cast<BoundingBox&>(*(i->second->GetBoundingObject())), i->second->GetModelMatrix());
+        TestPoints b(reinterpret_cast<BoundingBox&>(*(i->second->GetBoundingObject())), i->second->GetAAModelMatrix());
         if (BoundingBox::Intersection(a, b))
         {
             object->coll = 1.0f;
