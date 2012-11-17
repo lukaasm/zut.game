@@ -118,6 +118,7 @@
     <ClInclude Include="..\src\Shader.h" />
     <ClInclude Include="..\src\Singleton.h" />
     <ClInclude Include="..\src\Text2d.h" />
+    <ClInclude Include="..\src\Timer.h" />
     <ClInclude Include="..\src\VertexArrayObject.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
@@ -126,6 +127,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\res\icon.ico" />
+    <None Include="..\res\shaders\font.vert" />
+    <None Include="..\res\shaders\shader.frag" />
+    <None Include="..\res\shaders\shader.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -26,7 +26,7 @@ void Camera::OnResize(int32 width, int32 height)
     projMatrix = glm::perspective(60.0f, float(width/height), 0.1f, 100.0f);
 }
 
-void FppCamera::OnUpdate(const uint32 & diff)
+void FppCamera::OnUpdate(const uint32& diff)
 {
     if (DynamicObject* object = GetLinkedObject())
     {
@@ -44,6 +44,7 @@ void FppCamera::LinkTo(DynamicObject* o)
     owner = o;
 
     SetPosition(o->GetPosition());
+
 }
 
 void FppCamera::SetPosition(Position& pos)
