@@ -145,6 +145,8 @@ bool ResourcesMgr::loadModel(std::string fileName)
         vao.FillBuffer(GL_STATIC_DRAW, &vertexes[0], vertexes.size()*sizeof(Vertex));
         vao.EnableAttrib(VertexArray::Attrib::POSITION);
         vao.AddAttribToBuffer(VertexArray::Attrib::POSITION, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
+        vao.EnableAttrib(VertexArray::Attrib::COLOR);
+        vao.AddAttribToBuffer(VertexArray::Attrib::COLOR, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), BUFFER_OFFSET(COLOR_VERTEX_POS));
         vao.EnableAttrib(VertexArray::Attrib::TEXCOORD);
         vao.AddAttribToBuffer(VertexArray::Attrib::TEXCOORD, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), BUFFER_OFFSET(UV_VERTEX_POS));
 

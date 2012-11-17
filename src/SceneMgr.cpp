@@ -4,6 +4,7 @@
 
 #include "BoundingObject.h"
 #include "Camera.h"
+#include "Config.h"
 #include "DynamicObject.h"
 #include "GameObject.h"
 #include "Grid.h"
@@ -29,12 +30,7 @@ void SceneMgr::OnInit()
 
     gameObjectsMap[++guid] = new Grid();
 
-    GameObject* cube = new GameObject("cube.obj", "cube.tga");
-    cube->SetPosition(glm::vec3(5.0f, 0.25f, -5.0f));
-    cube->SetScale(glm::vec3(0.15f));
-    cube->SetBoundingObject(sResourcesMgr->GetModelData(cube->GetModel())->boundingObject);
-
-    gameObjectsMap[++guid] = cube;
+    GameObject* cube;
 
 #define POPULATE_CUBE(a,b,c) cube = new GameObject("cube.obj", "cube.tga"); \
     cube->SetPosition(glm::vec3(a, b, c)); \
@@ -56,7 +52,7 @@ void SceneMgr::OnInit()
 
     ccube->scripts.push_back([](DynamicObject& ob){ ob.SetScale(ob.coll ? glm::vec3(0.5f) : glm::vec3(0.25f)); });
 
-    //ccube->AddMoveType(moveInfos[MOVE_TYPE_ROTATE_LEFT]);
+    ccube->AddMoveType(moveInfos[MOVE_TYPE_ROTATE_LEFT]);
 
     text2D.Init();
 }
@@ -92,6 +88,9 @@ void SceneMgr::CollisionTest(GameObject* object)
 
 void SceneMgr::OnRender(RenderDevice* rd)
 {
+    bool renderTexture = sConfig->GetDefault("render.textures", true);
+    bool renderBounds = sConfig->GetDefault("render.bounds", true);
+
     Shader* shader = tempShader;
     for (GameObjectsMap::const_iterator i = gameObjectsMap.begin(); i != gameObjectsMap.end(); ++i)
     {
@@ -99,13 +98,16 @@ void SceneMgr::OnRender(RenderDevice* rd)
 
         GameObject* ob = i->second;
 
-        rd->SetUniforms(shader, GetCamera()->GetProjMatrix(), GetCamera()->GetViewMatrix(), ob->GetModelMatrix(), ob->IsTextured());
+        rd->SetUniforms(shader, GetCamera()->GetProjMatrix(), GetCamera()->GetViewMatrix(), ob->GetModelMatrix(), renderTexture ? ob->IsTextured() : 0.0f);
         i->second->OnRender(rd);
 
-        if (BoundingObject* bounds = ob->GetBoundingObject())
+        if (renderBounds)
         {
-            rd->SetUniforms(shader, GetCamera()->GetProjMatrix(), GetCamera()->GetViewMatrix(), ob->GetAAModelMatrix(), ob->coll);
-            bounds->OnRender(rd);
+            if (BoundingObject* bounds = ob->GetBoundingObject())
+            {
+                rd->SetUniforms(shader, GetCamera()->GetProjMatrix(), GetCamera()->GetViewMatrix(), ob->GetAAModelMatrix(), ob->coll);
+                bounds->OnRender(rd);
+            }
         }
         shader->Unbind();
     }
