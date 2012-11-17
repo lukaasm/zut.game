@@ -19,13 +19,13 @@ void GameObject::OnRender(RenderDevice* rd)
     rd->DrawTriangles(modelData->vao);
 }
 
-void GameObject::ReCreateModels()
+void GameObject::recreateAllMatrixes()
 {
-    ReCreateModelMatrix();
-    ReCreateAAModelMatrix();
+    recreateModelMatrix();
+    recreateAAModelMatrix();
 }
 
-void GameObject::ReCreateModelMatrix()
+void GameObject::recreateModelMatrix()
 {
     modelMatrix = glm::translate(glm::mat4(1.0f), position);
     modelMatrix = glm::rotate(modelMatrix, rotationX, glm::vec3(1.0f, 0.0f, 0.0f));
@@ -33,18 +33,18 @@ void GameObject::ReCreateModelMatrix()
     modelMatrix = glm::scale(modelMatrix, scale);
 }
 
-void GameObject::ReCreateAAModelMatrix()
+void GameObject::recreateAAModelMatrix()
 {
     aaModelMatrix = glm::translate(glm::mat4(1.0f), position);
     aaModelMatrix = glm::scale(aaModelMatrix, scale);
 }
 
-const glm::mat4 & GameObject::GetModelMatrix() const
+const glm::mat4& GameObject::GetModelMatrix() const
 {
     return modelMatrix;
 }
 
-const glm::mat4 & GameObject::GetAAModelMatrix() const
+const glm::mat4& GameObject::GetAAModelMatrix() const
 {
     return aaModelMatrix;
 }
@@ -52,7 +52,7 @@ const glm::mat4 & GameObject::GetAAModelMatrix() const
 void GameObject::SetPosition(const Position& pos)
 {
     position = pos;
-    ReCreateModels();
+    recreateAllMatrixes();
 }
 
 void GameObject::ChangePosition(const glm::vec3& offset)
@@ -65,7 +65,7 @@ void GameObject::ChangePosition(const glm::vec3& offset)
 void GameObject::SetScale(const glm::vec3& scale)
 {
     this->scale = scale;
-    ReCreateModels();
+    recreateAllMatrixes();
 }
 
 void GameObject::SetGuid(uint32 guid)
@@ -76,4 +76,9 @@ void GameObject::SetGuid(uint32 guid)
 void GameObject::SetBoundingObject(BoundingObject* object)
 {
     boundingObject = object;
+}
+
+GameObject::GameObject(std::string model, std::string texture) : coll(0.0f), modelName(model), textureName(texture), rotationX(0.0f), rotationY(0.0f), boundingObject(nullptr)
+{
+    recreateAllMatrixes();
 }
