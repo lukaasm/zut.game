@@ -144,16 +144,13 @@ SceneMgr::~SceneMgr()
     GameObjectsMap map = staticObjects;
     map.insert(dynamicObjects.begin(), dynamicObjects.end());
 
-    for (auto i = map.begin(); i != map.end(); ++i)
-        delete i->second;
-
     staticObjects.clear();
     dynamicObjects.clear();
 
     delete tempShader;
 
-    for (auto i = cameras.begin(); i != cameras.end(); ++i)
-        delete *i;
+    std::for_each(map.begin(), map.end(), [](std::pair<uint32, GameObject*> p) { delete p.second; });
+    std::for_each(cameras.begin(), cameras.end(), [](Camera* cam) { delete cam; });
 }
 
 void SceneMgr::RegisterObject(GameObject* object)
