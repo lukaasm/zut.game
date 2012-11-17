@@ -51,7 +51,7 @@ class RenderDevice;
 class GameObject
 {
     public:
-        explicit GameObject(std::string model, std::string texture) : coll(0.0f), modelName(model), textureName(texture), rotationX(0.0f), rotationY(0.0f), boundingObject(nullptr) { recreateAllMatrixes(); }
+        explicit GameObject(std::string model, std::string texture);
         virtual ~GameObject() {}
 
         virtual void OnRender(RenderDevice*);
