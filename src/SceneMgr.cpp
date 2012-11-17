@@ -29,9 +29,9 @@ void SceneMgr::OnInit()
 
     cameras.push_back(new TppCamera());
     cameras.push_back(new FppCamera());
+    cameras.push_back(new EagleEyeCamera());
 
-    cameras[0]->LinkTo(player);
-    cameras[1]->LinkTo(player);
+    std::for_each(cameras.begin(), cameras.end(), [this](Camera* c) { c->LinkTo(player); });
 
     currentCamera = 0;
 
@@ -65,7 +65,7 @@ void SceneMgr::OnInit()
     text2D.Init();
 }
 
-void SceneMgr::OnUpdate(const uint32 & diff)
+void SceneMgr::OnUpdate(const uint32& diff)
 {
     if (keyCheck.Passed())
     {
