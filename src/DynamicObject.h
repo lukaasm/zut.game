@@ -44,14 +44,14 @@ struct MoveInfo
 
 const MoveInfo moveInfos[] =
 {
-    { MOVE_FLAG_FORWARD,        MOVE_FLAG_BACKWARD,     0.1f },     // MOVE_TYPE_FORWARD
-    { MOVE_FLAG_BACKWARD,       MOVE_FLAG_FORWARD,      0.05f },    // MOVE_TYPE_BACKWARD
-    { MOVE_FLAG_STRAFE_LEFT,    MOVE_FLAG_STRAFE_RIGHT, 0.1f },     // MOVE_TYPE_STRAFE_LEFT
-    { MOVE_FLAG_STRAFE_RIGHT,   MOVE_FLAG_STRAFE_LEFT,  0.1f },     // MOVE_TYPE_STRAFE_RIGHT
-    { MOVE_FLAG_ROTATE_LEFT,    MOVE_FLAG_ROTATE_RIGHT, 0.75f },    // MOVE_TYPE_ROTATE_LEFT
-    { MOVE_FLAG_ROTATE_RIGHT,   MOVE_FLAG_ROTATE_LEFT,  0.75f },    // MOVE_TYPE_ROTATE_RIGHT
-    { MOVE_FLAG_UPWARD,         MOVE_FLAG_DOWNWARD,     0.1f },     // MOVE_TYPE_UPWARD
-    { MOVE_FLAG_DOWNWARD,       MOVE_FLAG_UPWARD,       0.1f },     // MOVE_TYPE_DOWNWARD
+    { MOVE_FLAG_FORWARD,        MOVE_FLAG_BACKWARD,     2.5f },     // MOVE_TYPE_FORWARD
+    { MOVE_FLAG_BACKWARD,       MOVE_FLAG_FORWARD,      1.75f },    // MOVE_TYPE_BACKWARD
+    { MOVE_FLAG_STRAFE_LEFT,    MOVE_FLAG_STRAFE_RIGHT, 2.5f },     // MOVE_TYPE_STRAFE_LEFT
+    { MOVE_FLAG_STRAFE_RIGHT,   MOVE_FLAG_STRAFE_LEFT,  2.5f },     // MOVE_TYPE_STRAFE_RIGHT
+    { MOVE_FLAG_ROTATE_LEFT,    MOVE_FLAG_ROTATE_RIGHT, 20.0f },    // MOVE_TYPE_ROTATE_LEFT
+    { MOVE_FLAG_ROTATE_RIGHT,   MOVE_FLAG_ROTATE_LEFT,  20.0f },    // MOVE_TYPE_ROTATE_RIGHT
+    { MOVE_FLAG_UPWARD,         MOVE_FLAG_DOWNWARD,     2.5f },     // MOVE_TYPE_UPWARD
+    { MOVE_FLAG_DOWNWARD,       MOVE_FLAG_UPWARD,       2.5f },     // MOVE_TYPE_DOWNWARD
     { MOVE_FLAG_NONE,           MOVE_FLAG_NONE,         0.0f }      // MOVE_TYPE_NONE/MAX_MOVE_TYPES
 };
 
@@ -68,7 +68,7 @@ class DynamicObject : public GameObject
 
         DynamicObject();
 
-        void Move();
+        void Move(const uint32 &);
 
         void RedoMoveOnCollision(Position&, Position&);
 
@@ -85,10 +85,8 @@ class DynamicObject : public GameObject
     private:
         MoveFlags moveFlags;
 
-        glm::vec3 lookDirection;
-
-        glm::vec3 right;
         glm::vec3 up;
+        glm::vec3 lookDirection;
 };
 
 #endif
