@@ -14,29 +14,66 @@
 
 Camera::Camera()
 {
-    //LookAt();
 }
 
-void Camera::OnUpdate(const uint32 &)
+void Camera::LookAt(Position& pos, glm::vec3& target, glm::vec3& up)
 {
-    LookAt();
-}
-
-void Camera::LookAt()
-{
-    // rotate own base position
-    glm::vec3 pos = glm::vec3(0.0f, 1.5f, 3.0f);
-    pos = glm::rotate(pos, owner->GetRotationX(), owner->up);
-    pos = glm::rotate(pos, owner->GetRotationY(), owner->up);
-    // move to owner position
-    pos += owner->position;
-
-    // and finally look at owner direction
-    viewMatrix = glm::lookAt(pos, owner->position + owner->lookDirection, owner->up);
+    viewMatrix = glm::lookAt(pos, target, up);
 }
 
 void Camera::OnResize(int32 width, int32 height)
 {
     projMatrix = glm::perspective(60.0f, float(width/height), 0.1f, 100.0f);
-    //frustum.Calculate(viewMatrix, projMatrix);
+}
+
+void FppCamera::OnUpdate(const uint32 & diff)
+{
+    if (DynamicObject* object = GetLinkedObject())
+    {
+        glm::vec3 offset = object->GetPosition() - position;
+
+        SetPosition(object->GetPosition());
+
+        LookAt(position, position + object->lookDirection, object->up);
+    }
+}
+
+void FppCamera::LinkTo(DynamicObject* o)
+{
+    owner = o;
+
+    SetPosition(o->GetPosition());
+}
+
+void FppCamera::SetPosition(Position& pos)
+{
+    position = pos;
+    position.y += 1.0f; // redo it to use max.y model vertex pos
+}
+
+void TppCamera::OnUpdate(const uint32 & diff)
+{
+    if (DynamicObject* object = GetLinkedObject())
+    {
+        glm::vec3 offset = object->GetPosition() - position;
+
+        position = glm::vec3(0.0f, 1.5f, 3.5f);
+
+        position = glm::rotate(position, object->GetRotationX(), glm::cross(object->up, object->lookDirection));
+        position = glm::rotate(position, object->GetRotationY(), object->up);
+        // move to owner position
+        position += owner->GetPosition();
+
+        LookAt(position, position + object->lookDirection, object->up);
+    }
+}
+
+void TppCamera::LinkTo(DynamicObject* o)
+{
+    owner = o;
+}
+
+void TppCamera::SetPosition(Position& pos)
+{
+    position = pos;
 }
