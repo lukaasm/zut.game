@@ -62,10 +62,7 @@ typedef std::vector<Script> ScriptsMap;
 
 class DynamicObject : public GameObject
 {
-    friend class FppCamera;
-    friend class TppCamera;
     public:
-
         DynamicObject();
 
         void Move(const uint32 &);
@@ -79,6 +76,9 @@ class DynamicObject : public GameObject
         virtual bool IsDynamicObject() const override { return true; }
 
         virtual void OnUpdate(const uint32 &) override;
+
+        glm::vec3 GetUpVector() const { return up; }
+        glm::vec3 GetDirVector() const { return lookDirection; }
 
         ScriptsMap scripts;
 

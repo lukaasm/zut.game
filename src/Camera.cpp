@@ -30,12 +30,12 @@ void FppCamera::OnUpdate(const uint32& diff)
 {
     if (DynamicObject* object = GetLinkedObject())
     {
-        glm::vec3 offset = object->GetPosition() - position;
+       // glm::vec3 offset = object->GetPosition() - position;
 
         SetPosition(object->GetPosition());
 
-        glm::vec3 lookPosition = position + object->lookDirection;
-        LookAt(position, lookPosition, object->up);
+        glm::vec3 lookPosition = position + object->GetDirVector();
+        LookAt(position, lookPosition, object->GetUpVector());
     }
 }
 
@@ -44,7 +44,6 @@ void FppCamera::LinkTo(DynamicObject* o)
     owner = o;
 
     SetPosition(o->GetPosition());
-
 }
 
 void FppCamera::SetPosition(Position& pos)
@@ -57,17 +56,17 @@ void TppCamera::OnUpdate(const uint32 & diff)
 {
     if (DynamicObject* object = GetLinkedObject())
     {
-        glm::vec3 offset = object->GetPosition() - position;
+       // glm::vec3 offset = object->GetPosition() - position;
 
         position = glm::vec3(0.0f, 1.5f, 3.5f);
 
-        position = glm::rotate(position, object->GetRotationX(), glm::cross(object->up, object->lookDirection));
-        position = glm::rotate(position, object->GetRotationY(), object->up);
+        position = glm::rotate(position, object->GetRotationX(), glm::cross(object->GetUpVector(), object->GetDirVector()));
+        position = glm::rotate(position, object->GetRotationY(), object->GetUpVector());
         // move to owner position
         position += owner->GetPosition();
 
-        glm::vec3 lookPosition = position + object->lookDirection;
-        LookAt(position, lookPosition, object->up);
+        glm::vec3 lookPosition = position + object->GetDirVector();
+        LookAt(position, lookPosition, object->GetUpVector());
     }
 }
 
@@ -79,4 +78,27 @@ void TppCamera::LinkTo(DynamicObject* o)
 void TppCamera::SetPosition(Position& pos)
 {
     position = pos;
+}
+
+void EagleEyeCamera::OnUpdate(const uint32 &)
+{
+    if (DynamicObject* object = GetLinkedObject())
+    {
+        SetPosition(object->GetPosition());
+        LookAt(position, object->GetPosition(), object->GetUpVector());
+    }
+}
+
+void EagleEyeCamera::LinkTo(DynamicObject* o)
+{
+    owner = o;
+
+    SetPosition(o->GetPosition());
+}
+
+void EagleEyeCamera::SetPosition(Position& pos)
+{
+    position = pos;
+    position.z += 0.005f;
+    position.y += 5.0f; // redo it to use max.y model vertex pos
 }

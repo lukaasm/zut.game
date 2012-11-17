@@ -69,4 +69,21 @@ class TppCamera : public Camera
     private:
         DynamicObject* owner;
 };
+
+class EagleEyeCamera : public Camera
+{
+    public:
+        EagleEyeCamera() : owner(nullptr) {}
+
+        void OnUpdate(const uint32 &) override;
+
+        void LinkTo(DynamicObject* o) override;
+        DynamicObject* GetLinkedObject() { return owner; }
+
+        void SetPosition(Position& pos) override;
+
+    private:
+        DynamicObject* owner;
+};
+
 #endif
