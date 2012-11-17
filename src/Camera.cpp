@@ -34,7 +34,8 @@ void FppCamera::OnUpdate(const uint32 & diff)
 
         SetPosition(object->GetPosition());
 
-        LookAt(position, position + object->lookDirection, object->up);
+        glm::vec3 lookPosition = position + object->lookDirection;
+        LookAt(position, lookPosition, object->up);
     }
 }
 
@@ -64,7 +65,8 @@ void TppCamera::OnUpdate(const uint32 & diff)
         // move to owner position
         position += owner->GetPosition();
 
-        LookAt(position, position + object->lookDirection, object->up);
+        glm::vec3 lookPosition = position + object->lookDirection;
+        LookAt(position, lookPosition, object->up);
     }
 }
 
