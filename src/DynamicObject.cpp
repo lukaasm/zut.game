@@ -12,15 +12,15 @@ void DynamicObject::Move()
     if (moveFlags & MOVE_FLAG_FORWARD)
     {
         glm::vec3 offset = lookDirection * moveInfos[MOVE_TYPE_FORWARD].speed;
-        position += offset;
+        ChangePosition(offset);
 
         RedoMoveOnCollision(original, offset);
     }
 
     if (moveFlags & MOVE_FLAG_BACKWARD)
     {
-        glm::vec3 offset = lookDirection * moveInfos[MOVE_TYPE_BACKWARD].speed;
-        position -= offset;
+        glm::vec3 offset = -lookDirection * moveInfos[MOVE_TYPE_BACKWARD].speed;
+        ChangePosition(offset);
 
         RedoMoveOnCollision(original, offset);
     }
@@ -28,15 +28,15 @@ void DynamicObject::Move()
     if (moveFlags & MOVE_FLAG_UPWARD)
     {
         glm::vec3 offset = up * moveInfos[MOVE_TYPE_UPWARD].speed;
-        position += offset;
+        ChangePosition(offset);
 
         RedoMoveOnCollision(original, offset);
     }
 
     if (moveFlags & MOVE_FLAG_DOWNWARD)
     {
-        glm::vec3 offset = up * moveInfos[MOVE_TYPE_DOWNWARD].speed;
-        position -= offset;
+        glm::vec3 offset = -up * moveInfos[MOVE_TYPE_DOWNWARD].speed;
+        ChangePosition(offset);
 
         RedoMoveOnCollision(original, offset);
     }
@@ -44,15 +44,15 @@ void DynamicObject::Move()
     if (moveFlags & MOVE_FLAG_STRAFE_RIGHT)
     {
         glm::vec3 offset = right * moveInfos[MOVE_TYPE_STRAFE_RIGHT].speed;
-        position += offset;
+        ChangePosition(offset);
 
         RedoMoveOnCollision(original, offset);
     }
 
     if (moveFlags & MOVE_FLAG_STRAFE_LEFT)
     {
-        glm::vec3 offset = right * moveInfos[MOVE_TYPE_STRAFE_LEFT].speed;
-        position -= offset;
+        glm::vec3 offset = -right * moveInfos[MOVE_TYPE_STRAFE_LEFT].speed;
+        ChangePosition(offset);
 
         RedoMoveOnCollision(original, offset);
     }
@@ -62,6 +62,7 @@ void DynamicObject::Move()
         lookDirection = glm::rotate(lookDirection, moveInfos[MOVE_TYPE_ROTATE_LEFT].speed, up);
         right = glm::normalize(glm::cross(lookDirection, up));
         rotationY += moveInfos[MOVE_TYPE_ROTATE_LEFT].speed;
+        //ReCreateModelMatrix();
     }
 
     if (moveFlags & MOVE_FLAG_ROTATE_RIGHT)
@@ -69,10 +70,16 @@ void DynamicObject::Move()
         lookDirection = glm::rotate(lookDirection, -moveInfos[MOVE_TYPE_ROTATE_RIGHT].speed, up);
         right = glm::normalize(glm::cross(lookDirection, up));
         rotationY -= moveInfos[MOVE_TYPE_ROTATE_RIGHT].speed;
+        //ReCreateModelMatrix();
     }
 
     if (position.y < (scale.y/2))
+    {
         position.y = scale.y / 2;
+        ReCreateModels();
+    }
+    else
+        ReCreateModelMatrix();
 }
 
 void DynamicObject::OnUpdate(const uint32 & diff)
