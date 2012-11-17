@@ -16,7 +16,7 @@
 #include "ResourcesMgr.h"
 #include "SceneMgr.h"
 
-#define UPDATE_STEP 35
+#define UPDATE_STEP 15
 
 BaseApp::BaseApp() : stop(false)
 {

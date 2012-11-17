@@ -51,15 +51,11 @@ class RenderDevice;
 class GameObject
 {
     public:
-        explicit GameObject(std::string model, std::string texture) : coll(0.0f), modelName(model), textureName(texture), rotationX(0.0f), rotationY(0.0f), boundingObject(nullptr) { ReCreateModels(); }
+        explicit GameObject(std::string model, std::string texture) : coll(0.0f), modelName(model), textureName(texture), rotationX(0.0f), rotationY(0.0f), boundingObject(nullptr) { recreateAllMatrixes(); }
         virtual ~GameObject() {}
 
         virtual void OnRender(RenderDevice*);
         virtual void OnUpdate(const uint32 &) {}
-
-        void ReCreateModels();
-        void ReCreateModelMatrix();
-        void ReCreateAAModelMatrix();
 
         const glm::mat4 & GetModelMatrix() const;
         const glm::mat4 & GetAAModelMatrix() const;
@@ -87,6 +83,10 @@ class GameObject
         Position& GetPosition() { return position; }
 
     protected:
+        void recreateAllMatrixes();
+        void recreateModelMatrix();
+        void recreateAAModelMatrix();
+
         uint32 guid;
 
         std::string modelName;
