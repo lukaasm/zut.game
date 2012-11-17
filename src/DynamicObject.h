@@ -75,7 +75,8 @@ class DynamicObject : public GameObject
         void AddMoveType(MoveInfo);
         void ClearMoveType(MoveFlags);
 
-        virtual bool IsControllable() const { return false; }
+        virtual bool IsControllable() const override { return false; }
+        virtual bool IsDynamicObject() const override { return true; }
 
         virtual void OnUpdate(const uint32 &) override;
 
