@@ -21,8 +21,8 @@ void SceneMgr::OnInit()
     player->SetScale(glm::vec3(0.15f));
     player->SetBoundingObject(sResourcesMgr->GetModelData(player->GetModel())->boundingObject);
 
-    SetCamera(new Camera());
-    GetCamera()->SetOwner(player);
+    SetCamera(new TppCamera());
+    GetCamera()->LinkTo(player);
 
     tempShader = new Shader("../res/shaders/shader.vert", "../res/shaders/shader.frag");
     uint8 guid = 0;
@@ -50,7 +50,7 @@ void SceneMgr::OnInit()
     gameObjectsMap[++guid] = ccube;
     ccube->SetBoundingObject(sResourcesMgr->GetModelData(cube->GetModel())->boundingObject);
 
-    ccube->scripts.push_back([](DynamicObject& ob){ ob.SetScale(ob.coll ? glm::vec3(0.5f) : glm::vec3(0.25f)); });
+    ccube->scripts.push_back([](DynamicObject& ob){ ob.SetScale(ob.coll ? glm::vec3(0.35f) : glm::vec3(0.25f)); });
 
     ccube->AddMoveType(moveInfos[MOVE_TYPE_ROTATE_LEFT]);
 

@@ -62,7 +62,8 @@ typedef std::vector<Script> ScriptsMap;
 
 class DynamicObject : public GameObject
 {
-    friend class Camera;
+    friend class FppCamera;
+    friend class TppCamera;
     public:
 
         DynamicObject();

@@ -83,6 +83,8 @@ class GameObject
         float GetRotationX() const { return rotationX; }
         float GetRotationY() const { return rotationY; }
 
+        Position& GetPosition() { return position; }
+
     protected:
         uint32 guid;
 
