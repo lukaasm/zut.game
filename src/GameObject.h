@@ -76,6 +76,7 @@ class GameObject
         std::string GetTexture() const { return textureName; }
 
         virtual bool IsControllable() const { return false; }
+        virtual bool IsDynamicObject() const { return false; }
 
         float IsTextured() const { return GetTexture() != "" ? 1.0f : 0.0f; }
         float coll;

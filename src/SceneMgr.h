@@ -31,15 +31,16 @@ class SceneMgr
         void OnUpdate(const uint32 & diff);
         void OnRender(RenderDevice*);
 
+        void RegisterObject(GameObject* object);
+
         Camera* GetCamera() { return camera; }
         Player* GetPlayer() { return player; }
-
-        GameObjectsMap& GetGameObjects() { return gameObjectsMap; }
 
         void SetCamera(Camera*);
         void CollisionTest(GameObject*);
 
     private:
+        uint32 guid;
         Text2D text2D;
 
         Camera* camera;
@@ -47,7 +48,8 @@ class SceneMgr
 
         Shader* tempShader;
 
-        GameObjectsMap gameObjectsMap;
+        GameObjectsMap staticObjects;
+        GameObjectsMap dynamicObjects;
 };
 
 #define sSceneMgr Singleton<SceneMgr>::Instance()
