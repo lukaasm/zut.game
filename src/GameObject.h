@@ -51,20 +51,25 @@ class RenderDevice;
 class GameObject
 {
     public:
-        explicit GameObject(std::string model, std::string texture) : coll(0.0f), modelName(model), textureName(texture), rotationX(0.0f), rotationY(0.0f), boundingObject(nullptr) {}
+        explicit GameObject(std::string model, std::string texture) : coll(0.0f), modelName(model), textureName(texture), rotationX(0.0f), rotationY(0.0f), boundingObject(nullptr) { ReCreateModels(); }
         virtual ~GameObject() {}
 
         virtual void OnRender(RenderDevice*);
         virtual void OnUpdate(const uint32 &) {}
 
-        glm::mat4 GetModelMatrix() const;
-        glm::mat4 GetAAModelMatrix() const;
+        void ReCreateModels();
+        void ReCreateModelMatrix();
+        void ReCreateAAModelMatrix();
+
+        const glm::mat4 & GetModelMatrix() const;
+        const glm::mat4 & GetAAModelMatrix() const;
 
         void SetGuid(uint32 guid);
         void SetBoundingObject(BoundingObject* object);
         BoundingObject* GetBoundingObject() const { return boundingObject; }
 
         void SetPosition(const Position& pos);
+        void ChangePosition(const glm::vec3&);
         void SetScale(const glm::vec3& scale);
 
         std::string GetModel() const { return modelName; }
@@ -91,6 +96,9 @@ class GameObject
         float rotationY;
 
         BoundingObject* boundingObject;
+
+        glm::mat4 modelMatrix;
+        glm::mat4 aaModelMatrix;
 };
 
 #endif
