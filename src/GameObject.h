@@ -22,7 +22,11 @@ namespace VertexArray
 
 struct Vertex
 {
-    Vertex() {}
+    Vertex()
+    {
+        color = glm::vec3(1.0f, 1.0f, 1.0f);
+    }
+
     Vertex(Vertex const& org)
     {
         position = org.position;
