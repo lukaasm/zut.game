@@ -8,6 +8,7 @@
 #include "DynamicObject.h"
 #include "GameObject.h"
 #include "Grid.h"
+#include "Input.h"
 #include "ModelData.h"
 #include "Player.h"
 #include "RenderDevice.h"
@@ -16,6 +17,8 @@
 
 void SceneMgr::OnInit()
 {
+    keyCheck.Start(0);
+
     guid = 0;
 
     player = new Player();
@@ -24,8 +27,13 @@ void SceneMgr::OnInit()
     player->SetBoundingObject(sResourcesMgr->GetModelData(player->GetModel())->boundingObject);
     RegisterObject(player);
 
-    SetCamera(new TppCamera());
-    GetCamera()->LinkTo(player);
+    cameras.push_back(new TppCamera());
+    cameras.push_back(new FppCamera());
+
+    cameras[0]->LinkTo(player);
+    cameras[1]->LinkTo(player);
+
+    currentCamera = 0;
 
     tempShader = new Shader("../res/shaders/shader.vert", "../res/shaders/shader.frag");
 
@@ -59,6 +67,15 @@ void SceneMgr::OnInit()
 
 void SceneMgr::OnUpdate(const uint32 & diff)
 {
+    if (keyCheck.Passed())
+    {
+        if (sKeyboard->IsKeyPressed('K'))
+        {
+            ToggleCamera();
+            keyCheck.Start(200);
+        }
+    }
+
     for (auto i = dynamicObjects.begin(); i != dynamicObjects.end(); ++i)
         i->second->OnUpdate(diff);
 
@@ -118,12 +135,8 @@ void SceneMgr::OnRender(RenderDevice* rd)
         shader->Unbind();
     }
 
-    text2D.Print(rd, "Controls: W,S,A,D + arrows for rotating", 100, 100, 10);
-}
-
-void SceneMgr::SetCamera(Camera* camera)
-{
-    this->camera = camera;
+    text2D.Print(rd, "Controls: W,S,A,D + arrows to rotate", 10, 10, 10);
+    text2D.Print(rd, "Press K, to change camera", 10, 25, 10);
 }
 
 SceneMgr::~SceneMgr()
@@ -138,7 +151,9 @@ SceneMgr::~SceneMgr()
     dynamicObjects.clear();
 
     delete tempShader;
-    delete camera;
+
+    for (auto i = cameras.begin(); i != cameras.end(); ++i)
+        delete *i;
 }
 
 void SceneMgr::RegisterObject(GameObject* object)
@@ -150,4 +165,23 @@ void SceneMgr::RegisterObject(GameObject* object)
         dynamicObjects[GUID] = object;
     else
         staticObjects[GUID] = object;
+}
+
+Camera* SceneMgr::GetCamera()
+{
+    if (cameras.empty())
+        return nullptr;
+
+    return cameras[currentCamera];
+}
+
+void SceneMgr::ToggleCamera()
+{
+    currentCamera = ++currentCamera % cameras.size();
+}
+
+void SceneMgr::OnResize(uint32 width, uint32 height)
+{
+    for (auto i = cameras.begin(); i != cameras.end(); ++i)
+        (*i)->OnResize(width, height);
 }

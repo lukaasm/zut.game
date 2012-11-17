@@ -11,6 +11,7 @@
 #include "Common.h"
 #include "Singleton.h"
 #include "Text2d.h"
+#include "Timer.h"
 
 class Camera;
 class GameObject;
@@ -30,23 +31,29 @@ class SceneMgr
         void OnInit();
         void OnUpdate(const uint32 & diff);
         void OnRender(RenderDevice*);
+        void OnResize(uint32 width, uint32 height);
 
         void RegisterObject(GameObject* object);
 
-        Camera* GetCamera() { return camera; }
+        void ToggleCamera();
+
+        Camera* GetCamera();
         Player* GetPlayer() { return player; }
 
-        void SetCamera(Camera*);
         void CollisionTest(GameObject*);
 
     private:
         uint32 guid;
         Text2D text2D;
 
-        Camera* camera;
+        uint32 currentCamera;
+        std::vector<Camera*> cameras;
+
         Player* player;
 
         Shader* tempShader;
+
+        Timer keyCheck;
 
         GameObjectsMap staticObjects;
         GameObjectsMap dynamicObjects;
