@@ -15,8 +15,11 @@
 #include "RenderDevice.h"
 #include "ResourcesMgr.h"
 #include "SceneMgr.h"
+#include "Timer.h"
 
 #define UPDATE_STEP 15
+
+double BaseApp::frameTime = 0;
 
 BaseApp::BaseApp() : stop(false)
 {
@@ -91,12 +94,22 @@ void BaseApp::Init()
 
 void BaseApp::Run()
 {
+    Timer frameTimer;
+    frameTimer.Start(100);
+
     uint32 accDiff = 0;
     double start = glfwGetTime();
     while (!Stopped())
     {
         double now = glfwGetTime();
         accDiff += uint32(ceil((now - start)*1000.0f));
+
+        if (frameTimer.Passed())
+        {
+            frameTime = (now - start)*1000.0f;
+            frameTimer.Start(1000);
+        }
+
         start = now;
 
         while (accDiff >= UPDATE_STEP)

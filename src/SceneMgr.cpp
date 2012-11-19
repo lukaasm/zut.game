@@ -2,6 +2,7 @@
 
 #include <glm/gtc/matrix_transform.hpp>
 
+#include "BaseApp.h"
 #include "BoundingObject.h"
 #include "Camera.h"
 #include "Config.h"
@@ -17,12 +18,12 @@
 
 void SceneMgr::OnInit()
 {
-    keyCheck.Start(0);
+    keyCheck.Start(100);
 
     guid = 0;
 
     player = new Player();
-    player->SetPosition(Position(5.0f, 0.5f, 0.0f));
+    player->SetPosition(Position(5.0f, 0.075f, 0.0f));
     player->SetScale(glm::vec3(0.15f));
     player->SetBoundingObject(sResourcesMgr->GetModelData(player->GetModel())->boundingObject);
     RegisterObject(player);
@@ -135,8 +136,12 @@ void SceneMgr::OnRender(RenderDevice* rd)
         shader->Unbind();
     }
 
-    text2D.Print(rd, "Controls: W,S,A,D + arrows to rotate", 10, 10, 10);
-    text2D.Print(rd, "Press K, to change camera", 10, 25, 10);
+    std::stringstream fps;
+    fps << "FrameTime: " << BaseApp::frameTime << "ms";
+
+    text2D.Print(rd, fps.str(), 10, sConfig->GetDefault("height", 600) - 12, 12);
+    text2D.Print(rd, "Controls: W,S,A,D + arrows to rotate", 10, 10, 12);
+    text2D.Print(rd, "Press K, to change camera", 10, 25, 12);
 }
 
 SceneMgr::~SceneMgr()
