@@ -29,6 +29,8 @@ class BaseApp
         void OnRender();
         void OnUpdate(const uint32);
 
+        static double frameTime;
+
         static ResizeCallBack *ResizeCallback;
         static void ResizeWindow(int32, int32);
 
