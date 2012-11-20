@@ -46,6 +46,9 @@ void VertexArrayObject::EnableAttrib(uint32 att)
 
 VertexArrayObject::~VertexArrayObject()
 {
+    if (!releaseGPUResources)
+        return;
+
     glDeleteVertexArrays(1, &id[ID_VAO]);
     glDeleteBuffers(1, &(id[ID_VBO]));
 }

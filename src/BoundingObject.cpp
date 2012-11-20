@@ -10,7 +10,7 @@
 // warning C4482: nonstandard extension used: enum 'VertexArray::Attrib' used in qualified name
 #pragma warning(disable : 4482)
 
-void BoundingBox::SetMinMax(const VertexVector& vertexes)
+void BoundingBoxProto::SetMinMax(const VertexVector& vertexes)
 {
     struct FindMinMax
     {
@@ -86,54 +86,7 @@ void BoundingBox::SetMinMax(const VertexVector& vertexes)
     vao.ElementsCount() = bbox.size();
 }
 
-void BoundingBox::OnRender(RenderDevice* rd)
+void BoundingBoxProto::OnRender(RenderDevice* rd)
 {
     rd->DrawLines(vao);
-}
-
-bool BoundingBox::Intersection(const BoundingBox& box) const 
-{
-    if (min.x > box.max.x)
-        return false;
-
-    if (box.min.x > max.x)
-        return false;
-
-    if (min.y > box.max.y)
-        return false;
-
-    if (box.min.y > max.y)
-        return false;
-
-    if (min.z > box.max.z)
-        return false;
-
-    if (box.min.z > max.z)
-        return false;
-
-    return true;
-}
-
-bool BoundingBox::Intersection( TestPoints& a, TestPoints& b)
-{
-
-    if (a.min.x > b.max.x)
-        return false;
-
-    if (b.min.x > a.max.x)
-        return false;
-
-    if (a.min.y > b.max.y)
-        return false;
-
-    if (b.min.y > a.max.y)
-        return false;
-
-    if (a.min.z > b.max.z)
-        return false;
-
-    if (b.min.z > a.max.z)
-        return false;
-
-    return true;
 }

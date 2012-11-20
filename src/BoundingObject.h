@@ -6,66 +6,41 @@
 
 #include "VertexArrayObject.h"
 
-class BoundingBox;
+class AABoundingBox;
 class Frustum;
-//class GameObject;
 class RenderDevice;
 
 struct Vertex;
 
-class BoundingObject
+enum BoundingType
 {
-    public:
-        //GameObject* GetOwner() const { return owner; }
-
-        virtual void OnRender(RenderDevice*) = 0;
-
-        virtual bool Intersection(const glm::vec3&) const = 0;
-        virtual bool Intersection(const BoundingBox&) const = 0;
-        virtual bool Intersection(const Frustum&) const = 0;
-        //virtual bool IsInFrustum(const Frustum&, GameObject*) = 0;
-
-    private:
-        //GameObject* owner;
+    BOUNDING_AABOX     = 0,
+    BOUNDING_BOX_PROTO = 1,
 };
 
 typedef std::vector<Vertex> VertexVector;
 
-struct TestPoints;
-
-class BoundingBox : public BoundingObject
+class BoundingBoxProto
 {
-    friend struct TestPoints;
+    friend class AABoundingBox;
     public:
         void SetMinMax(const VertexVector&);
 
+        BoundingType GetType() const { return BOUNDING_BOX_PROTO; }
+
         void OnRender(RenderDevice*);
 
-        bool Intersection(const glm::vec3& point) const override { return false; }
-        bool Intersection(const BoundingBox& box) const override;
-        bool Intersection(const Frustum& frustum) const override{ return false; }
+        //virtual bool Intersection(const glm::vec3& point) const = 0;
+        //virtual bool Intersection(const AABoundingBox& box) const = 0;
+        //virtual bool Intersection(const Frustum& frustum) const = 0;
 
-        static bool Intersection(TestPoints&, TestPoints&);
-    private:
+    protected:
         glm::vec3 min;
         glm::vec3 max;
 
         VertexArrayObject vao;
 };
 
-struct TestPoints
-{
-    TestPoints(BoundingBox& bb, glm::mat4 modelMatrix)
-    {
-        glm::vec4 m1 = modelMatrix * glm::vec4(bb.min, 1.0f);
-        glm::vec4 m2 = modelMatrix * glm::vec4(bb.max, 1.0f);
-        min = glm::vec3(m1.x, m1.y, m1.z);
-        max = glm::vec3(m2.x, m2.y, m2.z);;
-    }
-
-    glm::vec3 min;
-    glm::vec3 max;
-};
 /*
 class BoundingSphere : public BoundingObject
 {

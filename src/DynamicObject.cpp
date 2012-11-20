@@ -12,48 +12,36 @@ void DynamicObject::Move(const uint32& diff)
     if (moveFlags & MOVE_FLAG_FORWARD)
     {
         glm::vec3 offset = lookDirection * moveInfos[MOVE_TYPE_FORWARD].speed *(0.001f * diff);
-        ChangePosition(offset);
-
         RedoMoveOnCollision(original, offset);
     }
 
     if (moveFlags & MOVE_FLAG_BACKWARD)
     {
         glm::vec3 offset = -lookDirection * moveInfos[MOVE_TYPE_BACKWARD].speed *(0.001f * diff);
-        ChangePosition(offset);
-
         RedoMoveOnCollision(original, offset);
     }
 
     if (moveFlags & MOVE_FLAG_UPWARD)
     {
         glm::vec3 offset = up * moveInfos[MOVE_TYPE_UPWARD].speed *(0.001f * diff);
-        ChangePosition(offset);
-
         RedoMoveOnCollision(original, offset);
     }
 
     if (moveFlags & MOVE_FLAG_DOWNWARD)
     {
         glm::vec3 offset = -up * moveInfos[MOVE_TYPE_DOWNWARD].speed *(0.001f * diff);
-        ChangePosition(offset);
-
         RedoMoveOnCollision(original, offset);
     }
 
     if (moveFlags & MOVE_FLAG_STRAFE_RIGHT)
     {
         glm::vec3 offset = glm::cross(lookDirection, up) * moveInfos[MOVE_TYPE_STRAFE_RIGHT].speed *(0.001f * diff);
-        ChangePosition(offset);
-
         RedoMoveOnCollision(original, offset);
     }
 
     if (moveFlags & MOVE_FLAG_STRAFE_LEFT)
     {
         glm::vec3 offset = -glm::cross(lookDirection, up) * moveInfos[MOVE_TYPE_STRAFE_LEFT].speed *(0.001f * diff);
-        ChangePosition(offset);
-
         RedoMoveOnCollision(original, offset);
     }
 
@@ -61,21 +49,16 @@ void DynamicObject::Move(const uint32& diff)
     {
         lookDirection = glm::rotate(lookDirection, moveInfos[MOVE_TYPE_ROTATE_LEFT].speed *(0.001f * diff), up);
         rotationY += moveInfos[MOVE_TYPE_ROTATE_LEFT].speed *(0.001f * diff);
-        //ReCreateModelMatrix();
     }
 
     if (moveFlags & MOVE_FLAG_ROTATE_RIGHT)
     {
         lookDirection = glm::rotate(lookDirection, -moveInfos[MOVE_TYPE_ROTATE_RIGHT].speed *(0.001f * diff), up);
         rotationY -= moveInfos[MOVE_TYPE_ROTATE_RIGHT].speed *(0.001f * diff);
-        //ReCreateModelMatrix();
     }
 
     if (position.y < (scale.y/2))
-    {
         position.y = scale.y / 2;
-        recreateAllMatrixes();
-    }
     else
         recreateModelMatrix();
 }
@@ -111,6 +94,8 @@ DynamicObject::DynamicObject() : GameObject("cube.obj", "cube.tga")
 
 void DynamicObject::RedoMoveOnCollision(Position& original, Position& offset)
 {
+    SetPosition(original + offset);
+
     sSceneMgr->CollisionTest(this);
     if (coll == 1.0f)
         SetPosition(original);

@@ -155,10 +155,10 @@ bool ResourcesMgr::loadModel(std::string fileName)
 
         vao.ElementsCount() = vertexes.size();
 
-        BoundingBox* box = new BoundingBox();
+        BoundingBoxProto* box = new BoundingBoxProto();
         box->SetMinMax(vertexes);
 
-        modelData->boundingObject = box;
+        modelData->boundingBox = box;
 
         modelsData[fileName] = modelData;
     }

@@ -9,6 +9,7 @@
 #include <string>
 
 #include "Common.h"
+#include "BoundingObject.h"
 
 namespace VertexArray
 {
@@ -45,28 +46,55 @@ struct Vertex
 #define NORMAL_VERTEX_POS UV_VERTEX_POS + sizeof(glm::vec2)
 #define COLOR_VERTEX_POS NORMAL_VERTEX_POS + sizeof(glm::vec3)
 
-class BoundingObject;
+class GameObject;
 class RenderDevice;
+
+class AABoundingBox : public BoundingBoxProto
+{
+    public:
+        AABoundingBox(const BoundingBoxProto& proto, GameObject* o);
+
+        BoundingType GetType() const { return BOUNDING_AABOX; }
+
+        void RecalculateModelMatrix(const Position& pos, const glm::vec3& scale);
+
+        bool Intersection(const AABoundingBox& b);
+
+        glm::mat4& GetModelMatrix() { return modelMatrix; }
+        GameObject* GetOwner() { return owner; }
+
+        const glm::vec3& GetMin() const { return AABoundingBox::min; }
+        const glm::vec3& GetMax() const { return AABoundingBox::max; }
+
+    private:
+        GameObject* owner;
+        glm::mat4 modelMatrix;
+
+        glm::vec3 min;
+        glm::vec3 max;
+};
 
 class GameObject
 {
     public:
         explicit GameObject(std::string model, std::string texture);
-        virtual ~GameObject() {}
+        virtual ~GameObject() { delete boundingBox; }
 
         virtual void OnRender(RenderDevice*);
         virtual void OnUpdate(const uint32 &) {}
 
-        const glm::mat4 & GetModelMatrix() const;
-        const glm::mat4 & GetAAModelMatrix() const;
+        const glm::mat4& GetModelMatrix() const;
 
         void SetGuid(uint32 guid);
-        void SetBoundingObject(BoundingObject* object);
-        BoundingObject* GetBoundingObject() const { return boundingObject; }
+
+        void SetBoundingObject(BoundingBoxProto* object);
+        AABoundingBox* GetBoundingObject() const { return boundingBox; }
 
         void SetPosition(const Position& pos);
-        void ChangePosition(const glm::vec3&);
+        Position& GetPosition() { return position; }
+
         void SetScale(const glm::vec3& scale);
+        const glm::vec3& GetScale() { return scale; }
 
         std::string GetModel() const { return modelName; }
         std::string GetTexture() const { return textureName; }
@@ -80,12 +108,8 @@ class GameObject
         float GetRotationX() const { return rotationX; }
         float GetRotationY() const { return rotationY; }
 
-        Position& GetPosition() { return position; }
-
     protected:
-        void recreateAllMatrixes();
         void recreateModelMatrix();
-        void recreateAAModelMatrix();
 
         uint32 guid;
 
@@ -98,10 +122,9 @@ class GameObject
         float rotationX;
         float rotationY;
 
-        BoundingObject* boundingObject;
+        AABoundingBox* boundingBox;
 
         glm::mat4 modelMatrix;
-        glm::mat4 aaModelMatrix;
 };
 
 #endif
