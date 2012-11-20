@@ -24,7 +24,7 @@ void SceneMgr::OnInit()
 
     player = new Player();
     player->SetPosition(Position(5.0f, 0.075f, 0.0f));
-    player->SetScale(glm::vec3(0.15f));
+    player->SetScale(glm::vec3(0.05f));
     player->SetBoundingObject(sResourcesMgr->GetModelData(player->GetModel())->boundingBox);
     RegisterObject(player);
 
@@ -57,9 +57,9 @@ void SceneMgr::OnInit()
     DynamicObject* ccube = new DynamicObject();
     ccube->SetPosition(glm::vec3(5.0f, 0.875f+1.5f, -5.0f));
     ccube->SetScale(glm::vec3(0.25f));
-    ccube->SetBoundingObject(sResourcesMgr->GetModelData(cube->GetModel())->boundingBox);
+    ccube->SetBoundingObject(sResourcesMgr->GetModelData(ccube->GetModel())->boundingBox);
 
-    ccube->scripts.push_back([](DynamicObject& ob){ ob.SetScale(ob.coll ? glm::vec3(0.35f) : glm::vec3(0.25f)); });
+    //ccube->scripts.push_back([](DynamicObject& ob){ ob.SetScale(ob.coll ? glm::vec3(0.35f) : glm::vec3(0.25f)); });
     ccube->AddMoveType(moveInfos[MOVE_TYPE_ROTATE_LEFT]);
     RegisterObject(ccube);
 

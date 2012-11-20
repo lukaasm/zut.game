@@ -83,7 +83,7 @@ void DynamicObject::ClearMoveType(MoveFlags flag)
     moveFlags = MoveFlags(moveFlags & ~flag);
 }
 
-DynamicObject::DynamicObject() : GameObject("cube.obj", "cube.tga")
+DynamicObject::DynamicObject() : GameObject("mb.obj", "mb.tga")
 {
     lookDirection = glm::vec3(0.0f, 0.0f, -1.0f);
 
