@@ -73,7 +73,7 @@ void ResourcesMgr::loadModels()
     modelsData[name] = modelData;
 
     loadModel("cube.obj");
-    loadModel("trashbin.obj");
+    loadModel("mb.obj");
 }
 
 void ResourcesMgr::unloadModels()
@@ -279,7 +279,7 @@ void ResourcesMgr::loadTexture(std::string fileName)
 
 void ResourcesMgr::loadTextures()
 {
-    loadTexture("test.tga");
+    loadTexture("mb.tga");
     loadTexture("cube.tga");
     loadTexture("font.tga");
 }
