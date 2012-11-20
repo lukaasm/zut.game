@@ -25,7 +25,7 @@ void SceneMgr::OnInit()
     player = new Player();
     player->SetPosition(Position(5.0f, 0.075f, 0.0f));
     player->SetScale(glm::vec3(0.15f));
-    player->SetBoundingObject(sResourcesMgr->GetModelData(player->GetModel())->boundingObject);
+    player->SetBoundingObject(sResourcesMgr->GetModelData(player->GetModel())->boundingBox);
     RegisterObject(player);
 
     cameras.push_back(new TppCamera());
@@ -46,7 +46,7 @@ void SceneMgr::OnInit()
     cube->SetPosition(glm::vec3(a, b, c)); \
     cube->SetScale(glm::vec3(0.25f)); \
     RegisterObject(cube); \
-    cube->SetBoundingObject(sResourcesMgr->GetModelData(cube->GetModel())->boundingObject);
+    cube->SetBoundingObject(sResourcesMgr->GetModelData(cube->GetModel())->boundingBox);
 
     POPULATE_CUBE(4.25f, 0.25f, -5.0f)
     POPULATE_CUBE(5.75f, 0.25f, -5.0f)
@@ -57,7 +57,7 @@ void SceneMgr::OnInit()
     DynamicObject* ccube = new DynamicObject();
     ccube->SetPosition(glm::vec3(5.0f, 0.875f+1.5f, -5.0f));
     ccube->SetScale(glm::vec3(0.25f));
-    ccube->SetBoundingObject(sResourcesMgr->GetModelData(cube->GetModel())->boundingObject);
+    ccube->SetBoundingObject(sResourcesMgr->GetModelData(cube->GetModel())->boundingBox);
 
     ccube->scripts.push_back([](DynamicObject& ob){ ob.SetScale(ob.coll ? glm::vec3(0.35f) : glm::vec3(0.25f)); });
     ccube->AddMoveType(moveInfos[MOVE_TYPE_ROTATE_LEFT]);
@@ -87,17 +87,18 @@ void SceneMgr::CollisionTest(GameObject* object)
 {
     object->coll = 0.0f;
 
+    AABoundingBox* bounds = object->GetBoundingObject();
+
     GameObjectsMap map = staticObjects;
     map.insert(dynamicObjects.begin(), dynamicObjects.end());
 
-    TestPoints a(reinterpret_cast<BoundingBox&>(*(object->GetBoundingObject())), object->GetAAModelMatrix());
     for (auto i = map.begin(); i != map.end(); ++i)
     {
-        if (object == i->second || i->second->GetBoundingObject() == nullptr)
+        GameObject* ob = i->second;
+        if (object == ob || ob->GetBoundingObject() == nullptr)
             continue;
 
-        TestPoints b(reinterpret_cast<BoundingBox&>(*(i->second->GetBoundingObject())), i->second->GetAAModelMatrix());
-        if (BoundingBox::Intersection(a, b))
+        if (bounds->Intersection(*(ob->GetBoundingObject())))
         {
             object->coll = 1.0f;
             i->second->coll = 1.0f;
@@ -127,9 +128,9 @@ void SceneMgr::OnRender(RenderDevice* rd)
 
         if (renderBounds)
         {
-            if (BoundingObject* bounds = ob->GetBoundingObject())
+            if (AABoundingBox* bounds = ob->GetBoundingObject())
             {
-                rd->SetUniforms(shader, GetCamera()->GetProjMatrix(), GetCamera()->GetViewMatrix(), ob->GetAAModelMatrix(), ob->coll);
+                rd->SetUniforms(shader, GetCamera()->GetProjMatrix(), GetCamera()->GetViewMatrix(), bounds->GetModelMatrix(), ob->coll);
                 bounds->OnRender(rd);
             }
         }

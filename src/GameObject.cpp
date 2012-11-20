@@ -19,12 +19,6 @@ void GameObject::OnRender(RenderDevice* rd)
     rd->DrawTriangles(modelData->vao);
 }
 
-void GameObject::recreateAllMatrixes()
-{
-    recreateModelMatrix();
-    recreateAAModelMatrix();
-}
-
 void GameObject::recreateModelMatrix()
 {
     modelMatrix = glm::translate(glm::mat4(1.0f), position);
@@ -33,39 +27,35 @@ void GameObject::recreateModelMatrix()
     modelMatrix = glm::scale(modelMatrix, scale);
 }
 
-void GameObject::recreateAAModelMatrix()
-{
-    aaModelMatrix = glm::translate(glm::mat4(1.0f), position);
-    aaModelMatrix = glm::scale(aaModelMatrix, scale);
-}
-
 const glm::mat4& GameObject::GetModelMatrix() const
 {
     return modelMatrix;
 }
 
-const glm::mat4& GameObject::GetAAModelMatrix() const
-{
-    return aaModelMatrix;
-}
-
 void GameObject::SetPosition(const Position& pos)
 {
-    position = pos;
-    recreateAllMatrixes();
-}
+    if (pos == position)
+        return;
 
-void GameObject::ChangePosition(const glm::vec3& offset)
-{
-    position += offset;
-    modelMatrix = glm::translate(modelMatrix, offset/scale);
-    aaModelMatrix = glm::translate(aaModelMatrix, offset/scale);
+    position = pos;
+
+    recreateModelMatrix();
+
+    if (AABoundingBox* bounds = GetBoundingObject())
+        bounds->RecalculateModelMatrix(GetPosition(), GetScale());
 }
 
 void GameObject::SetScale(const glm::vec3& scale)
 {
+    if (this->scale == scale)
+        return;
+
     this->scale = scale;
-    recreateAllMatrixes();
+
+    recreateModelMatrix();
+
+    if (AABoundingBox* bounds = GetBoundingObject())
+        bounds->RecalculateModelMatrix(GetPosition(), GetScale());
 }
 
 void GameObject::SetGuid(uint32 guid)
@@ -73,12 +63,55 @@ void GameObject::SetGuid(uint32 guid)
     this->guid = guid;
 }
 
-void GameObject::SetBoundingObject(BoundingObject* object)
+void GameObject::SetBoundingObject(BoundingBoxProto* object)
 {
-    boundingObject = object;
+    boundingBox = new AABoundingBox(*object, this);
 }
 
-GameObject::GameObject(std::string model, std::string texture) : coll(0.0f), modelName(model), textureName(texture), rotationX(0.0f), rotationY(0.0f), boundingObject(nullptr)
+GameObject::GameObject(std::string model, std::string texture) : coll(0.0f), modelName(model), textureName(texture), rotationX(0.0f), rotationY(0.0f), boundingBox(nullptr)
 {
-    recreateAllMatrixes();
+}
+
+AABoundingBox::AABoundingBox(const BoundingBoxProto& proto, GameObject* o) : owner(o)
+{
+    vao = proto.vao;
+
+    vao.releaseGPUResources = false;
+
+    BoundingBoxProto::min = proto.min;
+    BoundingBoxProto::max = proto.max;
+
+    RecalculateModelMatrix(owner->GetPosition(), owner->GetScale());
+}
+
+void AABoundingBox::RecalculateModelMatrix(const Position& pos, const glm::vec3& scale)
+{
+    modelMatrix = glm::translate(glm::mat4(1.0f), pos);
+    modelMatrix = glm::scale(modelMatrix, scale);
+
+    AABoundingBox::min = glm::vec3(modelMatrix * glm::vec4(BoundingBoxProto::min, 1.0f));
+    AABoundingBox::max = glm::vec3(modelMatrix * glm::vec4(BoundingBoxProto::max, 1.0f));
+}
+
+bool AABoundingBox::Intersection(const AABoundingBox& b)
+{
+    if (GetMin().x > b.GetMax().x)
+        return false;
+
+    if (b.GetMin().x > GetMax().x)
+        return false;
+
+    if (GetMin().y > b.GetMax().y)
+        return false;
+
+    if (b.GetMin().y > GetMax().y)
+        return false;
+
+    if (GetMin().z > b.GetMax().z)
+        return false;
+
+    if (b.GetMin().z > GetMax().z)
+        return false;
+
+    return true;
 }

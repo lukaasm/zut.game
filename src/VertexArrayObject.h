@@ -14,7 +14,7 @@ enum
 class VertexArrayObject
 {
     public:
-        VertexArrayObject() {}
+        VertexArrayObject() : releaseGPUResources(true) {}
         ~VertexArrayObject();
 
         uint32 GetId() const { return id[ID_VAO]; }
@@ -31,6 +31,8 @@ class VertexArrayObject
         void EnableAttrib(uint32);
 
         uint32& ElementsCount() { return size; }
+
+        bool releaseGPUResources;
 
     private:
         uint32 id[ID_MAX];

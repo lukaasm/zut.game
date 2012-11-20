@@ -7,7 +7,7 @@
 #include "Common.h"
 #include "VertexArrayObject.h"
 
-class BoundingObject;
+class BoundingBoxProto;
 struct Vertex;
 
 struct ModelData
@@ -17,7 +17,7 @@ struct ModelData
 
     uint32 textureId;
 
-    BoundingObject* boundingObject;
+    BoundingBoxProto* boundingBox;
     VertexArrayObject vao;
 
     typedef std::vector<Vertex> VertexVector;
