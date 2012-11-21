@@ -1,6 +1,7 @@
 #include "SceneMgr.h"
 
 #include <glm/gtc/matrix_transform.hpp>
+#include <iomanip>
 
 #include "BaseApp.h"
 #include "BoundingObject.h"
@@ -59,8 +60,8 @@ void SceneMgr::OnInit()
     ccube->SetScale(glm::vec3(0.25f));
     ccube->SetBoundingObject(sResourcesMgr->GetModelData(ccube->GetModel())->boundingBox);
 
-    //ccube->scripts.push_back([](DynamicObject& ob){ ob.SetScale(ob.coll ? glm::vec3(0.35f) : glm::vec3(0.25f)); });
-    ccube->AddMoveType(moveInfos[MOVE_TYPE_ROTATE_LEFT]);
+    ccube->scripts.push_back([](DynamicObject& ob){ ob.coll ? ob.AddMoveType(moveInfos[MOVE_TYPE_FORWARD]) : ob.ClearMoveType(MOVE_FLAG_FORWARD); });
+    //ccube->AddMoveType(moveInfos[MOVE_TYPE_ROTATE_LEFT]);
     RegisterObject(ccube);
 
     text2D.Init();
@@ -138,11 +139,11 @@ void SceneMgr::OnRender(RenderDevice* rd)
     }
 
     std::stringstream fps;
-    fps << "FrameTime: " << BaseApp::frameTime << "ms";
+    fps << "FrameTime: " << std::setprecision(3) << BaseApp::frameTime << "ms";
 
     text2D.Print(rd, fps.str(), 10, sConfig->GetDefault("height", 600) - 12, 12);
-    text2D.Print(rd, "Controls: W,S,A,D + arrows to rotate", 10, 10, 12);
-    text2D.Print(rd, "Press K, to change camera", 10, 25, 12);
+    text2D.Print(rd, "WSAD - movement, <- -> - rotate", 10, 10, 12);
+    text2D.Print(rd, "K - change camera, L - toggle textures", 10, 25, 12);
 }
 
 SceneMgr::~SceneMgr()
