@@ -126,6 +126,7 @@
     <ResourceCompile Include="VS2k10.rc" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\bin\config.ini" />
     <None Include="..\res\icon.ico" />
     <None Include="..\res\shaders\font.vert" />
     <None Include="..\res\shaders\shader.frag" />

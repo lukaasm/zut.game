@@ -126,6 +126,9 @@
     <None Include="..\res\shaders\shader.vert">
       <Filter>Shader</Filter>
     </None>
+    <None Include="..\bin\config.ini">
+      <Filter>Config</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\BaseApp.cpp">
