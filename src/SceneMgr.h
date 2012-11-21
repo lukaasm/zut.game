@@ -1,17 +1,11 @@
 #ifndef H_SCENEMGR
 #define H_SCENEMGR
 
-#ifdef __GNUG__
 #include <unordered_map>
-#define hash_map unordered_map
-#else
-#include <hash_map>
-#endif
 
 #include "Common.h"
 #include "Singleton.h"
 #include "Text2d.h"
-#include "Timer.h"
 
 class Camera;
 class GameObject;
@@ -19,7 +13,7 @@ class Player;
 class RenderDevice;
 class Shader;
 
-typedef std::hash_map<uint32, GameObject*> GameObjectsMap;
+typedef std::unordered_map<uint32, GameObject*> GameObjectsMap;
 
 class SceneMgr
 {
@@ -52,8 +46,6 @@ class SceneMgr
         Player* player;
 
         Shader* tempShader;
-
-        Timer keyCheck;
 
         GameObjectsMap staticObjects;
         GameObjectsMap dynamicObjects;

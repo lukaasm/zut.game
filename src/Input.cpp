@@ -77,8 +77,9 @@ void Keyboard::OnKeyPress(int32 key)
 
     if (key == 'L')
         sConfig->Set("render.textures", sConfig->Get<bool>("render.textures") ? "0" : "1");
-
-    if (key == GLFW_KEY_ESC)
+    else if (key == 'K')
+        sSceneMgr->ToggleCamera();
+    else if (key == GLFW_KEY_ESC)
         BaseApp::CloseWindow();
 }
 
