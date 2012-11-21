@@ -27,11 +27,22 @@ class Config
         template<class T>
         T GetDefault(std::string key, T dflt);
 
+        template<class T>
+        void Set(std::string, T);
+
     private:
         void parseLine(std::string);
 
         ConfigItemsMap itemsMap;
 };
+
+template<class T>
+void Config::Set(std::string name, T key)
+{
+    std::stringstream istr;
+    istr << key;
+    istr >> itemsMap[name];
+}
 
 template<class T>
 T Config::Get(std::string key)
@@ -40,10 +51,8 @@ T Config::Get(std::string key)
     auto i = itemsMap.find(key);
 
     std::stringstream istr(i != itemsMap.end() ? i->second : "-1");
-    if (istr >> out)
-        return out;
-
-    throw std::exception();
+    istr >> out;
+    return out;
 }
 
 template<class T>
