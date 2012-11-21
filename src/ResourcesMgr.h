@@ -7,13 +7,7 @@
 
 #include <string>
 
-#ifdef __GNUG__
 #include <unordered_map>
-#define hash_map unordered_map
-#else
-#include <hash_map>
-#endif
-
 #include <vector>
 
 #include "Common.h"
@@ -22,8 +16,8 @@
 struct Vertex;
 struct ModelData;
 
-typedef std::hash_map<std::string, ModelData*> ModelDataMap;
-typedef std::hash_map<std::string, uint32> TexturesMap;
+typedef std::unordered_map<std::string, ModelData*> ModelDataMap;
+typedef std::unordered_map<std::string, uint32> TexturesMap;
 
 class ResourcesMgr
 {

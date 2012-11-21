@@ -19,8 +19,6 @@
 
 void SceneMgr::OnInit()
 {
-    keyCheck.Start(100);
-
     guid = 0;
 
     player = new Player();
@@ -69,15 +67,6 @@ void SceneMgr::OnInit()
 
 void SceneMgr::OnUpdate(const uint32& diff)
 {
-    if (keyCheck.Passed())
-    {
-        if (sKeyboard->IsKeyPressed('K'))
-        {
-            ToggleCamera();
-            keyCheck.Start(200);
-        }
-    }
-
     for (auto i = dynamicObjects.begin(); i != dynamicObjects.end(); ++i)
         i->second->OnUpdate(diff);
 
