@@ -23,7 +23,6 @@ class Text2D
     private:
         uint32 textureId;
 
-        Shader* shader;
         VertexArrayObject vao;
 };
 

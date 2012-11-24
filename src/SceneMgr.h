@@ -45,8 +45,6 @@ class SceneMgr
 
         Player* player;
 
-        Shader* tempShader;
-
         GameObjectsMap staticObjects;
         GameObjectsMap dynamicObjects;
 };

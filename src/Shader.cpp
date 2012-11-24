@@ -10,29 +10,8 @@
 #include <iostream>
 #include <GL/glew.h>
 
-using namespace std;
-
-Shader::Shader(string vertName, string fragName)
-{
-    vertShader = 0;
-    fragShader = 0;
-
-    id = glCreateProgram();
-
-    prepareShader(vertName, vertShader, id);
-    prepareShader(fragName, fragShader, id);
-
-    glBindAttribLocation(GetId(), 0, "in_Position");
-    glBindAttribLocation(GetId(), 1, "in_TexCoord");
-    glBindAttribLocation(GetId(), 3, "in_Color");
-
-    glLinkProgram(id);
-
-    mvpLoc = glGetUniformLocation(GetId(), "mvpMatrix");
-
-    textEnabledLoc = glGetUniformLocation(GetId(), "textureFlag");
-    textLoc = glGetUniformLocation(GetId(), "baseTexture");
-}
+#include "Exception.h"
+#include "GameObject.h"
 
 Shader::~Shader()
 {
@@ -42,42 +21,6 @@ Shader::~Shader()
     glDeleteShader(fragShader);
     glDeleteShader(vertShader);
     glDeleteProgram(id);
-}
-
-void Shader::prepareShader(string shadName, uint32& subid, uint32& id)
-{
-    string data = "";
-    string line = "";
-
-    ifstream file(shadName.c_str(), ios::binary);
-    if (file.is_open())
-    {
-        while (!file.eof())
-        {
-            getline(file, line);
-            data.append(line + "\n");
-        }
-    }
-    else
-        exit(EXIT_FAILURE);
-
-    const char* shadText = data.c_str();
-
-    if (shadName.find(".frag") != string::npos)
-        subid = glCreateShader(GL_FRAGMENT_SHADER);
-    else
-        subid = glCreateShader(GL_VERTEX_SHADER);
-
-    glShaderSource(subid, 1, &shadText, 0);
-    glCompileShader(subid);
-
-    if (char* error = ValidiateShader(id))
-    {
-        cout << "SHADER ERROR: " << error << endl;
-        delete_array(error);
-    }
-
-    glAttachShader(id, subid);
 }
 
 void Shader::Bind()
@@ -90,17 +33,116 @@ void Shader::Unbind()
     glUseProgram(0);
 }
 
-char* Shader::ValidiateShader(uint32 id)
+std::string Shader::getShaderInfo(uint32 id)
 {
-    const unsigned int BUFFER_SIZE = 512;
-    char * buffer = new char[BUFFER_SIZE];
-    memset(buffer, 0, BUFFER_SIZE);
+    const uint32 BUFFER_SIZE = 512;
+
+    char buffer[BUFFER_SIZE];
     GLsizei length = 0;
 
+    std::string out;
     glGetShaderInfoLog(id, BUFFER_SIZE, &length, buffer);
     if (length > 0)
-        return buffer;
+        out = buffer;
 
-    delete_array(buffer)
-    return nullptr;
+    return out;
+}
+
+Shader* Shader::LoadFromFile(std::string fileName)
+{
+    try
+    {
+        std::ifstream file(fileName);
+        if (!file.is_open())
+            throw Exception("[Shader] problem occurred while trying to open file: " + fileName);
+
+        std::cout << std::endl << "[Shader] loading file: " << fileName << std::endl;
+        id = glCreateProgram();
+
+        while (!file.eof())
+        {
+            char buff[1000];
+            file.getline(buff, 1000);
+
+            std::string line(buff);
+            if (line.find("//") == 0)
+            {
+                // it is a comment, ignore
+                continue;
+            }
+            else if (line.find("#vert_start") == 0)
+            {
+                // vertex shader data start
+                std::string data = loadShaderData(file, "#vert");
+
+                uint32 id = glCreateShader(GL_VERTEX_SHADER);
+
+                const char* temp = data.c_str();
+                glShaderSource(id, 1, &temp, 0);
+                glCompileShader(id);
+
+                std::cout << getShaderInfo(id);
+
+                glAttachShader(GetId(), id);
+            }
+            else if (line.find("#frag_start") == 0)
+            {
+                // fragment shader data start
+                std::string data = loadShaderData(file, "#frag");
+
+                uint32 id = glCreateShader(GL_FRAGMENT_SHADER);
+
+                const char* temp = data.c_str();
+                glShaderSource(id, 1, &temp, 0);
+                glCompileShader(id);
+
+                std::cout << getShaderInfo(id);
+
+                glAttachShader(GetId(), id);
+            }
+        }
+    }
+    catch (Exception& e)
+    {
+        std::cout << e.what() << std::endl;
+    }
+
+    glBindAttribLocation(GetId(), VertexArray::Attrib::POSITION, "in_Position");
+    glBindAttribLocation(GetId(), VertexArray::Attrib::TEXCOORD, "in_TexCoord");
+    glBindAttribLocation(GetId(), VertexArray::Attrib::COLOR, "in_Color");
+
+    glLinkProgram(GetId());
+
+    uniformsLocation["mvpMatrix"] = glGetUniformLocation(GetId(), "mvpMatrix");
+    uniformsLocation["textureFlag"] = glGetUniformLocation(GetId(), "textureFlag");
+    uniformsLocation["baseTexture"] = glGetUniformLocation(GetId(), "baseTexture");
+
+    return this;
+}
+
+std::string Shader::loadShaderData(std::ifstream& file, std::string data)
+{
+    std::string shaderData;
+    while (!file.eof())
+    {
+        char buff[1000];
+        file.getline(buff, 1000);
+
+        std::string line(buff);
+        if (line.find(data + "_end") == 0)
+            return shaderData;
+            
+        shaderData.append(line).append("\n");        
+    }
+
+    throw Exception("[Shader] there is NO data terminator for shader:" + data);
+}
+
+uint32 Shader::GetUnformLocation(std::string key)
+{
+    auto i = uniformsLocation.find(key);
+    if (i != uniformsLocation.end())
+        return i->second;
+
+    throw Exception("[Shader] there is NO such uniform for this shader");
 }
