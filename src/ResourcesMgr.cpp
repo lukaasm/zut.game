@@ -1,5 +1,6 @@
 #include "ResourcesMgr.h"
 
+#include <algorithm>
 #include <iostream>
 #include <cstdio>
 #include <cstring>
@@ -11,6 +12,7 @@
 #include "Exception.h"
 #include "GameObject.h"
 #include "ModelData.h"
+#include "Shader.h"
 #include "VertexArrayObject.h"
 
 // warning C4482: nonstandard extension used: enum 'VertexArray::Attrib' used in qualified name
@@ -22,6 +24,7 @@ void ResourcesMgr::OnInit()
 {
     loadTextures();
     loadModels();
+    loadShaders();
 }
 
 ResourcesMgr::~ResourcesMgr()
@@ -86,16 +89,16 @@ void ResourcesMgr::unloadModels()
 
 ModelData* ResourcesMgr::GetModelData(std::string name)
 {
-    if (modelsData.find(name.c_str()) != modelsData.end())
-        return modelsData[name.c_str()];
+    if (modelsData.find(name) != modelsData.end())
+        return modelsData[name];
 
     return nullptr;
 }
 
 uint32 ResourcesMgr::GetTextureId(std::string name)
 {
-    if (textures.find(name.c_str()) != textures.end())
-        return textures[name.c_str()];
+    if (textures.find(name) != textures.end())
+        return textures[name];
 
     return 0;
 }
@@ -122,16 +125,18 @@ bool ResourcesMgr::loadModel(std::string fileName)
 {
     try
     {
+        std::cout << std::endl << "[Model] loading file: " << fileName;
+
         if (GetModelData(fileName) != nullptr)
         {
-            std::string what = "Error: file: " + fileName + " were already loaded.";
+            std::string what = "[E][Model] file: " + fileName + " were already loaded.";
             throw Exception(what);
         }
 
         std::vector<Vertex> vertexes;
         if (!loadOBJ("../res/models/" + fileName, vertexes))
         {
-            std::string what = "Error: problem with loading file: " + fileName;
+            std::string what = "[E][Model] problem with loading file: " + fileName;
             throw Exception(what);
         }
 
@@ -165,6 +170,7 @@ bool ResourcesMgr::loadModel(std::string fileName)
     catch (std::exception& e)
     {
         std::cout << e.what() << std::endl;
+        std::exit(EXIT_FAILURE);
     }
 
     return true;
@@ -213,7 +219,7 @@ bool ResourcesMgr::loadOBJ(std::string fileName, std::vector<Vertex>& vert)
             uint32 vertexIndex[3], uvIndex[3], normalIndex[3];
             if (fscanf(file, "%d/%d/%d %d/%d/%d %d/%d/%d\n", &vertexIndex[0], &uvIndex[0], &normalIndex[0], &vertexIndex[1], &uvIndex[1], &normalIndex[1], &vertexIndex[2], &uvIndex[2], &normalIndex[2]) != 9)
             {
-                std::cout << "ERROR: can NOT load OBJ file: " << fileName << " weird line format for 'f'" << std::endl;
+                std::cout << "[E][Model] can NOT load OBJ file: " << fileName << " weird line format for 'f'" << std::endl;
                 return false;
             }
 
@@ -255,16 +261,17 @@ void ResourcesMgr::loadTexture(std::string fileName)
 {
     try
     {
+        std::cout << std::endl << "[Texture] loading file: " << fileName;
         if (GetTextureId(fileName))
         {
-            std::string what = "Error: file: " + fileName + " were already loaded.";
+            std::string what = "[E][Texture] file: " + fileName + " were already loaded.";
             throw Exception(what);
         }
 
         uint32 textureId = createTexture("../res/textures/" + fileName);
         if (textureId == 0)
         {
-            std::string what = "Error: problem occurred while creating texture from file: " + fileName;
+            std::string what = "[E][Texture] problem occurred while creating texture from file: " + fileName;
             throw Exception(what);
         }
 
@@ -273,7 +280,7 @@ void ResourcesMgr::loadTexture(std::string fileName)
     catch (std::exception& e)
     {
         std::cout << e.what() << std::endl;
-        // exit program
+        std::exit(EXIT_FAILURE);
     }
 }
 
@@ -286,8 +293,28 @@ void ResourcesMgr::loadTextures()
 
 void ResourcesMgr::unloadTextures()
 {
-    for (TexturesMap::iterator i = textures.begin(); i != textures.end(); ++i)
-        glDeleteTextures(1, &(i->second));
+    std::for_each(textures.begin(), textures.end(), [](std::pair<std::string, uint32> p) { glDeleteTextures(1, &(p.second)); });
 
     textures.clear();
+}
+
+void ResourcesMgr::loadShaders()
+{
+    shaders["test.shader"] = (new Shader())->LoadFromFile("../res/shaders/test.shader");
+    shaders["text2d.shader"] = (new Shader())->LoadFromFile("../res/shaders/text2d.shader");
+}
+
+void ResourcesMgr::unloadShaders()
+{
+    std::for_each(shaders.begin(), shaders.end(), [](std::pair<std::string, Shader*> p) { delete p.second;});
+
+    shaders.clear();
+}
+
+Shader* ResourcesMgr::GetShader(std::string key)
+{
+    if (shaders.find(key) != shaders.end())
+        return shaders[key];
+
+    return nullptr;
 }

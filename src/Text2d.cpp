@@ -17,7 +17,6 @@
 
 Text2D::~Text2D()
 {
-    delete shader;
 }
 
 struct FontVert
@@ -28,8 +27,6 @@ struct FontVert
 
 void Text2D::Init()
 {
-    shader = new Shader("../res/shaders/font.vert", "../res/shaders/font.frag");
-
     // Initialize texture
     textureId = sResourcesMgr->GetTextureId("font.tga");
 
@@ -86,6 +83,8 @@ void Text2D::Print(RenderDevice* rd, std::string text, int x, int y, int fontSiz
     vao.Unbind(ID_VAO);
 
     glDisable(GL_DEPTH_TEST);
+
+    Shader* shader = sResourcesMgr->GetShader("text2d.shader");
 
     // Bind shader
     shader->Bind();

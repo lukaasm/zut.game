@@ -35,8 +35,6 @@ void SceneMgr::OnInit()
 
     currentCamera = 0;
 
-    tempShader = new Shader("../res/shaders/shader.vert", "../res/shaders/shader.frag");
-
     RegisterObject(new Grid());
 
     GameObject* cube;
@@ -106,7 +104,7 @@ void SceneMgr::OnRender(RenderDevice* rd)
     GameObjectsMap map = staticObjects;
     map.insert(dynamicObjects.begin(), dynamicObjects.end());
 
-    Shader* shader = tempShader;
+    Shader* shader = sResourcesMgr->GetShader("test.shader");
     for (auto i = map.begin(); i != map.end(); ++i)
     {
         shader->Bind();
@@ -142,8 +140,6 @@ SceneMgr::~SceneMgr()
 
     staticObjects.clear();
     dynamicObjects.clear();
-
-    delete tempShader;
 
     std::for_each(map.begin(), map.end(), [](std::pair<uint32, GameObject*> p) { delete p.second; });
     std::for_each(cameras.begin(), cameras.end(), [](Camera* cam) { delete cam; });

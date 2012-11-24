@@ -11,7 +11,7 @@ class Singleton
 
         static T* Instance()
         {
-            if (instance)
+            if (instance != nullptr)
                 return instance;
 
             return instance = new T();
