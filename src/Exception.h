@@ -26,5 +26,4 @@ class Exception: public std::exception
         std::string m_whatStr;
 };
 
-
 #endif // EXCEPTION_H_INCLUDED

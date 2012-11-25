@@ -84,7 +84,7 @@ void Text2D::Print(RenderDevice* rd, std::string text, int x, int y, int fontSiz
 
     glDisable(GL_DEPTH_TEST);
 
-    Shader* shader = sResourcesMgr->GetShader("text2d.shader");
+    Shader* shader = sResourcesMgr->GetShader("text2d.glsl");
 
     // Bind shader
     shader->Bind();

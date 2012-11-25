@@ -15,6 +15,12 @@ class Shader;
 
 typedef std::unordered_map<uint32, GameObject*> GameObjectsMap;
 
+struct DirectionalLight
+{
+    glm::vec3 color;
+    float ambientIntensity;
+};
+
 class SceneMgr
 {
     SINGLETON(SceneMgr)

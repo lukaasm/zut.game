@@ -106,6 +106,7 @@
     <ClInclude Include="..\src\Common.h" />
     <ClInclude Include="..\src\Config.h" />
     <ClInclude Include="..\src\DynamicObject.h" />
+    <ClInclude Include="..\src\Exception.h" />
     <ClInclude Include="..\src\Frustum.h" />
     <ClInclude Include="..\src\GameObject.h" />
     <ClInclude Include="..\src\Grid.h" />
@@ -128,9 +129,8 @@
   <ItemGroup>
     <None Include="..\bin\config.ini" />
     <None Include="..\res\icon.ico" />
-    <None Include="..\res\shaders\font.vert" />
-    <None Include="..\res\shaders\shader.frag" />
-    <None Include="..\res\shaders\shader.vert" />
+    <None Include="..\res\shaders\test.glsl" />
+    <None Include="..\res\shaders\text2d.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

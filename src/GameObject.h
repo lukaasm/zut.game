@@ -17,6 +17,7 @@ namespace VertexArray
     {
         POSITION = 0,
         TEXCOORD = 1,
+        NORMAL   = 2,
         COLOR    = 3,
     };
 };
