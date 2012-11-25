@@ -8,7 +8,7 @@
 #define ATTR_COLOR      3
 
 uniform mat4 in_MVP; // Proj*View*Model matrix
-uniform mat4 in_M;  // View*Model matrix
+uniform mat4 in_MV;  // View*Model matrix
 uniform mat3 in_N;   // Normal matrix
 
 varying vec3 pass_Color;
@@ -29,7 +29,7 @@ void main(void)
     pass_Color = in_Color;
     pass_TexCoord = in_TexCoord;
 
-	pass_Vpeye = vec3(in_M * vec4(in_Position, 1.0));
+	pass_Vpeye = vec3(in_MV * vec4(in_Position, 1.0));
 	pass_Vneye = normalize(in_N * in_Normal);
 }
 
@@ -63,9 +63,9 @@ struct DirectionalLight
 
 DirectionalLight light0 = DirectionalLight
 (
-    vec4(0.0,  1.0,  -1.0, 1.0), // pos
-    vec4(0.7,  0.7,  0.7, 1.0), // diff
-    vec4(1.0,  1.0,  1.0, 1.0), // spec
+    vec4(0.0, 2.0, 2.0, 1.0), // pos
+    vec4(0.7, 0.7, 0.7, 1.0), // diff
+    vec4(1.0, 1.0, 1.0, 1.0), // spec
     vec4(0.4, 0.4, 0.4, 1.0)    // amb
 );
 
@@ -82,7 +82,7 @@ Material frontMaterial = Material
     vec4(0.3, 0.3, 0.3, 1.0),
     vec4(0.7, 0.7, 0.7, 1.0),
     vec4(1.0, 1.0, 1.0, 1.0),
-    35.0
+    15.0
 );
 
 void main(void)
@@ -99,7 +99,7 @@ void main(void)
     vec4 Is = frontMaterial.specular * light0.specular * pow(max(dot(R, E), 0.0), frontMaterial.shininess);
     Is = clamp(Is, 0.0, 1.0);
 
-    out_Color = (textureFlag * texture2D(baseTexture, pass_TexCoord) + (1.0f - textureFlag) * vec4(pass_Color, 1.0f)) * (Ia + Id + Is);
+    out_Color = textureFlag * texture2D(baseTexture, pass_TexCoord) + (1.0f - textureFlag) * (Ia + Id + Is);
 }
 
 #frag_end
