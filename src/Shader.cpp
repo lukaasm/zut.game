@@ -115,20 +115,12 @@ Shader* Shader::LoadFromFile(std::string fileName)
     glLinkProgram(GetId());
 
     uniformsLocation["in_MVP"] = glGetUniformLocation(GetId(), "in_MVP");
-    uniformsLocation["in_MV"] = glGetUniformLocation(GetId(), "in_MV");
+    uniformsLocation["in_M"] = glGetUniformLocation(GetId(), "in_M");
     uniformsLocation["in_N"] = glGetUniformLocation(GetId(), "in_N");
+    uniformsLocation["in_V"] = glGetUniformLocation(GetId(), "in_V");
 
     uniformsLocation["textureFlag"] = glGetUniformLocation(GetId(), "textureFlag");
     uniformsLocation["baseTexture"] = glGetUniformLocation(GetId(), "baseTexture");
-
-    uniformsLocation["in_DirectionalLight.position"] = glGetUniformLocation(GetId(), "in_DirectionalLight.position");
-
-    uniformsLocation["in_DirectionalLight.ambient"] = glGetUniformLocation(GetId(), "in_DirectionalLight.ambient");
-    uniformsLocation["in_DirectionalLight.diffuse"] = glGetUniformLocation(GetId(), "in_DirectionalLight.diffuse");
-    uniformsLocation["in_DirectionalLight.specular"] = glGetUniformLocation(GetId(), "in_DirectionalLight.specular");
-    uniformsLocation["in_DirectionalLight.specularExp"] = glGetUniformLocation(GetId(), "in_DirectionalLight.specularExp");
-
-    //uniformsLocation["in_DirectionalLight.diffuseColor"] = glGetUniformLocation(GetId(), "in_DirectionalLight.diffuseColor");
     return this;
 }
 

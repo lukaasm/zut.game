@@ -7,6 +7,7 @@
 #include <GL/glew.h>
 #include <GL/glfw.h>
 
+#include <glm/gtc/matrix_inverse.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <iostream>
@@ -46,23 +47,15 @@ void RenderDevice::SetUniforms(Shader* shader, const glm::mat4& projMatrix, cons
     {
         glm::mat4 MV = viewMatrix * modelMatrix;
         glm::mat4 MVP = projMatrix * MV;
-        glm::mat3 N = glm::transpose(glm::inverse(glm::mat3(MV)));
+        glm::mat3 N = glm::inverseTranspose(glm::mat3(modelMatrix));
 
         glUniformMatrix4fv(shader->GetUniformLocation("in_MVP"), 1, GL_FALSE, glm::value_ptr(MVP));
-        glUniformMatrix4fv(shader->GetUniformLocation("in_MV"), 1, GL_FALSE, glm::value_ptr(MV));
+        glUniformMatrix4fv(shader->GetUniformLocation("in_M"), 1, GL_FALSE, glm::value_ptr(modelMatrix));
         glUniformMatrix3fv(shader->GetUniformLocation("in_N"), 1, GL_FALSE, glm::value_ptr(N));
+        //glUniformMatrix3fv(shader->GetUniformLocation("in_V"), 1, GL_FALSE, glm::value_ptr(viewMatrix));
 
         glUniform1i(shader->GetUniformLocation("baseTexture"), 0);
         glUniform1f(shader->GetUniformLocation("textureFlag"), hasTexture);
-
-        glUniform4f(shader->GetUniformLocation("in_DirectionalLight.position"), 1.0, 2.0, 2.0, 0.0);
-
-        glUniform4f(shader->GetUniformLocation("in_DirectionalLight.ambient"), 0.2, 0.2, 0.2, 1.0);
-        glUniform4f(shader->GetUniformLocation("in_DirectionalLight.diffuse"), 0.8f, 0.8f, 0.8f, 1.0f);
-        glUniform4f(shader->GetUniformLocation("in_DirectionalLight.specular"), 1.0, 1.0, 1.0, 1.0);
-
-        glUniform1f(shader->GetUniformLocation("in_DirectionalLight.specularExp"), 20.0f);
-        //glUniform4f(shader->GetUniformLocation("in_DirectionalLight.diffuseColor"), 1.2f, 0.2f, 0.2f, 0.0f);
     }
     catch (Exception& e)
     {

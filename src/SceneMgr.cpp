@@ -57,7 +57,7 @@ void SceneMgr::OnInit()
     ccube->SetBoundingObject(sResourcesMgr->GetModelData(ccube->GetModel())->boundingBox);
 
     ccube->scripts.push_back([](DynamicObject& ob){ ob.coll ? ob.AddMoveType(moveInfos[MOVE_TYPE_FORWARD]) : ob.ClearMoveType(MOVE_FLAG_FORWARD); });
-    //ccube->AddMoveType(moveInfos[MOVE_TYPE_ROTATE_LEFT]);
+    ccube->AddMoveType(moveInfos[MOVE_TYPE_ROTATE_LEFT]);
     RegisterObject(ccube);
 
     text2D.Init();

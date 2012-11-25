@@ -8,7 +8,7 @@
 #define ATTR_COLOR      3
 
 uniform mat4 in_MVP; // Proj*View*Model matrix
-uniform mat4 in_MV;  // View*Model matrix
+uniform mat4 in_M;  // View*Model matrix
 uniform mat3 in_N;   // Normal matrix
 
 varying vec3 pass_Color;
@@ -29,7 +29,7 @@ void main(void)
     pass_Color = in_Color;
     pass_TexCoord = in_TexCoord;
 
-	pass_Vpeye = vec3(in_MV * vec4(in_Position, 1.0));
+	pass_Vpeye = vec3(in_M * vec4(in_Position, 1.0));
 	pass_Vneye = normalize(in_N * in_Normal);
 }
 
@@ -48,33 +48,55 @@ varying vec3 pass_Vneye; // surface normal in eye coords
 uniform lowp float textureFlag;
 uniform sampler2D baseTexture;
 
+//uniform mat4 in_V;
+
 out vec4 out_Color;
 
 struct DirectionalLight
 {
     vec4 position;
 
-    vec4 ambient;
 	vec4 diffuse;
 	vec4 specular;
-
-	float specularExp;
+    vec4 ambient;
 };
 
-uniform DirectionalLight in_DirectionalLight;
+DirectionalLight light0 = DirectionalLight
+(
+    vec4(0.0,  1.0,  -1.0, 1.0), // pos
+    vec4(0.7,  0.7,  0.7, 1.0), // diff
+    vec4(1.0,  1.0,  1.0, 1.0), // spec
+    vec4(0.4, 0.4, 0.4, 1.0)    // amb
+);
+
+struct Material
+{
+    vec4 ambient;
+    vec4 diffuse;
+    vec4 specular;
+    float shininess;
+};
+
+Material frontMaterial = Material
+(
+    vec4(0.3, 0.3, 0.3, 1.0),
+    vec4(0.7, 0.7, 0.7, 1.0),
+    vec4(1.0, 1.0, 1.0, 1.0),
+    35.0
+);
 
 void main(void)
 {
-    vec3 L = normalize(in_DirectionalLight.position.xyz - pass_Vpeye);
+    vec3 L = normalize(light0.position.xyz - pass_Vpeye);
     vec3 E = normalize(pass_Vpeye);
     vec3 R = normalize(-reflect(L, pass_Vneye));
  
-    vec4 Ia = vec4(0.01f, 0.01f, 0.01f, 1.0f) * in_DirectionalLight.ambient;
+    vec4 Ia = frontMaterial.ambient * light0.ambient;
 
-    vec4 Id = vec4(0.01f, 0.01f, 0.01f, 1.0f) * in_DirectionalLight.diffuse * max(dot(pass_Vneye, L), 0.0);
+    vec4 Id = frontMaterial.diffuse * light0.diffuse * max(dot(pass_Vneye, L), 0.0);
 	Id = clamp(Id, 0.0, 1.0);
 
-    vec4 Is = vec4(1.0, 1.0, 1.0, 1.0) * in_DirectionalLight.specular * pow(max(dot(R, E), 0.0), in_DirectionalLight.specularExp);
+    vec4 Is = frontMaterial.specular * light0.specular * pow(max(dot(R, E), 0.0), frontMaterial.shininess);
     Is = clamp(Is, 0.0, 1.0);
 
     out_Color = (textureFlag * texture2D(baseTexture, pass_TexCoord) + (1.0f - textureFlag) * vec4(pass_Color, 1.0f)) * (Ia + Id + Is);
