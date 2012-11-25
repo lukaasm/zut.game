@@ -117,7 +117,7 @@ Shader* Shader::LoadFromFile(std::string fileName)
     uniformsLocation["in_MVP"] = glGetUniformLocation(GetId(), "in_MVP");
     uniformsLocation["in_M"] = glGetUniformLocation(GetId(), "in_M");
     uniformsLocation["in_N"] = glGetUniformLocation(GetId(), "in_N");
-    uniformsLocation["in_V"] = glGetUniformLocation(GetId(), "in_V");
+    uniformsLocation["in_MV"] = glGetUniformLocation(GetId(), "in_MV");
 
     uniformsLocation["textureFlag"] = glGetUniformLocation(GetId(), "textureFlag");
     uniformsLocation["baseTexture"] = glGetUniformLocation(GetId(), "baseTexture");
