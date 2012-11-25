@@ -104,7 +104,7 @@ void SceneMgr::OnRender(RenderDevice* rd)
     GameObjectsMap map = staticObjects;
     map.insert(dynamicObjects.begin(), dynamicObjects.end());
 
-    Shader* shader = sResourcesMgr->GetShader("test.shader");
+    Shader* shader = sResourcesMgr->GetShader("test.glsl");
     for (auto i = map.begin(); i != map.end(); ++i)
     {
         shader->Bind();

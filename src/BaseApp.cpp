@@ -137,6 +137,9 @@ void BaseApp::resizeWindow(int32 width, int32 height)
 {
     GetRenderDevice()->OnResize(width, height);
     sSceneMgr->OnResize(width, height);
+
+    sConfig->Set("width", width);
+    sConfig->Set("height", height);
 }
 
 CloseCallBack* BaseApp::CloseCallback = nullptr;

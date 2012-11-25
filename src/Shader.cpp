@@ -75,30 +75,30 @@ Shader* Shader::LoadFromFile(std::string fileName)
                 // vertex shader data start
                 std::string data = loadShaderData(file, "#vert");
 
-                uint32 id = glCreateShader(GL_VERTEX_SHADER);
+                vertShader = glCreateShader(GL_VERTEX_SHADER);
 
                 const char* temp = data.c_str();
-                glShaderSource(id, 1, &temp, 0);
-                glCompileShader(id);
+                glShaderSource(vertShader, 1, &temp, 0);
+                glCompileShader(vertShader);
 
-                std::cout << getShaderInfo(id);
+                std::cout << getShaderInfo(vertShader);
 
-                glAttachShader(GetId(), id);
+                glAttachShader(GetId(), vertShader);
             }
             else if (line.find("#frag_start") == 0)
             {
                 // fragment shader data start
                 std::string data = loadShaderData(file, "#frag");
 
-                uint32 id = glCreateShader(GL_FRAGMENT_SHADER);
+                fragShader = glCreateShader(GL_FRAGMENT_SHADER);
 
                 const char* temp = data.c_str();
-                glShaderSource(id, 1, &temp, 0);
-                glCompileShader(id);
+                glShaderSource(fragShader, 1, &temp, 0);
+                glCompileShader(fragShader);
 
-                std::cout << getShaderInfo(id);
+                std::cout << getShaderInfo(fragShader);
 
-                glAttachShader(GetId(), id);
+                glAttachShader(GetId(), fragShader);
             }
         }
     }
@@ -107,16 +107,28 @@ Shader* Shader::LoadFromFile(std::string fileName)
         std::cout << e.what() << std::endl;
     }
 
+    //these need to be done in more genereic way :P
     glBindAttribLocation(GetId(), VertexArray::Attrib::POSITION, "in_Position");
     glBindAttribLocation(GetId(), VertexArray::Attrib::TEXCOORD, "in_TexCoord");
     glBindAttribLocation(GetId(), VertexArray::Attrib::COLOR, "in_Color");
 
     glLinkProgram(GetId());
 
-    uniformsLocation["mvpMatrix"] = glGetUniformLocation(GetId(), "mvpMatrix");
+    uniformsLocation["in_MVP"] = glGetUniformLocation(GetId(), "in_MVP");
+    uniformsLocation["in_MV"] = glGetUniformLocation(GetId(), "in_MV");
+    uniformsLocation["in_N"] = glGetUniformLocation(GetId(), "in_N");
+
     uniformsLocation["textureFlag"] = glGetUniformLocation(GetId(), "textureFlag");
     uniformsLocation["baseTexture"] = glGetUniformLocation(GetId(), "baseTexture");
 
+    uniformsLocation["in_DirectionalLight.position"] = glGetUniformLocation(GetId(), "in_DirectionalLight.position");
+
+    uniformsLocation["in_DirectionalLight.ambient"] = glGetUniformLocation(GetId(), "in_DirectionalLight.ambient");
+    uniformsLocation["in_DirectionalLight.diffuse"] = glGetUniformLocation(GetId(), "in_DirectionalLight.diffuse");
+    uniformsLocation["in_DirectionalLight.specular"] = glGetUniformLocation(GetId(), "in_DirectionalLight.specular");
+    uniformsLocation["in_DirectionalLight.specularExp"] = glGetUniformLocation(GetId(), "in_DirectionalLight.specularExp");
+
+    //uniformsLocation["in_DirectionalLight.diffuseColor"] = glGetUniformLocation(GetId(), "in_DirectionalLight.diffuseColor");
     return this;
 }
 
@@ -138,11 +150,11 @@ std::string Shader::loadShaderData(std::ifstream& file, std::string data)
     throw Exception("[Shader] there is NO data terminator for shader:" + data);
 }
 
-uint32 Shader::GetUnformLocation(std::string key)
+uint32 Shader::GetUniformLocation(std::string key)
 {
     auto i = uniformsLocation.find(key);
     if (i != uniformsLocation.end())
         return i->second;
 
-    throw Exception("[Shader] there is NO such uniform for this shader");
+    throw Exception("[Shader] there is NO such uniform for this shader " + key);
 }

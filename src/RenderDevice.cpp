@@ -9,8 +9,10 @@
 
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <iostream>
 
 #include "Camera.h"
+#include "Exception.h"
 #include "SceneMgr.h"
 #include "Shader.h"
 #include "VertexArrayObject.h"
@@ -40,18 +42,39 @@ void RenderDevice::OnUpdate(const uint32 & diff)
 
 void RenderDevice::SetUniforms(Shader* shader, const glm::mat4& projMatrix, const glm::mat4& viewMatrix, const glm::mat4& modelMatrix, float hasTexture)
 {
-    glm::mat4 mvpMatrix = projMatrix * viewMatrix * modelMatrix;
-    glUniformMatrix4fv(shader->GetUnformLocation("mvpMatrix"), 1, GL_FALSE, glm::value_ptr(mvpMatrix));
+    try
+    {
+        glm::mat4 MV = viewMatrix * modelMatrix;
+        glm::mat4 MVP = projMatrix * MV;
+        glm::mat3 N = glm::transpose(glm::inverse(glm::mat3(MV)));
 
-    glUniform1i(shader->GetUnformLocation("baseTexture"), 0);
-    glUniform1f(shader->GetUnformLocation("textureFlag"), hasTexture);
+        glUniformMatrix4fv(shader->GetUniformLocation("in_MVP"), 1, GL_FALSE, glm::value_ptr(MVP));
+        glUniformMatrix4fv(shader->GetUniformLocation("in_MV"), 1, GL_FALSE, glm::value_ptr(MV));
+        glUniformMatrix3fv(shader->GetUniformLocation("in_N"), 1, GL_FALSE, glm::value_ptr(N));
+
+        glUniform1i(shader->GetUniformLocation("baseTexture"), 0);
+        glUniform1f(shader->GetUniformLocation("textureFlag"), hasTexture);
+
+        glUniform4f(shader->GetUniformLocation("in_DirectionalLight.position"), 1.0, 2.0, 2.0, 0.0);
+
+        glUniform4f(shader->GetUniformLocation("in_DirectionalLight.ambient"), 0.2, 0.2, 0.2, 1.0);
+        glUniform4f(shader->GetUniformLocation("in_DirectionalLight.diffuse"), 0.8f, 0.8f, 0.8f, 1.0f);
+        glUniform4f(shader->GetUniformLocation("in_DirectionalLight.specular"), 1.0, 1.0, 1.0, 1.0);
+
+        glUniform1f(shader->GetUniformLocation("in_DirectionalLight.specularExp"), 20.0f);
+        //glUniform4f(shader->GetUniformLocation("in_DirectionalLight.diffuseColor"), 1.2f, 0.2f, 0.2f, 0.0f);
+    }
+    catch (Exception& e)
+    {
+        std::cout << e.what() << std::endl;
+    }
 }
 
 // For Text2d render only
 void RenderDevice::SetUniforms(Shader* shader)
 {
-    glUniform1i(shader->GetUnformLocation("baseTexture"), 0);
-    glUniform1f(shader->GetUnformLocation("textureFlag"), float(1.0f));
+    glUniform1i(shader->GetUniformLocation("baseTexture"), 0);
+    glUniform1f(shader->GetUniformLocation("textureFlag"), float(1.0f));
 }
 
 void RenderDevice::DrawLines(VertexArrayObject& vao)

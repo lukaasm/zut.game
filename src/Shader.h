@@ -27,11 +27,9 @@ class Shader
 
         uint32 GetId() const { return id; }
 
-        uint32 GetUnformLocation(std::string key);
+        uint32 GetUniformLocation(std::string key);
 
     private:
-        void prepareShader(std::string, uint32&, uint32&);
-
         std::string loadShaderData(std::ifstream&, std::string);
 
         uint32 id;

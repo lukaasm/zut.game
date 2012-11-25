@@ -65,6 +65,8 @@ void ResourcesMgr::loadModels()
 
     vao.EnableAttrib(VertexArray::Attrib::POSITION);
     vao.AddAttribToBuffer(VertexArray::Attrib::POSITION, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
+    vao.EnableAttrib(VertexArray::Attrib::NORMAL);
+    vao.AddAttribToBuffer(VertexArray::Attrib::NORMAL, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), BUFFER_OFFSET(NORMAL_VERTEX_POS));
     vao.EnableAttrib(VertexArray::Attrib::COLOR);
     vao.AddAttribToBuffer(VertexArray::Attrib::COLOR, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), BUFFER_OFFSET(COLOR_VERTEX_POS));
 
@@ -81,9 +83,7 @@ void ResourcesMgr::loadModels()
 
 void ResourcesMgr::unloadModels()
 {
-    for (ModelDataMap::iterator i = modelsData.begin(); i != modelsData.end(); ++i)
-        delete i->second;
-
+    std::for_each(modelsData.begin(), modelsData.end(), [] (std::pair<std::string, ModelData*> p) { delete p.second; });
     modelsData.clear();
 }
 
@@ -294,20 +294,18 @@ void ResourcesMgr::loadTextures()
 void ResourcesMgr::unloadTextures()
 {
     std::for_each(textures.begin(), textures.end(), [](std::pair<std::string, uint32> p) { glDeleteTextures(1, &(p.second)); });
-
     textures.clear();
 }
 
 void ResourcesMgr::loadShaders()
 {
-    shaders["test.shader"] = (new Shader())->LoadFromFile("../res/shaders/test.shader");
-    shaders["text2d.shader"] = (new Shader())->LoadFromFile("../res/shaders/text2d.shader");
+    shaders["test.glsl"] = (new Shader())->LoadFromFile("../res/shaders/test.glsl");
+    shaders["text2d.glsl"] = (new Shader())->LoadFromFile("../res/shaders/text2d.glsl");
 }
 
 void ResourcesMgr::unloadShaders()
 {
     std::for_each(shaders.begin(), shaders.end(), [](std::pair<std::string, Shader*> p) { delete p.second;});
-
     shaders.clear();
 }
 

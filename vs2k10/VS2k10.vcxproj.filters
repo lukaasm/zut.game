@@ -107,6 +107,9 @@
     <ClInclude Include="..\src\Timer.h">
       <Filter>Misc</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\Exception.h">
+      <Filter>Other</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="VS2k10.rc">
@@ -117,17 +120,14 @@
     <None Include="..\res\icon.ico">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="..\res\shaders\font.vert">
-      <Filter>Shader</Filter>
-    </None>
-    <None Include="..\res\shaders\shader.frag">
-      <Filter>Shader</Filter>
-    </None>
-    <None Include="..\res\shaders\shader.vert">
-      <Filter>Shader</Filter>
-    </None>
     <None Include="..\bin\config.ini">
       <Filter>Config</Filter>
+    </None>
+    <None Include="..\res\shaders\test.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\res\shaders\text2d.glsl">
+      <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
