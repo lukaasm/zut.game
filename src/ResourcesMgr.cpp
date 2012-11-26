@@ -299,8 +299,35 @@ void ResourcesMgr::unloadTextures()
 
 void ResourcesMgr::loadShaders()
 {
-    shaders["test.glsl"] = (new Shader())->LoadFromFile("../res/shaders/test.glsl");
-    shaders["text2d.glsl"] = (new Shader())->LoadFromFile("../res/shaders/text2d.glsl");
+    try
+    {
+        Shader* shader = (new Shader())->LoadFromFile("../res/shaders/test.glsl");
+
+        shader->AddUniform("in_MVP");
+        shader->AddUniform("in_MV");
+        shader->AddUniform("in_N");
+        shader->AddUniform("textureFlag");
+        shader->AddUniform("baseTexture");
+
+        shader->AddAttribute(VertexArray::Attrib::POSITION, "in_Position");
+        shader->AddAttribute(VertexArray::Attrib::TEXCOORD, "in_TexCoord");
+        shader->AddAttribute(VertexArray::Attrib::NORMAL, "in_Normal");
+        shader->AddAttribute(VertexArray::Attrib::COLOR, "in_Color");
+
+        shaders["test.glsl"] = shader;
+
+        shader = (new Shader())->LoadFromFile("../res/shaders/text2d.glsl");
+
+        shader->AddUniform("baseTexture");
+
+        shader->AddAttribute(VertexArray::Attrib::POSITION, "in_Position");
+        shader->AddAttribute(VertexArray::Attrib::TEXCOORD, "in_TexCoord");
+        shaders["text2d.glsl"] = shader;
+    }
+    catch (Exception& e)
+    {
+        std::cout << e.what() << std::endl;
+    }
 }
 
 void ResourcesMgr::unloadShaders()

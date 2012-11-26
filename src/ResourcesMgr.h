@@ -34,10 +34,12 @@ class ResourcesMgr
         uint32 GetTextureId(std::string);
         Shader* GetShader(std::string);
 
+        void loadShaders();
+
     private:
         void loadTextures();
         void loadModels();
-        void loadShaders();
+       // void loadShaders();
 
         void unloadModels();
         void unloadTextures();

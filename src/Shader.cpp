@@ -107,21 +107,7 @@ Shader* Shader::LoadFromFile(std::string fileName)
         std::cout << e.what() << std::endl;
     }
 
-    //these need to be done in more genereic way :P
-    glBindAttribLocation(GetId(), VertexArray::Attrib::POSITION, "in_Position");
-    glBindAttribLocation(GetId(), VertexArray::Attrib::TEXCOORD, "in_TexCoord");
-    glBindAttribLocation(GetId(), VertexArray::Attrib::NORMAL, "in_Normal");
-    glBindAttribLocation(GetId(), VertexArray::Attrib::COLOR, "in_Color");
-
     glLinkProgram(GetId());
-
-    uniformsLocation["in_MVP"] = glGetUniformLocation(GetId(), "in_MVP");
-    uniformsLocation["in_M"] = glGetUniformLocation(GetId(), "in_M");
-    uniformsLocation["in_N"] = glGetUniformLocation(GetId(), "in_N");
-    uniformsLocation["in_MV"] = glGetUniformLocation(GetId(), "in_MV");
-
-    uniformsLocation["textureFlag"] = glGetUniformLocation(GetId(), "textureFlag");
-    uniformsLocation["baseTexture"] = glGetUniformLocation(GetId(), "baseTexture");
     return this;
 }
 
@@ -149,5 +135,19 @@ uint32 Shader::GetUniformLocation(std::string key)
     if (i != uniformsLocation.end())
         return i->second;
 
-    throw Exception("[Shader] there is NO such uniform for this shader " + key);
+    throw Exception("[Shader][E] there is NO such uniform for this shader " + key);
+}
+
+void Shader::AddAttribute(uint32 location, std::string key)
+{
+    glBindAttribLocation(GetId(), location, key.c_str());
+}
+
+void Shader::AddUniform(std::string key)
+{
+    int loc = glGetUniformLocation(GetId(), key.c_str());
+    if (loc == -1)
+        throw Exception("[Shader][E] cannot find in shader, specified uniform :" + key);
+
+    uniformsLocation[key] = loc;
 }
