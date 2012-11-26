@@ -110,6 +110,7 @@ Shader* Shader::LoadFromFile(std::string fileName)
     //these need to be done in more genereic way :P
     glBindAttribLocation(GetId(), VertexArray::Attrib::POSITION, "in_Position");
     glBindAttribLocation(GetId(), VertexArray::Attrib::TEXCOORD, "in_TexCoord");
+    glBindAttribLocation(GetId(), VertexArray::Attrib::NORMAL, "in_Normal");
     glBindAttribLocation(GetId(), VertexArray::Attrib::COLOR, "in_Color");
 
     glLinkProgram(GetId());
