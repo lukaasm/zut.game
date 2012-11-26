@@ -45,6 +45,8 @@ in vec2 pass_TexCoord;
 in vec3 pass_VertexEyePos;
 in vec3 pass_VertexEyeNorm;
 
+uniform mat4 in_MV;
+
 uniform lowp float textureFlag;
 uniform sampler2D baseTexture;
 
@@ -63,10 +65,10 @@ struct DirectionalLight
 
 DirectionalLight light0 = DirectionalLight
 (
-    vec4(0.0, 2.0, 2.0, 1.0), // pos
+    vec4(0.0, 1.0, 0.0, 1.0), // pos
     vec4(0.7, 0.7, 0.7, 1.0), // diff
     vec4(1.0, 1.0, 1.0, 1.0), // spec
-    vec4(0.4, 0.4, 0.4, 1.0)  // amb
+    vec4(0.1, 0.1, 0.1, 1.0)  // amb
 );
 
 struct Material
@@ -79,17 +81,18 @@ struct Material
 
 Material frontMaterial = Material
 (
-    vec4(0.3, 0.3, 0.3, 1.0),
+    vec4(0.6, 0.6, 0.6, 1.0),
     vec4(0.7, 0.7, 0.7, 1.0),
     vec4(1.0, 1.0, 1.0, 1.0),
-    15.0
+    1.0
 );
 
 void main(void)
 {
+    light0.position = in_MV * light0.position; 
     vec3 L = normalize(light0.position.xyz - pass_VertexEyePos);
     vec3 E = normalize(-pass_VertexEyePos);
-    vec3 R = normalize(reflect(L, pass_VertexEyeNorm));
+    vec3 R = normalize(reflect(-L, pass_VertexEyeNorm));
  
     vec4 Ia = frontMaterial.ambient * light0.ambient;
 
@@ -99,7 +102,13 @@ void main(void)
     vec4 Is = frontMaterial.specular * light0.specular * pow(max(dot(R, E), 0.0), frontMaterial.shininess);
     Is = clamp(Is, 0.0, 1.0);
 
-    out_Color = (textureFlag * (texture2D(baseTexture, pass_TexCoord) * Id) + Is) + (1.0f - textureFlag) * (Ia + Id + Is);
+	if (pass_Color.rgb == vec3(0.5f, 0.0f, 0.3f))
+	    out_Color = vec4(pass_Color, 1.0);
+	else
+	{
+		out_Color = textureFlag * texture2D(baseTexture, pass_TexCoord) + (1.0f - textureFlag) * vec4(pass_Color, 1.0f);
+		out_Color *= (Ia + Id + Is);
+    }
 }
 
 #frag_end

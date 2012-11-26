@@ -2,8 +2,8 @@
 
 #version 330 core
 
-#define ATTR_POSITION	0
-#define ATTR_TEXCOORD   1
+#define ATTR_POSITION 0
+#define ATTR_TEXCOORD 1
 
 out vec2 pass_TexCoord;
 
@@ -32,7 +32,6 @@ void main()
 in vec3 pass_Color;
 in vec2 pass_TexCoord;
 
-uniform lowp float textureFlag;
 uniform sampler2D baseTexture;
 
 out vec4 out_Color;

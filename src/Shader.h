@@ -21,6 +21,9 @@ class Shader
         void Bind();
         void Unbind();
 
+        void AddAttribute(uint32, std::string);
+        void AddUniform(std::string);
+
         std::string getShaderInfo(uint32);
 
         Shader* LoadFromFile(std::string);

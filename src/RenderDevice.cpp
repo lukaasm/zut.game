@@ -45,8 +45,8 @@ void RenderDevice::SetUniforms(Shader* shader, const glm::mat4& projMatrix, cons
 {
     try
     {
-        glm::mat4 MV = viewMatrix * glm::mat4(1.0);
-        glm::mat4 MVP = projMatrix * viewMatrix * modelMatrix;
+        glm::mat4 MV = viewMatrix * modelMatrix;
+        glm::mat4 MVP = projMatrix * MV;
         glm::mat3 N = glm::inverseTranspose(glm::mat3(MV));
 
         glUniformMatrix4fv(shader->GetUniformLocation("in_MVP"), 1, GL_FALSE, glm::value_ptr(MVP));
@@ -65,8 +65,7 @@ void RenderDevice::SetUniforms(Shader* shader, const glm::mat4& projMatrix, cons
 // For Text2d render only
 void RenderDevice::SetUniforms(Shader* shader)
 {
-    glUniform1i(shader->GetUniformLocation("baseTexture"), 0);
-    glUniform1f(shader->GetUniformLocation("textureFlag"), float(1.0f));
+    glUniform1f(shader->GetUniformLocation("baseTexture"), 0);
 }
 
 void RenderDevice::DrawLines(VertexArrayObject& vao)

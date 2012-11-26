@@ -71,6 +71,8 @@ void Keyboard::OnKeyState(int32 key, int32 state)
         (*Keyboard::KeyReleaseCallBack)(key);
 }
 
+#include "ResourcesMgr.h"
+
 void Keyboard::OnKeyPress(int32 key)
 {
     _keyStateMap[key] = true;
@@ -79,6 +81,8 @@ void Keyboard::OnKeyPress(int32 key)
         sConfig->Set("render.textures", sConfig->Get<bool>("render.textures") ? "0" : "1");
     else if (key == 'K')
         sSceneMgr->ToggleCamera();
+    else if (key == 'O')
+        sResourcesMgr->loadShaders();
     else if (key == GLFW_KEY_ESC)
         BaseApp::CloseWindow();
 }
