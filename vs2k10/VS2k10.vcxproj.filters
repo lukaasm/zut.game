@@ -110,6 +110,9 @@
     <ClInclude Include="..\src\Exception.h">
       <Filter>Other</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\Terrain.h">
+      <Filter>Other</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="VS2k10.rc">
@@ -181,6 +184,9 @@
     </ClCompile>
     <ClCompile Include="..\src\Config.cpp">
       <Filter>Config</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Terrain.cpp">
+      <Filter>Other</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

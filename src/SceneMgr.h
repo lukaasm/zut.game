@@ -12,6 +12,7 @@ class GameObject;
 class Player;
 class RenderDevice;
 class Shader;
+class Terrain;
 
 typedef std::unordered_map<uint32, GameObject*> GameObjectsMap;
 
@@ -50,6 +51,7 @@ class SceneMgr
         std::vector<Camera*> cameras;
 
         Player* player;
+        Terrain* terrain;
 
         GameObjectsMap staticObjects;
         GameObjectsMap dynamicObjects;
