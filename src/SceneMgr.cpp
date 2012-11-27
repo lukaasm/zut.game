@@ -1,5 +1,7 @@
 #include "SceneMgr.h"
 
+#include <gl/glew.h>
+#include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <iomanip>
 
@@ -16,10 +18,13 @@
 #include "RenderDevice.h"
 #include "ResourcesMgr.h"
 #include "Shader.h"
+#include "Terrain.h"
 
 void SceneMgr::OnInit()
 {
     guid = 0;
+
+    terrain = new Terrain();
 
     player = new Player();
     player->SetPosition(Position(5.0f, 0.075f, 0.0f));
@@ -35,7 +40,7 @@ void SceneMgr::OnInit()
 
     currentCamera = 0;
 
-    RegisterObject(new Grid());
+    //RegisterObject(new Grid());
 
     GameObject* cube;
 
@@ -104,7 +109,13 @@ void SceneMgr::OnRender(RenderDevice* rd)
     GameObjectsMap map = staticObjects;
     map.insert(dynamicObjects.begin(), dynamicObjects.end());
 
-    Shader* shader = sResourcesMgr->GetShader("test.glsl");
+    Shader* shader = sResourcesMgr->GetShader("simple.glsl");
+    shader->Bind();
+    glUniformMatrix4fv(shader->GetUniformLocation("in_MVP"), 1, GL_FALSE, glm::value_ptr(GetCamera()->GetProjMatrix() * GetCamera()->GetViewMatrix() * glm::rotate(glm::translate(glm::mat4(1.0f), glm::vec3(20.0f, 0.0f, 10.0f)), 180.0f, glm::vec3(0,1,0))));
+    terrain->OnRender(rd);
+    shader->Unbind();
+
+    shader = sResourcesMgr->GetShader("test.glsl");
     for (auto i = map.begin(); i != map.end(); ++i)
     {
         shader->Bind();

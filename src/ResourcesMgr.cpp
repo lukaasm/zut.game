@@ -35,48 +35,6 @@ ResourcesMgr::~ResourcesMgr()
 
 void ResourcesMgr::loadModels()
 {
-    std::string name = "grid";
-    ModelData* modelData = new ModelData();
-
-    uint32 _size = 40;
-    Vertex vert[160]; // _size*4
-
-    for (uint32 i = 0; i < 160; ++i)
-        vert[i].color = glm::vec3(0.5f, 0.0f, 0.3f);
-
-    for (uint32 x = 0; x < _size; x++)
-    {
-        vert[x*2].position = glm::vec3(float(x), 0.0f, 0.0f);
-        vert[x*2 +1].position = glm::vec3(float(x), 0.0f, -float(_size));
-
-        vert[x*2 +_size*2].position = glm::vec3(0.0f, 0.0f, -float(x));
-        vert[x*2 +_size*2+1].position = glm::vec3(float(_size), 0.0f, -float(x));
-    };
-
-    VertexArrayObject& vao = modelData->vao;
-
-    vao.CreateVertexArray();
-    vao.CreateVertexBuffer();
-
-    vao.Bind(ID_VAO);
-    vao.Bind(ID_VBO);
-
-    vao.FillBuffer(GL_STATIC_DRAW, vert, sizeof(vert));
-
-    vao.EnableAttrib(VertexArray::Attrib::POSITION);
-    vao.AddAttribToBuffer(VertexArray::Attrib::POSITION, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
-    vao.EnableAttrib(VertexArray::Attrib::NORMAL);
-    vao.AddAttribToBuffer(VertexArray::Attrib::NORMAL, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), BUFFER_OFFSET(NORMAL_VERTEX_POS));
-    vao.EnableAttrib(VertexArray::Attrib::COLOR);
-    vao.AddAttribToBuffer(VertexArray::Attrib::COLOR, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), BUFFER_OFFSET(COLOR_VERTEX_POS));
-
-    vao.Unbind(ID_VBO);
-    vao.Unbind(ID_VAO);
-
-    vao.ElementsCount() = 160;
-
-    modelsData[name] = modelData;
-
     loadModel("cube.obj");
     loadModel("mb.obj");
 }
@@ -308,6 +266,14 @@ void ResourcesMgr::loadShaders()
     shader->AddAttribute(VertexArray::Attrib::POSITION, "in_Position");
     shader->AddAttribute(VertexArray::Attrib::TEXCOORD, "in_TexCoord");
     shaders["text2d.glsl"] = shader;
+
+    shader = (new Shader())->LoadFromFile("../res/shaders/simple.glsl");
+
+    shader->AddUniform("in_MVP");
+
+    shader->AddAttribute(VertexArray::Attrib::POSITION, "in_Position");
+    shader->AddAttribute(VertexArray::Attrib::TEXCOORD, "in_TexCoord");
+    shaders["simple.glsl"] = shader;
 }
 
 void ResourcesMgr::unloadShaders()
