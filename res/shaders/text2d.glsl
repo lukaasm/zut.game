@@ -32,13 +32,13 @@ void main()
 in vec3 pass_Color;
 in vec2 pass_TexCoord;
 
-uniform sampler2D baseTexture;
+uniform sampler2D textureSampler;
 
 out vec4 out_Color;
 
 void main(void)
 {
-    out_Color = texture2D(baseTexture, pass_TexCoord);
+    out_Color = texture2D(textureSampler, pass_TexCoord);
     if (out_Color == vec4(1.0f, 0.0f, 0.0f, 1.0f))
         discard;
 }

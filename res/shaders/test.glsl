@@ -9,7 +9,7 @@
 
 uniform mat4 in_MVP; // Proj*View*Model matrix
 uniform mat4 in_MV;  // View*Model matrix
-uniform mat3 in_N;   // Normal matrix
+uniform mat4 in_N;   // Normal matrix
 
 out vec3 pass_Color;
 out vec2 pass_TexCoord;
@@ -30,7 +30,7 @@ void main(void)
     pass_TexCoord = in_TexCoord;
 
 	pass_VertexEyePos = vec3(in_MV * vec4(in_Position, 1.0));
-	pass_VertexEyeNorm = normalize(in_N * in_Normal);
+	pass_VertexEyeNorm = normalize((in_N * vec4(in_Normal, 0.0)).xyz);
 }
 
 #vert_end
@@ -45,12 +45,11 @@ in vec2 pass_TexCoord;
 in vec3 pass_VertexEyePos;
 in vec3 pass_VertexEyeNorm;
 
+uniform mat4 in_V;
 uniform mat4 in_MV;
 
 uniform lowp float textureFlag;
-uniform sampler2D baseTexture;
-
-//uniform mat4 in_V;
+uniform sampler2D textureSampler;
 
 out vec4 out_Color;
 
@@ -65,10 +64,10 @@ struct DirectionalLight
 
 DirectionalLight light0 = DirectionalLight
 (
-    vec4(0.0, 1.0, 0.0, 1.0), // pos
+    vec4(5.0, 222.0, 50.0, 1.0), // pos
     vec4(0.7, 0.7, 0.7, 1.0), // diff
     vec4(1.0, 1.0, 1.0, 1.0), // spec
-    vec4(0.1, 0.1, 0.1, 1.0)  // amb
+    vec4(0.5, 0.5, 0.5, 1.0)  // amb
 );
 
 struct Material
@@ -89,10 +88,10 @@ Material frontMaterial = Material
 
 void main(void)
 {
-    light0.position = in_MV * light0.position; 
+    light0.position = in_V * light0.position;
     vec3 L = normalize(light0.position.xyz - pass_VertexEyePos);
-    vec3 E = normalize(-pass_VertexEyePos);
-    vec3 R = normalize(reflect(-L, pass_VertexEyeNorm));
+    vec3 E = normalize(pass_VertexEyePos);
+    vec3 R = normalize(reflect(L, pass_VertexEyeNorm));
  
     vec4 Ia = frontMaterial.ambient * light0.ambient;
 
@@ -102,11 +101,11 @@ void main(void)
     vec4 Is = frontMaterial.specular * light0.specular * pow(max(dot(R, E), 0.0), frontMaterial.shininess);
     Is = clamp(Is, 0.0, 1.0);
 
-	if (pass_Color.rgb == vec3(0.5f, 0.0f, 0.3f))
-	    out_Color = vec4(pass_Color, 1.0);
-	else
+	//if (pass_Color.rgb == vec3(0.5f, 0.0f, 0.3f))
+	//    out_Color = vec4(pass_Color, 1.0);
+	//else
 	{
-		out_Color = textureFlag * texture2D(baseTexture, pass_TexCoord) + (1.0f - textureFlag) * vec4(pass_Color, 1.0f);
+		out_Color = textureFlag * texture2D(textureSampler, pass_TexCoord) + (1.0f - textureFlag) * vec4(pass_Color, 1.0f);
 		out_Color *= (Ia + Id + Is);
     }
 }
