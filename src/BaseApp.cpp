@@ -11,6 +11,7 @@
 
 #include "Camera.h"
 #include "Config.h"
+#include "Exception.h"
 #include "Input.h"
 #include "RenderDevice.h"
 #include "ResourcesMgr.h"
@@ -39,7 +40,7 @@ void BaseApp::createContext()
     if (!glfwInit())
     {
         std::cout << "GLFW Init failed" << std::endl;
-        exit(EXIT_FAILURE);
+        std::exit(EXIT_FAILURE);
     }
 
     // set OGL window render context which will allow us to use specific gl functions
@@ -67,7 +68,7 @@ void BaseApp::CreateWindow()
     if (glewInitResult != GLEW_OK)
     {
         std::cout << "Error: " << glewGetErrorString(glewInitResult) << std::endl;
-        exit(EXIT_FAILURE);
+        std::exit(EXIT_FAILURE);
     }
 
     Init();
@@ -86,10 +87,20 @@ void BaseApp::CreateCallBacks()
 
 void BaseApp::Init()
 {
-    sResourcesMgr->OnInit();
-    sSceneMgr->OnInit();
+    try
+    {
+        sResourcesMgr->OnInit();
+        sSceneMgr->OnInit();
 
-    GetRenderDevice()->OnInit();
+        GetRenderDevice()->OnInit();
+    }
+    catch (Exception& e)
+    {
+        std::cout << e.what() << std::endl;
+        int i;
+        std::cin >> i;
+        std::exit(EXIT_FAILURE);
+    }
 }
 
 void BaseApp::Run()
@@ -157,16 +168,36 @@ void BaseApp::closeWindow()
 
 void BaseApp::OnUpdate(const uint32 diff)
 {
-    sSceneMgr->OnUpdate(diff);
+    try
+    {
+        sSceneMgr->OnUpdate(diff);
 
-    GetRenderDevice()->OnUpdate(diff);
+        GetRenderDevice()->OnUpdate(diff);
+    }
+    catch (Exception& e)
+    {
+        std::cout << e.what() << std::endl;
+        int i;
+        std::cin >> i;
+        std::exit(EXIT_FAILURE);
+    }
 }
 
 void BaseApp::OnRender()
 {
-    GetRenderDevice()->OnRenderStart();
-    sSceneMgr->OnRender(GetRenderDevice());
-    GetRenderDevice()->OnRenderEnd();
+    try
+    {
+        GetRenderDevice()->OnRenderStart();
+        sSceneMgr->OnRender(GetRenderDevice());
+        GetRenderDevice()->OnRenderEnd();
+    }
+    catch (Exception& e)
+    {
+        std::cout << e.what() << std::endl;
+        int i;
+        std::cin >> i;
+        std::exit(EXIT_FAILURE);
+    }
 }
 
 int main()

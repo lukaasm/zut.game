@@ -50,63 +50,55 @@ std::string Shader::getShaderInfo(uint32 id)
 
 Shader* Shader::LoadFromFile(std::string fileName)
 {
-    try
+    std::ifstream file(fileName);
+    if (!file.is_open())
+        throw Exception("[Shader] problem occurred while trying to open file: " + fileName);
+
+    std::cout << std::endl << "[Shader] loading file: " << fileName << std::endl;
+    id = glCreateProgram();
+
+    while (!file.eof())
     {
-        std::ifstream file(fileName);
-        if (!file.is_open())
-            throw Exception("[Shader] problem occurred while trying to open file: " + fileName);
+        char buff[1000];
+        file.getline(buff, 1000);
 
-        std::cout << std::endl << "[Shader] loading file: " << fileName << std::endl;
-        id = glCreateProgram();
-
-        while (!file.eof())
+        std::string line(buff);
+        if (line.find("//") == 0)
         {
-            char buff[1000];
-            file.getline(buff, 1000);
+            // it is a comment, ignore
+            continue;
+        }
+        else if (line.find("#vert_start") == 0)
+        {
+            // vertex shader data start
+            std::string data = loadShaderData(file, "#vert");
 
-            std::string line(buff);
-            if (line.find("//") == 0)
-            {
-                // it is a comment, ignore
-                continue;
-            }
-            else if (line.find("#vert_start") == 0)
-            {
-                // vertex shader data start
-                std::string data = loadShaderData(file, "#vert");
+            vertShader = glCreateShader(GL_VERTEX_SHADER);
 
-                vertShader = glCreateShader(GL_VERTEX_SHADER);
+            const char* temp = data.c_str();
+            glShaderSource(vertShader, 1, &temp, 0);
+            glCompileShader(vertShader);
 
-                const char* temp = data.c_str();
-                glShaderSource(vertShader, 1, &temp, 0);
-                glCompileShader(vertShader);
+            std::cout << getShaderInfo(vertShader);
 
-                std::cout << getShaderInfo(vertShader);
+            glAttachShader(GetId(), vertShader);
+        }
+        else if (line.find("#frag_start") == 0)
+        {
+            // fragment shader data start
+            std::string data = loadShaderData(file, "#frag");
 
-                glAttachShader(GetId(), vertShader);
-            }
-            else if (line.find("#frag_start") == 0)
-            {
-                // fragment shader data start
-                std::string data = loadShaderData(file, "#frag");
+            fragShader = glCreateShader(GL_FRAGMENT_SHADER);
 
-                fragShader = glCreateShader(GL_FRAGMENT_SHADER);
+            const char* temp = data.c_str();
+            glShaderSource(fragShader, 1, &temp, 0);
+            glCompileShader(fragShader);
 
-                const char* temp = data.c_str();
-                glShaderSource(fragShader, 1, &temp, 0);
-                glCompileShader(fragShader);
+            std::cout << getShaderInfo(fragShader);
 
-                std::cout << getShaderInfo(fragShader);
-
-                glAttachShader(GetId(), fragShader);
-            }
+            glAttachShader(GetId(), fragShader);
         }
     }
-    catch (Exception& e)
-    {
-        std::cout << e.what() << std::endl;
-    }
-
     glLinkProgram(GetId());
     return this;
 }

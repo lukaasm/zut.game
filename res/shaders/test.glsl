@@ -64,8 +64,8 @@ struct DirectionalLight
 
 DirectionalLight light0 = DirectionalLight
 (
-    vec4(5.0, 222.0, 50.0, 1.0), // pos
-    vec4(0.7, 0.7, 0.7, 1.0), // diff
+    vec4(150.0, 150.0, 150.0, 1.0), // pos
+    vec4(0.5, 0.5, 0.5, 1.0), // diff
     vec4(1.0, 1.0, 1.0, 1.0), // spec
     vec4(0.5, 0.5, 0.5, 1.0)  // amb
 );
@@ -80,10 +80,10 @@ struct Material
 
 Material frontMaterial = Material
 (
-    vec4(0.6, 0.6, 0.6, 1.0),
-    vec4(0.7, 0.7, 0.7, 1.0),
-    vec4(1.0, 1.0, 1.0, 1.0),
-    1.0
+    vec4(0.2, 0.2, 0.2, 1.0), // amb
+    vec4(0.7, 0.7, 0.7, 1.0), // diff
+    vec4(1.0, 1.0, 1.0, 1.0), // spec
+    22.0
 );
 
 void main(void)
@@ -91,7 +91,7 @@ void main(void)
     light0.position = in_V * light0.position;
     vec3 L = normalize(light0.position.xyz - pass_VertexEyePos);
     vec3 E = normalize(pass_VertexEyePos);
-    vec3 R = normalize(reflect(L, pass_VertexEyeNorm));
+    vec3 R = normalize(reflect(-L, pass_VertexEyeNorm));
  
     vec4 Ia = frontMaterial.ambient * light0.ambient;
 

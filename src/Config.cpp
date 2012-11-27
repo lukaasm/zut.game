@@ -8,24 +8,17 @@
 
 void Config::LoadFile(std::string fileName)
 {
-    try
-    {
-        std::ifstream file(fileName);
-        if (!file.is_open())
-            throw Exception("can NOT open config file.");
+    std::ifstream file(fileName);
+    if (!file.is_open())
+        throw Exception("can NOT open config file.");
 
-        const uint32 LINE_SIZE = 50;
-        char line[LINE_SIZE];
+    const uint32 LINE_SIZE = 50;
+    char line[LINE_SIZE];
 
-        while (!file.eof())
-        {
-            file.getline(line, LINE_SIZE, ';');
-            parseLine(line);
-        }
-    }
-    catch (std::exception& e)
+    while (!file.eof())
     {
-        std::cout << "[Exception]: " << e.what() << std::endl;
+        file.getline(line, LINE_SIZE, ';');
+        parseLine(line);
     }
 }
 
