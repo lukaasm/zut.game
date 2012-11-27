@@ -43,26 +43,19 @@ void RenderDevice::OnUpdate(const uint32 & diff)
 
 void RenderDevice::SetUniforms(Shader* shader, const glm::mat4& projMatrix, const glm::mat4& viewMatrix, const glm::mat4& modelMatrix, float hasTexture)
 {
-    try
-    {
-        glm::mat4 MV = viewMatrix * modelMatrix;
-        glm::mat4 MVP = projMatrix * MV;
+    glm::mat4 MV = viewMatrix * modelMatrix;
+    glm::mat4 MVP = projMatrix * MV;
 
-        glm::mat4 N = glm::transpose(glm::inverse(MV));
-       // glm::mat3 X = glm::inverseTranspose(glm::mat3(MV));
+    glm::mat4 N = glm::transpose(glm::inverse(MV));
+    // glm::mat3 X = glm::inverseTranspose(glm::mat3(MV));
 
-        glUniformMatrix4fv(shader->GetUniformLocation("in_MVP"), 1, GL_FALSE, glm::value_ptr(MVP));
-        glUniformMatrix4fv(shader->GetUniformLocation("in_MV"), 1, GL_FALSE, glm::value_ptr(MV));
-        glUniformMatrix4fv(shader->GetUniformLocation("in_N"), 1, GL_FALSE, glm::value_ptr(N));
-        glUniformMatrix3fv(shader->GetUniformLocation("in_V"), 1, GL_FALSE, glm::value_ptr(viewMatrix));
+    glUniformMatrix4fv(shader->GetUniformLocation("in_MVP"), 1, GL_FALSE, glm::value_ptr(MVP));
+    glUniformMatrix4fv(shader->GetUniformLocation("in_MV"), 1, GL_FALSE, glm::value_ptr(MV));
+    glUniformMatrix4fv(shader->GetUniformLocation("in_N"), 1, GL_FALSE, glm::value_ptr(N));
+    glUniformMatrix3fv(shader->GetUniformLocation("in_V"), 1, GL_FALSE, glm::value_ptr(viewMatrix));
 
-        glUniform1i(shader->GetUniformLocation("textureSampler"), 0);
-        glUniform1f(shader->GetUniformLocation("textureFlag"), hasTexture);
-    }
-    catch (Exception& e)
-    {
-        std::cout << e.what() << std::endl;
-    }
+    glUniform1i(shader->GetUniformLocation("textureSampler"), 0);
+    glUniform1f(shader->GetUniformLocation("textureFlag"), hasTexture);
 }
 
 // For Text2d render only

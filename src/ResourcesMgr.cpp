@@ -123,58 +123,49 @@ uint32 ResourcesMgr::createTexture(std::string fileName)
 
 bool ResourcesMgr::loadModel(std::string fileName)
 {
-    try
+    std::cout << std::endl << "[Model] loading file: " << fileName;
+
+    if (GetModelData(fileName) != nullptr)
     {
-        std::cout << std::endl << "[Model] loading file: " << fileName;
-
-        if (GetModelData(fileName) != nullptr)
-        {
-            std::string what = "[E][Model] file: " + fileName + " were already loaded.";
-            throw Exception(what);
-        }
-
-        std::vector<Vertex> vertexes;
-        if (!loadOBJ("../res/models/" + fileName, vertexes))
-        {
-            std::string what = "[E][Model] problem with loading file: " + fileName;
-            throw Exception(what);
-        }
-
-        ModelData* modelData = new ModelData();
-        VertexArrayObject& vao = modelData->vao;
-        vao.CreateVertexArray();
-        vao.CreateVertexBuffer();
-
-        vao.Bind(ID_VAO);
-        vao.Bind(ID_VBO);
-        vao.FillBuffer(GL_STATIC_DRAW, &vertexes[0], vertexes.size()*sizeof(Vertex));
-        vao.EnableAttrib(VertexArray::Attrib::POSITION);
-        vao.AddAttribToBuffer(VertexArray::Attrib::POSITION, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
-        vao.EnableAttrib(VertexArray::Attrib::NORMAL);
-        vao.AddAttribToBuffer(VertexArray::Attrib::NORMAL, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), BUFFER_OFFSET(NORMAL_VERTEX_POS));
-        vao.EnableAttrib(VertexArray::Attrib::COLOR);
-        vao.AddAttribToBuffer(VertexArray::Attrib::COLOR, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), BUFFER_OFFSET(COLOR_VERTEX_POS));
-        vao.EnableAttrib(VertexArray::Attrib::TEXCOORD);
-        vao.AddAttribToBuffer(VertexArray::Attrib::TEXCOORD, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), BUFFER_OFFSET(UV_VERTEX_POS));
-
-        vao.Unbind(ID_VBO);
-        vao.Unbind(ID_VAO);
-
-        vao.ElementsCount() = vertexes.size();
-
-        BoundingBoxProto* box = new BoundingBoxProto();
-        box->SetMinMax(vertexes);
-
-        modelData->boundingBox = box;
-
-        modelsData[fileName] = modelData;
-    }
-    catch (std::exception& e)
-    {
-        std::cout << e.what() << std::endl;
-        std::exit(EXIT_FAILURE);
+        std::string what = "[E][Model] file: " + fileName + " were already loaded.";
+        throw Exception(what);
     }
 
+    std::vector<Vertex> vertexes;
+    if (!loadOBJ("../res/models/" + fileName, vertexes))
+    {
+        std::string what = "[E][Model] problem with loading file: " + fileName;
+        throw Exception(what);
+    }
+
+    ModelData* modelData = new ModelData();
+    VertexArrayObject& vao = modelData->vao;
+    vao.CreateVertexArray();
+    vao.CreateVertexBuffer();
+
+    vao.Bind(ID_VAO);
+    vao.Bind(ID_VBO);
+    vao.FillBuffer(GL_STATIC_DRAW, &vertexes[0], vertexes.size()*sizeof(Vertex));
+    vao.EnableAttrib(VertexArray::Attrib::POSITION);
+    vao.AddAttribToBuffer(VertexArray::Attrib::POSITION, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
+    vao.EnableAttrib(VertexArray::Attrib::NORMAL);
+    vao.AddAttribToBuffer(VertexArray::Attrib::NORMAL, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), BUFFER_OFFSET(NORMAL_VERTEX_POS));
+    vao.EnableAttrib(VertexArray::Attrib::COLOR);
+    vao.AddAttribToBuffer(VertexArray::Attrib::COLOR, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), BUFFER_OFFSET(COLOR_VERTEX_POS));
+    vao.EnableAttrib(VertexArray::Attrib::TEXCOORD);
+    vao.AddAttribToBuffer(VertexArray::Attrib::TEXCOORD, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), BUFFER_OFFSET(UV_VERTEX_POS));
+
+    vao.Unbind(ID_VBO);
+    vao.Unbind(ID_VAO);
+
+    vao.ElementsCount() = vertexes.size();
+
+    BoundingBoxProto* box = new BoundingBoxProto();
+    box->SetMinMax(vertexes);
+
+    modelData->boundingBox = box;
+
+    modelsData[fileName] = modelData;
     return true;
 }
 
@@ -261,29 +252,21 @@ bool ResourcesMgr::loadOBJ(std::string fileName, std::vector<Vertex>& vert)
 
 void ResourcesMgr::loadTexture(std::string fileName)
 {
-    try
+    std::cout << std::endl << "[Texture] loading file: " << fileName;
+    if (GetTextureId(fileName))
     {
-        std::cout << std::endl << "[Texture] loading file: " << fileName;
-        if (GetTextureId(fileName))
-        {
-            std::string what = "[E][Texture] file: " + fileName + " were already loaded.";
-            throw Exception(what);
-        }
-
-        uint32 textureId = createTexture("../res/textures/" + fileName);
-        if (textureId == 0)
-        {
-            std::string what = "[E][Texture] problem occurred while creating texture from file: " + fileName;
-            throw Exception(what);
-        }
-
-        textures[fileName] = textureId;
+        std::string what = "[E][Texture] file: " + fileName + " were already loaded.";
+        throw Exception(what);
     }
-    catch (std::exception& e)
+
+    uint32 textureId = createTexture("../res/textures/" + fileName);
+    if (textureId == 0)
     {
-        std::cout << e.what() << std::endl;
-        std::exit(EXIT_FAILURE);
+        std::string what = "[E][Texture] problem occurred while creating texture from file: " + fileName;
+        throw Exception(what);
     }
+
+    textures[fileName] = textureId;
 }
 
 void ResourcesMgr::loadTextures()
@@ -301,37 +284,30 @@ void ResourcesMgr::unloadTextures()
 
 void ResourcesMgr::loadShaders()
 {
-    try
-    {
-        Shader* shader = (new Shader())->LoadFromFile("../res/shaders/test.glsl");
+    Shader* shader = (new Shader())->LoadFromFile("../res/shaders/test.glsl");
 
-        shader->AddUniform("in_MVP");
-        shader->AddUniform("in_MV");
-        shader->AddUniform("in_N");
-        shader->AddUniform("in_V");
+    shader->AddUniform("in_MVP");
+    shader->AddUniform("in_MV");
+    shader->AddUniform("in_N");
+    shader->AddUniform("in_V");
 
-        shader->AddUniform("textureFlag");
-        shader->AddUniform("textureSampler");
+    shader->AddUniform("textureFlag");
+    shader->AddUniform("textureSampler");
 
-        shader->AddAttribute(VertexArray::Attrib::POSITION, "in_Position");
-        shader->AddAttribute(VertexArray::Attrib::TEXCOORD, "in_TexCoord");
-        shader->AddAttribute(VertexArray::Attrib::NORMAL, "in_Normal");
-        shader->AddAttribute(VertexArray::Attrib::COLOR, "in_Color");
+    shader->AddAttribute(VertexArray::Attrib::POSITION, "in_Position");
+    shader->AddAttribute(VertexArray::Attrib::TEXCOORD, "in_TexCoord");
+    shader->AddAttribute(VertexArray::Attrib::NORMAL, "in_Normal");
+    shader->AddAttribute(VertexArray::Attrib::COLOR, "in_Color");
 
-        shaders["test.glsl"] = shader;
+    shaders["test.glsl"] = shader;
 
-        shader = (new Shader())->LoadFromFile("../res/shaders/text2d.glsl");
+    shader = (new Shader())->LoadFromFile("../res/shaders/text2d.glsl");
 
-        shader->AddUniform("textureSampler");
+    shader->AddUniform("textureSampler");
 
-        shader->AddAttribute(VertexArray::Attrib::POSITION, "in_Position");
-        shader->AddAttribute(VertexArray::Attrib::TEXCOORD, "in_TexCoord");
-        shaders["text2d.glsl"] = shader;
-    }
-    catch (Exception& e)
-    {
-        std::cout << e.what() << std::endl;
-    }
+    shader->AddAttribute(VertexArray::Attrib::POSITION, "in_Position");
+    shader->AddAttribute(VertexArray::Attrib::TEXCOORD, "in_TexCoord");
+    shaders["text2d.glsl"] = shader;
 }
 
 void ResourcesMgr::unloadShaders()
