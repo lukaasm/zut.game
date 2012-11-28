@@ -109,9 +109,12 @@ void SceneMgr::OnRender(RenderDevice* rd)
     GameObjectsMap map = staticObjects;
     map.insert(dynamicObjects.begin(), dynamicObjects.end());
 
-    Shader* shader = sResourcesMgr->GetShader("simple.glsl");
+    Shader* shader = sResourcesMgr->GetShader("test.glsl");
     shader->Bind();
-    glUniformMatrix4fv(shader->GetUniformLocation("in_MVP"), 1, GL_FALSE, glm::value_ptr(GetCamera()->GetProjMatrix() * GetCamera()->GetViewMatrix() * glm::rotate(glm::translate(glm::mat4(1.0f), glm::vec3(20.0f, 0.0f, 10.0f)), 180.0f, glm::vec3(0,1,0))));
+
+    glm::mat4 x = glm::rotate(glm::translate(glm::mat4(1.0f), glm::vec3(20.0f, 0.0f, 10.0f)), 180.0f, glm::vec3(0,1,0));
+    rd->SetUniforms(shader, GetCamera()->GetProjMatrix(), GetCamera()->GetViewMatrix(), x, 0.0f);
+
     terrain->OnRender(rd);
     shader->Unbind();
 
