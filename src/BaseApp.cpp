@@ -93,10 +93,15 @@ void BaseApp::Init()
         sSceneMgr->OnInit();
 
         GetRenderDevice()->OnInit();
+
+        int width, height;
+        glfwGetWindowSize(&width, &height);
+        resizeWindow(width, height);
     }
     catch (Exception& e)
     {
         std::cout << e.what() << std::endl;
+        glfwTerminate();
         int i;
         std::cin >> i;
         std::exit(EXIT_FAILURE);
@@ -177,6 +182,7 @@ void BaseApp::OnUpdate(const uint32 diff)
     catch (Exception& e)
     {
         std::cout << e.what() << std::endl;
+        glfwTerminate();
         int i;
         std::cin >> i;
         std::exit(EXIT_FAILURE);
@@ -194,6 +200,7 @@ void BaseApp::OnRender()
     catch (Exception& e)
     {
         std::cout << e.what() << std::endl;
+        glfwTerminate();
         int i;
         std::cin >> i;
         std::exit(EXIT_FAILURE);

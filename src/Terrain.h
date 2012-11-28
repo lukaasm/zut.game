@@ -12,6 +12,9 @@ class RenderDevice;
 
 struct PolygonFace
 {
+    PolygonFace() {}
+    PolygonFace(const PolygonFace& b);
+
     void addIndexes(int vi, int ti, int ni)
     {
         v.push_back(vi);
