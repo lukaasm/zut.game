@@ -16,7 +16,7 @@ Camera::Camera()
 {
 }
 
-void Camera::LookAt(Position& pos, glm::vec3& target, glm::vec3& up)
+void Camera::LookAt(const Position& pos, const glm::vec3& target, const glm::vec3& up)
 {
     viewMatrix = glm::lookAt(pos, target, up);
 }

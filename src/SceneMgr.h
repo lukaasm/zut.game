@@ -2,6 +2,7 @@
 #define H_SCENEMGR
 
 #include <unordered_map>
+#include <vector>
 
 #include "Common.h"
 #include "Singleton.h"
