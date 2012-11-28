@@ -23,7 +23,7 @@ class Camera
         virtual void OnUpdate(const uint32&) = 0;
         virtual void LinkTo(DynamicObject*) = 0;
 
-        void LookAt(Position& pos, glm::vec3& dir, glm::vec3& up);
+        void LookAt(const Position& pos, const glm::vec3& dir, const glm::vec3& up);
 
         glm::mat4 GetProjMatrix() const { return projMatrix; }
         glm::mat4 GetViewMatrix() const { return viewMatrix; }

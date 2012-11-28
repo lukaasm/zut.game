@@ -77,7 +77,7 @@ class DynamicObject : public GameObject
 
         virtual void OnUpdate(const uint32 &) override;
 
-        glm::vec3 GetUpVector() const { return up; }
+        const glm::vec3 & GetUpVector() const { return up; }
         glm::vec3 GetDirVector() const { return lookDirection; }
 
         ScriptsMap scripts;

@@ -7,7 +7,7 @@
 class Exception: public std::exception
 {
     public:
-        Exception(std::string & whatStr) : std::exception()
+        Exception(std::string whatStr) : std::exception()
         {
             m_whatStr = whatStr;
         }
