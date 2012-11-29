@@ -49,7 +49,7 @@ void FppCamera::LinkTo(DynamicObject* o)
 void FppCamera::SetPosition(Position& pos)
 {
     position = pos;
-    position.y += 1.0f; // redo it to use max.y model vertex pos
+    position.y += 1.4f; // redo it to use max.y model vertex pos
 }
 
 void TppCamera::OnUpdate(const uint32 & diff)
@@ -58,7 +58,7 @@ void TppCamera::OnUpdate(const uint32 & diff)
     {
        // glm::vec3 offset = object->GetPosition() - position;
 
-        position = glm::vec3(0.0f, 1.5f, 3.5f);
+        position = glm::vec3(0.0f, 1.5f, -3.5f);
 
         position = glm::rotate(position, object->GetRotationX(), glm::cross(object->GetUpVector(), object->GetDirVector()));
         position = glm::rotate(position, object->GetRotationY(), object->GetUpVector());
@@ -99,6 +99,6 @@ void EagleEyeCamera::LinkTo(DynamicObject* o)
 void EagleEyeCamera::SetPosition(Position& pos)
 {
     position = pos;
-    position.z += 0.005f;
-    position.y += 5.0f; // redo it to use max.y model vertex pos
+    position.z -= 0.005f;
+    position.y += 10.0f; // redo it to use max.y model vertex pos
 }

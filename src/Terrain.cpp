@@ -156,6 +156,12 @@ void Terrain::createVAO()
     vao.ElementsCount() = vertexes.size();
 }
 
+float Terrain::GetHeight(float x, float y)
+{
+    return 1.0f;
+}
+
+
 PolygonFace::PolygonFace(const PolygonFace& b)
 {
     std::for_each(b.v.begin(), b.v.end(), [this](int i) { this->v.push_back(i); });

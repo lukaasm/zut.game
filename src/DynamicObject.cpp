@@ -85,7 +85,7 @@ void DynamicObject::ClearMoveType(MoveFlags flag)
 
 DynamicObject::DynamicObject() : GameObject("mb.obj", "mb.tga")
 {
-    lookDirection = glm::vec3(0.0f, 0.0f, -1.0f);
+    lookDirection = glm::vec3(0.0f, 0.0f, 1.0f);
 
     moveFlags = MOVE_FLAG_NONE;
 

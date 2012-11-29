@@ -28,7 +28,7 @@ void SceneMgr::OnInit()
 
     player = new Player();
     player->SetPosition(Position(5.0f, 0.075f, 0.0f));
-    player->SetScale(glm::vec3(0.05f));
+    player->SetScale(glm::vec3(0.15f));
     player->SetBoundingObject(sResourcesMgr->GetModelData(player->GetModel())->boundingBox);
     RegisterObject(player);
 
@@ -50,14 +50,14 @@ void SceneMgr::OnInit()
     RegisterObject(cube); \
     cube->SetBoundingObject(sResourcesMgr->GetModelData(cube->GetModel())->boundingBox);
 
-    POPULATE_CUBE(4.25f, 0.25f, -5.0f)
-    POPULATE_CUBE(5.75f, 0.25f, -5.0f)
-    POPULATE_CUBE(4.625f, 0.875f, -5.0f)
-    POPULATE_CUBE(5.375f, 0.875f, -5.0f)
-    POPULATE_CUBE(5.0f, 0.875f+0.625f, -5.0f)
+    POPULATE_CUBE(4.25f, 0.25f, 5.0f)
+    POPULATE_CUBE(5.75f, 0.25f, 5.0f)
+    POPULATE_CUBE(4.625f, 0.875f, 5.0f)
+    POPULATE_CUBE(5.375f, 0.875f, 5.0f)
+    POPULATE_CUBE(5.0f, 0.875f+0.625f, 5.0f)
 
     DynamicObject* ccube = new DynamicObject();
-    ccube->SetPosition(glm::vec3(5.0f, 0.875f+1.5f, -5.0f));
+    ccube->SetPosition(glm::vec3(5.0f, 0.875f+1.5f, 5.0f));
     ccube->SetScale(glm::vec3(0.25f));
     ccube->SetBoundingObject(sResourcesMgr->GetModelData(ccube->GetModel())->boundingBox);
 
@@ -112,7 +112,7 @@ void SceneMgr::OnRender(RenderDevice* rd)
     Shader* shader = sResourcesMgr->GetShader("test.glsl");
     shader->Bind();
 
-    glm::mat4 x = glm::rotate(glm::translate(glm::mat4(1.0f), glm::vec3(20.0f, 0.0f, 10.0f)), 180.0f, glm::vec3(0,1,0));
+    glm::mat4 x = glm::translate(glm::mat4(1.0f), glm::vec3(-20.0f, 0.0f, -10.0f));
     rd->SetUniforms(shader, GetCamera()->GetProjMatrix(), GetCamera()->GetViewMatrix(), x, 0.0f);
 
     terrain->OnRender(rd);

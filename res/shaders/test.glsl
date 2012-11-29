@@ -68,7 +68,7 @@ struct LightSource
 
 Material frontMaterial = Material
 (
-    vec4(0.0f, 0.0f, 0.0f, 1.0f),
+    vec4(0.1f, 0.1f, 0.1f, 1.0f),
     vec4(0.2f, 0.2f, 0.2f, 1.0f),
     vec4(0.5f, 0.5f, 0.5f, 1.0f),
     vec4(0.0f, 0.0f, 0.5f, 1.0f),
@@ -86,22 +86,9 @@ LightSource light = LightSource
 vec4 lightSource(vec3 N, vec3 V)
 {
 	vec3 lightpos = (in_V * light.position).xyz;
-    float d = length(lightpos - V);
+
     vec3  L = normalize(lightpos - V);
-
-    bool eyeAtOrigin = true;
-
-    vec3  H;
-    if (eyeAtOrigin)
-    {
-        // eye at (0,0,0)
-        H = normalize(L - V.xyz);
-    }
-    else
-    {
-        // eye at (0,0,infinity)
-        H = normalize(L + vec3(0.0f, 0.0f, 1.0f));
-    }
+    vec3  H = normalize(L - V.xyz);
 
     float NdotL = max(0.0f, dot(N,L));
     float NdotH = max(0.0f, dot(N,H));
@@ -109,7 +96,6 @@ vec4 lightSource(vec3 N, vec3 V)
     float Idiff = NdotL;
     float Ispec = pow(NdotH, frontMaterial.shininess);
 
-    // 'real' shading
     return 
         frontMaterial.ambient  * light.ambient +
         frontMaterial.diffuse  * light.diffuse  * Idiff +
@@ -118,12 +104,11 @@ vec4 lightSource(vec3 N, vec3 V)
 
 vec4 lighting( void )
 {
-    // normal might be damaged by linear interpolation.
     vec3 N = normalize(pass_Normal);
 
     return
         frontMaterial.emission +
-        frontMaterial.ambient * 1 +
+        frontMaterial.ambient * 0.2 +
         lightSource(N, pass_Position);
 }
 
