@@ -139,7 +139,7 @@ void Shader::AddUniform(std::string key)
 {
     int loc = glGetUniformLocation(GetId(), key.c_str());
     if (loc == -1)
-        throw Exception("[Shader][E] AddUniform: " + key);
+        return;
 
     uniformsLocation[key] = loc;
 }

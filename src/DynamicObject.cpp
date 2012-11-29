@@ -57,9 +57,9 @@ void DynamicObject::Move(const uint32& diff)
         rotationY -= moveInfos[MOVE_TYPE_ROTATE_RIGHT].speed *(0.001f * diff);
     }
 
-    if (position.y < (scale.y/2))
-        position.y = scale.y / 2;
-    else
+    //if (position.y < (scale.y/2))
+    //    position.y = scale.y / 2;
+    //else
         recreateModelMatrix();
 }
 
@@ -85,7 +85,7 @@ void DynamicObject::ClearMoveType(MoveFlags flag)
 
 DynamicObject::DynamicObject() : GameObject("mb.obj", "mb.tga")
 {
-    lookDirection = glm::vec3(0.0f, 0.0f, -1.0f);
+    lookDirection = glm::vec3(0.0f, 0.0f, 1.0f);
 
     moveFlags = MOVE_FLAG_NONE;
 
