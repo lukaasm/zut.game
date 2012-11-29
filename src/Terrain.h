@@ -40,6 +40,8 @@ class Terrain
 
         void createVAO();
 
+        float GetHeight(float, float);
+
         VertexArrayObject vao;
 
         std::vector<glm::vec3> vertVector;
