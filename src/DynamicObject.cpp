@@ -57,9 +57,9 @@ void DynamicObject::Move(const uint32& diff)
         rotationY -= moveInfos[MOVE_TYPE_ROTATE_RIGHT].speed *(0.001f * diff);
     }
 
-    if (position.y < (scale.y/2))
-        position.y = scale.y / 2;
-    else
+    //if (position.y < (scale.y/2))
+    //    position.y = scale.y / 2;
+    //else
         recreateModelMatrix();
 }
 

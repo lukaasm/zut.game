@@ -2,6 +2,7 @@
 
 //#include <gl/glfw.h>
 #include <algorithm>
+#include <glm/gtc/matrix_transform.hpp>
 #include <vector>
 
 #include "Common.h"
@@ -33,7 +34,7 @@ Terrain::Terrain()
 
             uint8 height = image.Data[y * pitch + x * bpp];
 
-            float fHeight = float(height) / 6.0f;
+            float fHeight = float(height) / 10.0f;
             terrainHeights[y * image.Width + x] = fHeight;
 
             vertVector.push_back(glm::vec3(float(x) * SCALE, fHeight, float(y) * SCALE));
@@ -57,6 +58,7 @@ Terrain::~Terrain()
 void Terrain::OnRender(RenderDevice* rd)
 {
     rd->DrawTriangles(vao);
+    //rd->DrawLines(vao);
 }
 
 void Terrain::calculateFaces(GLFWimage* image)
@@ -90,7 +92,7 @@ void Terrain::calculateNormals()
     for (unsigned int i=0; i<faceVector.size(); i++)
     {
         PolygonFace& face = faceVector[i];
-        assert(face.v.size() == 3);
+        //assert(face.v.size() == 3);
         glm::vec3& gv1 = vertVector[face.v[0]];
         glm::vec3& gv2 = vertVector[face.v[1]];
         glm::vec3& gv3 = vertVector[face.v[2]];
@@ -106,7 +108,7 @@ void Terrain::calculateNormals()
     for (unsigned int i = 0; i < vertVector.size(); i++)
     {
         glm::vec3 normal = normal_buffer[i][0];
-        for (unsigned int j = 1; j< normal_buffer[i].size(); j++)
+        for (uint8 j = 1; j < normal_buffer[i].size(); j++)
             normal += normal_buffer[i][j];
 
         normal /= normal_buffer[i].size();
@@ -156,9 +158,39 @@ void Terrain::createVAO()
     vao.ElementsCount() = vertexes.size();
 }
 
-float Terrain::GetHeight(float x, float y)
+float Terrain::GetHeight(float x, float z)
 {
-    return 1.0f;
+    //glm::mat4 modelMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(-20.0f, 0.0f, -10.0f));
+    //glm::vec4 localPos = modelMatrix * glm::vec4(x, 0.0f, z, 1.0f);
+    //return 0.075;
+    // we first get the height of four points of the quad underneath the point
+    // Check to make sure this point is not off the map at all
+    int ix = (int)(x / SCALE);      
+    int iz = (int)(z / SCALE);
+    if (ix < 0 || ix > terrainSize.x || iz < 0 || iz > terrainSize.y)
+        return 3.0f;
+
+    float triZ0 = terrainHeights[iz * int(terrainSize.x) + ix];
+    float triZ1 = terrainHeights[iz * int(terrainSize.x) + ix+1];
+    float triZ2 = terrainHeights[(iz+1) * int(terrainSize.x) + ix];
+    float triZ3 = terrainHeights[(iz+1) * int(terrainSize.x) + ix+1];
+
+    float height = 0.0f;
+    float sqX = (x / SCALE) - ix;
+    float sqZ = (z / SCALE) - iz;
+    if ((sqX + sqZ) < 1)
+    {
+        height = triZ0;
+        height += (triZ1 - triZ0) * sqX;
+        height += (triZ2 - triZ0) * sqZ;
+    }
+    else
+    {
+        height = triZ3;
+        height += (triZ1 - triZ3) * (1.0f - sqZ);
+        height += (triZ2 - triZ3) * (1.0f - sqX);
+    }
+    return height;
 }
 
 
