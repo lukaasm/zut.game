@@ -1,9 +1,12 @@
 #include "Terrain.h"
 
 //#include <gl/glfw.h>
+#include <algorithm>
+#include <glm/gtc/matrix_transform.hpp>
 #include <vector>
 
 #include "Common.h"
+#include "Exception.h"
 #include "GameObject.h"
 #include "RenderDevice.h"
 
@@ -12,7 +15,8 @@
 Terrain::Terrain()
 {
     GLFWimage image;
-    glfwReadImage("../res/textures/terrain.tga", &image, GLFW_ORIGIN_UL_BIT);
+    if (glfwReadImage("../res/textures/terrain.tga", &image, 0) == GL_FALSE)
+        throw Exception("[Terrain][E] cannot read terrain data from texture.");
 
     terrainHeights = new float[image.Width * image.Height];
 
@@ -30,7 +34,7 @@ Terrain::Terrain()
 
             uint8 height = image.Data[y * pitch + x * bpp];
 
-            float fHeight = float(height) / 6.0f;
+            float fHeight = float(height) / 10.0f;
             terrainHeights[y * image.Width + x] = fHeight;
 
             vertVector.push_back(glm::vec3(float(x) * SCALE, fHeight, float(y) * SCALE));
@@ -48,12 +52,13 @@ Terrain::Terrain()
 
 Terrain::~Terrain()
 {
-    delete terrainHeights;
+    delete [] terrainHeights;
 }
 
 void Terrain::OnRender(RenderDevice* rd)
 {
-    rd->DrawLines(vao);
+    rd->DrawTriangles(vao);
+    //rd->DrawLines(vao);
 }
 
 void Terrain::calculateFaces(GLFWimage* image)
@@ -68,12 +73,12 @@ void Terrain::calculateFaces(GLFWimage* image)
             int v3 = v1 + image->Width;
             int v4 = v3 + 1;
 
-            tri1.addIndexes(v1, v1, -1);
-            tri1.addIndexes(v3, v3, -1);
-            tri1.addIndexes(v2, v2, -1);
-            tri2.addIndexes(v2, v2, -1);
-            tri2.addIndexes(v3, v3, -1);
-            tri2.addIndexes(v4, v4, -1);
+            tri1.addIndexes(v1, v1, v1);
+            tri1.addIndexes(v3, v3, v3);
+            tri1.addIndexes(v2, v2, v2);
+            tri2.addIndexes(v2, v2, v2);
+            tri2.addIndexes(v3, v3, v3);
+            tri2.addIndexes(v4, v4, v4);
 
             faceVector.push_back(tri1);
             faceVector.push_back(tri2);
@@ -87,7 +92,7 @@ void Terrain::calculateNormals()
     for (unsigned int i=0; i<faceVector.size(); i++)
     {
         PolygonFace& face = faceVector[i];
-        assert(face.v.size() == 3);
+        //assert(face.v.size() == 3);
         glm::vec3& gv1 = vertVector[face.v[0]];
         glm::vec3& gv2 = vertVector[face.v[1]];
         glm::vec3& gv3 = vertVector[face.v[2]];
@@ -99,15 +104,13 @@ void Terrain::calculateNormals()
     }
 
     normVector.clear();
-    normVector.reserve(vertVector.size());
 
-    for (unsigned int i = 0; i< vertVector.size(); i++)
+    for (unsigned int i = 0; i < vertVector.size(); i++)
     {
         glm::vec3 normal = normal_buffer[i][0];
-        for (unsigned int j=1; j<normal_buffer[i].size(); j++)
-        {
+        for (uint8 j = 1; j < normal_buffer[i].size(); j++)
             normal += normal_buffer[i][j];
-        }
+
         normal /= normal_buffer[i].size();
         normVector.push_back(normal);
     }
@@ -122,6 +125,7 @@ void Terrain::createVAO()
         for (uint8 j = 0; j < 3; j++)
         {
             Vertex vertex;
+            vertex.color = glm::vec3(1.0f, 1.0f, 1.0f);
             vertex.position = vertVector[face.v[j]];
             vertex.normal = normVector[face.vn[j]];
             vertex.uv = texVector[face.vt[j]];
@@ -138,8 +142,13 @@ void Terrain::createVAO()
     vao.FillBuffer(GL_STATIC_DRAW, &vertexes[0], vertexes.size()*sizeof(Vertex));
     vao.EnableAttrib(VertexArray::Attrib::POSITION);
     vao.AddAttribToBuffer(VertexArray::Attrib::POSITION, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
+
+    vao.EnableAttrib(VertexArray::Attrib::NORMAL);
+    vao.AddAttribToBuffer(VertexArray::Attrib::NORMAL, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), BUFFER_OFFSET(NORMAL_VERTEX_POS));
+
     vao.EnableAttrib(VertexArray::Attrib::COLOR);
     vao.AddAttribToBuffer(VertexArray::Attrib::COLOR, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), BUFFER_OFFSET(COLOR_VERTEX_POS));
+
     vao.EnableAttrib(VertexArray::Attrib::TEXCOORD);
     vao.AddAttribToBuffer(VertexArray::Attrib::TEXCOORD, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), BUFFER_OFFSET(UV_VERTEX_POS));
 
@@ -147,4 +156,47 @@ void Terrain::createVAO()
     vao.Unbind(ID_VAO);
 
     vao.ElementsCount() = vertexes.size();
+}
+
+float Terrain::GetHeight(float x, float z)
+{
+    //glm::mat4 modelMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(-20.0f, 0.0f, -10.0f));
+    //glm::vec4 localPos = modelMatrix * glm::vec4(x, 0.0f, z, 1.0f);
+    //return 0.075;
+    // we first get the height of four points of the quad underneath the point
+    // Check to make sure this point is not off the map at all
+    int ix = (int)(x / SCALE);      
+    int iz = (int)(z / SCALE);
+    if (ix < 0 || ix > terrainSize.x || iz < 0 || iz > terrainSize.y)
+        return 3.0f;
+
+    float triZ0 = terrainHeights[iz * int(terrainSize.x) + ix];
+    float triZ1 = terrainHeights[iz * int(terrainSize.x) + ix+1];
+    float triZ2 = terrainHeights[(iz+1) * int(terrainSize.x) + ix];
+    float triZ3 = terrainHeights[(iz+1) * int(terrainSize.x) + ix+1];
+
+    float height = 0.0f;
+    float sqX = (x / SCALE) - ix;
+    float sqZ = (z / SCALE) - iz;
+    if ((sqX + sqZ) < 1)
+    {
+        height = triZ0;
+        height += (triZ1 - triZ0) * sqX;
+        height += (triZ2 - triZ0) * sqZ;
+    }
+    else
+    {
+        height = triZ3;
+        height += (triZ1 - triZ3) * (1.0f - sqZ);
+        height += (triZ2 - triZ3) * (1.0f - sqX);
+    }
+    return height;
+}
+
+
+PolygonFace::PolygonFace(const PolygonFace& b)
+{
+    std::for_each(b.v.begin(), b.v.end(), [this](int i) { this->v.push_back(i); });
+    std::for_each(b.vn.begin(), b.vn.end(), [this](int i) { this->vn.push_back(i); });
+    std::for_each(b.vt.begin(), b.vt.end(), [this](int i) { this->vt.push_back(i); });
 }
