@@ -67,6 +67,27 @@ void SceneMgr::OnInit()
     RegisterObject(ccube);
 
     text2D.Init();
+
+    // directional
+    LightSource light;
+    light.Position = glm::vec4(0.0, 5.0, 1.0, 0.0),
+    light.Diffuse = glm::vec4(1.0f, 1.0f, 1.0f, 1.0),
+    light.Specular = glm::vec4(1.0f, 1.0f, 1.0f, 1.0);
+
+    lights.push_back(light);
+
+    // point
+    light.Position = glm::vec4(15.0, 3.0, 12.5, 1.0),
+    light.Diffuse = glm::vec4(1.0, 1.0, 1.0, 1.0),
+    light.Specular = glm::vec4(0.4, 0.1, 0.1, 1.0),
+    light.ConstantAttenuation = 0.0f;
+    light.LinearAttenuation = 0.0f;
+    light.QuadraticAttenuation = 0.1f;
+    light.SpotCutoff = 100.0;
+    light.SpotExponent = 30.0;
+    light.SpotDirection = glm::vec3(0.0, 0.0, -1.0);
+
+    lights.push_back(light);
 }
 
 void SceneMgr::OnUpdate(const uint32& diff)
@@ -110,7 +131,7 @@ void SceneMgr::OnRender(RenderDevice* rd)
     GameObjectsMap map = staticObjects;
     map.insert(dynamicObjects.begin(), dynamicObjects.end());
 
-    Shader* shader = sResourcesMgr->GetShader("phong.glsl");
+    Shader* shader = sResourcesMgr->GetShader("lighting.glsl");
     shader->Bind();
 
     glm::mat4 MV = GetCamera()->GetViewMatrix();
@@ -118,15 +139,17 @@ void SceneMgr::OnRender(RenderDevice* rd)
     shader->SetUniform("in_MV", MV);
     shader->SetUniform("in_N", glm::inverseTranspose(glm::mat3(MV)));
     shader->SetUniform("in_V", GetCamera()->GetViewMatrix());
-    shader->SetUniform("textureSampler", 0);
+
     shader->SetUniform("textureFlag", 0.0f);
+
+    shader->SetLightSources(lights);
 
     terrain->OnRender(rd);
 
-    shader->Unbind();
+    //shader->Unbind();
 
-    shader = sResourcesMgr->GetShader("phong.glsl");
-    shader->Bind();
+    //shader = sResourcesMgr->GetShader("phong.glsl");
+    //shader->Bind();
     for (auto i = map.begin(); i != map.end(); ++i)
     {
         GameObject* ob = i->second;
@@ -135,7 +158,7 @@ void SceneMgr::OnRender(RenderDevice* rd)
         shader->SetUniform("in_MVP", GetCamera()->GetProjMatrix()*MV);
         shader->SetUniform("in_MV", MV);
         shader->SetUniform("in_N", glm::inverseTranspose(glm::mat3(MV)));
-        shader->SetUniform("in_V", GetCamera()->GetViewMatrix());
+        //shader->SetUniform("in_V", GetCamera()->GetViewMatrix());
 
         shader->SetUniform("textureSampler", 0);
         shader->SetUniform("textureFlag", renderTexture ? ob->IsTextured() : 0.0f);

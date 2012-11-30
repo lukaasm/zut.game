@@ -30,7 +30,7 @@ void main(void)
     pass_TexCoord = in_TexCoord;
 
     pass_Normal = in_N * in_Normal;
-    pass_Position = (in_MV * vec4(in_Position, 0.2f)).xyz;
+    pass_Position = (in_MV * vec4(in_Position, 1.0f)).xyz;
 }
 
 #vert_end
@@ -72,7 +72,7 @@ Material frontMaterial = Material
     vec4(0.2f, 0.2f, 0.2f, 1.0f),
     vec4(0.5f, 0.5f, 0.5f, 1.0f),
     vec4(0.0f, 0.0f, 0.5f, 1.0f),
-    40.0f
+    50.0f
 );
 
 LightSource light = LightSource

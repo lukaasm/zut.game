@@ -268,6 +268,25 @@ void ResourcesMgr::loadShaders()
 
     shaders["phong.glsl"] = shader;
 
+    shader = (new Shader())->LoadFromFile("../res/shaders/lighting.glsl");
+
+    shader->AddUniform("in_MVP");
+    shader->AddUniform("in_MV");
+    shader->AddUniform("in_N");
+    shader->AddUniform("in_V");
+
+    shader->AddUniform("textureFlag");
+    shader->AddUniform("textureSampler");
+
+    shader->AddLightSources(2);
+
+    shader->AddAttribute(VertexArray::Attrib::POSITION, "in_Position");
+    shader->AddAttribute(VertexArray::Attrib::TEXCOORD, "in_TexCoord");
+    shader->AddAttribute(VertexArray::Attrib::NORMAL, "in_Normal");
+    shader->AddAttribute(VertexArray::Attrib::COLOR, "in_Color");
+
+    shaders["lighting.glsl"] = shader;
+
     shader = (new Shader())->LoadFromFile("../res/shaders/text2d.glsl");
 
     shader->AddUniform("textureSampler");

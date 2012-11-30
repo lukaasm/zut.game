@@ -8,11 +8,13 @@
 #include <cstring>  // for memset
 #include <fstream>
 #include <iostream>
+#include <sstream>
 #include <GL/glew.h>
 #include <glm/gtc/type_ptr.hpp>
 
 #include "Exception.h"
 #include "GameObject.h"
+#include "Light.h"
 
 Shader::~Shader()
 {
@@ -143,6 +145,97 @@ void Shader::AddUniform(std::string key)
         return;
 
     uniformsLocation[key] = loc;
+}
+
+void Shader::AddLightSources(uint32 count)
+{
+    AddUniform("in_LightSourcesNum");
+    
+    // clearing stringstringstream is a bit tricky, we could use key.str(""); + key.clear(); or just use new one :P
+    std::stringstream key;
+    for (uint32 i = 0; i < count; ++i)
+    {
+        key = std::stringstream();
+        key << "in_Lights[" << i << "].Position";
+        AddUniform(key.str());
+
+        key = std::stringstream();
+        key << "in_Lights[" << i << "].Diffuse";
+        AddUniform(key.str());
+
+        key = std::stringstream();
+        key << "in_Lights[" << i << "].Specular";
+        AddUniform(key.str());
+
+        key = std::stringstream();
+        key << "in_Lights[" << i << "].ConstantAttenuation";
+        AddUniform(key.str());
+
+        key = std::stringstream();
+        key << "in_Lights[" << i << "].LinearAttenuation";
+        AddUniform(key.str());
+
+        key = std::stringstream();
+        key << "in_Lights[" << i << "].QuadraticAttenuation";
+        AddUniform(key.str());
+
+        key = std::stringstream();
+        key << "in_Lights[" << i << "].SpotCutoff";
+        AddUniform(key.str());
+
+        key = std::stringstream();
+        key << "in_Lights[" << i << "].SpotExponent";
+        AddUniform(key.str());
+
+        key = std::stringstream();
+        key << "in_Lights[" << i << "].SpotDirection";
+        AddUniform(key.str());
+    }
+}
+
+void Shader::SetLightSources(std::vector<LightSource>& lights)
+{
+    SetUniform("in_LightSourcesNum", int(lights.size()));
+    
+    std::stringstream key;
+    for (uint32 i = 0; i < lights.size(); ++i)
+    {
+        key = std::stringstream();
+        key << "in_Lights[" << i << "].Position";
+        SetUniform(key.str(), lights[i].Position);
+
+        key = std::stringstream();
+        key << "in_Lights[" << i << "].Diffuse";
+        SetUniform(key.str(), lights[i].Diffuse);
+
+        key = std::stringstream();
+        key << "in_Lights[" << i << "].Specular";
+        SetUniform(key.str(), lights[i].Specular);
+
+        key = std::stringstream();
+        key << "in_Lights[" << i << "].ConstantAttenuation";
+        SetUniform(key.str(), lights[i].ConstantAttenuation);
+
+        key = std::stringstream();
+        key << "in_Lights[" << i << "].LinearAttenuation";
+        SetUniform(key.str(), lights[i].LinearAttenuation);
+
+        key = std::stringstream();
+        key << "in_Lights[" << i << "].QuadraticAttenuation";
+        SetUniform(key.str(), lights[i].QuadraticAttenuation);
+
+        key = std::stringstream();
+        key << "in_Lights[" << i << "].SpotCutoff";
+        SetUniform(key.str(), lights[i].SpotCutoff);
+
+        key = std::stringstream();
+        key << "in_Lights[" << i << "].SpotExponent";
+        SetUniform(key.str(), lights[i].SpotExponent);
+
+        key = std::stringstream();
+        key << "in_Lights[" << i << "].SpotDirection";
+        SetUniform(key.str(), lights[i].SpotDirection);
+    }
 }
 
 void Shader::SetUniform(std::string key, glm::mat4 matrix)

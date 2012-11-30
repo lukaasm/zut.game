@@ -7,8 +7,10 @@
 
 #include <string>
 #include <unordered_map>
+#include <vector>
 
 #include "Common.h"
+#include "Light.h"
 
 typedef std::unordered_map<std::string, uint32> UniformsMap;
 
@@ -22,7 +24,11 @@ class Shader
         void Unbind();
 
         void AddAttribute(uint32, std::string);
+
         void AddUniform(std::string);
+        void AddLightSources(uint32);
+
+        void SetLightSources(std::vector<LightSource>&);
 
         void SetUniform(std::string, glm::mat4);
         void SetUniform(std::string, glm::mat3);

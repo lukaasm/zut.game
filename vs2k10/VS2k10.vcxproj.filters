@@ -119,6 +119,9 @@
     <ClInclude Include="..\src\FrameBufferObject.h">
       <Filter>Other</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\Light.h">
+      <Filter>Other</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="VS2k10.rc">
@@ -195,6 +198,9 @@
       <Filter>Terrain</Filter>
     </ClCompile>
     <ClCompile Include="..\src\FrameBufferObject.cpp">
+      <Filter>Other</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Light.cpp">
       <Filter>Other</Filter>
     </ClCompile>
   </ItemGroup>

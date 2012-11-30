@@ -6,6 +6,7 @@
 #include <vector>
 
 #include "Common.h"
+#include "Light.h"
 #include "Singleton.h"
 #include "Text2d.h"
 
@@ -55,6 +56,9 @@ class SceneMgr
         GameObjectsMap staticObjects;
         GameObjectsMap dynamicObjects;
         BoundingBoxSet boundingBoxes;
+
+        typedef std::vector<LightSource> LightVector;
+        LightVector lights;
 
 };
 
