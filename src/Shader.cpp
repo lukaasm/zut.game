@@ -9,6 +9,7 @@
 #include <fstream>
 #include <iostream>
 #include <GL/glew.h>
+#include <glm/gtc/type_ptr.hpp>
 
 #include "Exception.h"
 #include "GameObject.h"
@@ -142,4 +143,39 @@ void Shader::AddUniform(std::string key)
         return;
 
     uniformsLocation[key] = loc;
+}
+
+void Shader::SetUniform(std::string key, glm::mat4 matrix)
+{
+    glUniformMatrix4fv(GetUniformLocation(key), 1, GL_FALSE, glm::value_ptr(matrix));
+}
+
+void Shader::SetUniform(std::string key, glm::mat3 matrix)
+{
+    glUniformMatrix3fv(GetUniformLocation(key), 1, GL_FALSE, glm::value_ptr(matrix));
+}
+
+void Shader::SetUniform(std::string key, glm::vec4 vector)
+{
+    glUniform4fv(GetUniformLocation(key), 1, glm::value_ptr(vector));
+}
+
+void Shader::SetUniform(std::string key, glm::vec3 vector)
+{
+    glUniform3fv(GetUniformLocation(key), 1, glm::value_ptr(vector));
+}
+
+void Shader::SetUniform(std::string key, glm::vec2 vector)
+{
+    glUniform2fv(GetUniformLocation(key), 1, glm::value_ptr(vector));
+}
+
+void Shader::SetUniform(std::string key, float value)
+{
+    glUniform1f(GetUniformLocation(key), value);
+}
+
+void Shader::SetUniform(std::string key, int value)
+{
+    glUniform1i(GetUniformLocation(key), value);
 }

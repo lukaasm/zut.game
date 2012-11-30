@@ -7,9 +7,6 @@
 #include "GameObject.h"
 #include "RenderDevice.h"
 
-// warning C4482: nonstandard extension used: enum 'VertexArray::Attrib' used in qualified name
-#pragma warning(disable : 4482)
-
 void BoundingBoxProto::SetMinMax(const VertexVector& vertexes)
 {
     struct FindMinMax

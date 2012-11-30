@@ -57,10 +57,7 @@ void DynamicObject::Move(const uint32& diff)
         rotationY -= moveInfos[MOVE_TYPE_ROTATE_RIGHT].speed *(0.001f * diff);
     }
 
-    //if (position.y < (scale.y/2))
-    //    position.y = scale.y / 2;
-    //else
-        recreateModelMatrix();
+    recreateModelMatrix();
 }
 
 void DynamicObject::OnUpdate(const uint32 & diff)
@@ -99,6 +96,4 @@ void DynamicObject::RedoMoveOnCollision(Position& original, Position& offset)
     sSceneMgr->CollisionTest(this);
     if (coll == 1.0f)
         SetPosition(original);
-    else
-        original += offset;
 }

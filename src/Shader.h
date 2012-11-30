@@ -24,6 +24,14 @@ class Shader
         void AddAttribute(uint32, std::string);
         void AddUniform(std::string);
 
+        void SetUniform(std::string, glm::mat4);
+        void SetUniform(std::string, glm::mat3);
+        void SetUniform(std::string, glm::vec4);
+        void SetUniform(std::string, glm::vec3);
+        void SetUniform(std::string, glm::vec2);
+        void SetUniform(std::string, float);
+        void SetUniform(std::string, int);
+
         std::string getShaderInfo(uint32);
 
         Shader* LoadFromFile(std::string);
