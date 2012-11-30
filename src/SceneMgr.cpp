@@ -2,6 +2,7 @@
 
 #include <GL/glew.h>
 #include <glm/gtc/type_ptr.hpp>
+#include <glm/gtc/matrix_inverse.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <iomanip>
 
@@ -27,7 +28,7 @@ void SceneMgr::OnInit()
     terrain = new Terrain();
 
     player = new Player();
-    player->SetPosition(Position(15.0f, 0.075f, 10.0f));
+    player->SetPosition(Position(15.0f, terrain->GetHeight(15.0f, 10.0f) + 0.075f, 10.0f));
     player->SetScale(glm::vec3(0.15f));
     player->SetBoundingObject(sResourcesMgr->GetModelData(player->GetModel())->boundingBox);
     RegisterObject(player);
@@ -45,10 +46,10 @@ void SceneMgr::OnInit()
     GameObject* cube;
 
 #define POPULATE_CUBE(a,b,c) cube = new GameObject("cube.obj", "cube.tga"); \
-    cube->SetPosition(glm::vec3(a, b, c)); \
+    cube->SetPosition(glm::vec3(a, terrain->GetHeight(a, c) + b, c)); \
     cube->SetScale(glm::vec3(0.25f)); \
+    cube->SetBoundingObject(sResourcesMgr->GetModelData(cube->GetModel())->boundingBox); \
     RegisterObject(cube); \
-    cube->SetBoundingObject(sResourcesMgr->GetModelData(cube->GetModel())->boundingBox);
 
     POPULATE_CUBE(14.25f, 0.25f, 15.0f)
     POPULATE_CUBE(15.75f, 0.25f, 15.0f)
@@ -57,7 +58,7 @@ void SceneMgr::OnInit()
     POPULATE_CUBE(15.0f, 0.875f+0.625f, 15.0f)
 
     DynamicObject* ccube = new DynamicObject();
-    ccube->SetPosition(glm::vec3(15.0f, 0.875f+1.5f, 15.0f));
+    ccube->SetPosition(glm::vec3(15.0f, terrain->GetHeight(15.0f, 15.0f) + 0.875f+1.5f, 15.0f));
     ccube->SetScale(glm::vec3(0.25f));
     ccube->SetBoundingObject(sResourcesMgr->GetModelData(ccube->GetModel())->boundingBox);
 
@@ -74,8 +75,6 @@ void SceneMgr::OnUpdate(const uint32& diff)
         i->second->OnUpdate(diff);
 
     GetCamera()->OnUpdate(diff);
-
-    player->GetPosition().y = terrain->GetHeight(player->GetPosition().x, player->GetPosition().z);
 }
 
 void SceneMgr::CollisionTest(GameObject* object)
@@ -96,10 +95,10 @@ void SceneMgr::CollisionTest(GameObject* object)
         if (bounds->Intersection(*(ob->GetBoundingObject())))
         {
             object->coll = 1.0f;
-            i->second->coll = 1.0f;
+            ob->coll = 1.0f;
         }
         else
-            i->second->coll = 0.0f;
+            ob->coll = 0.0f;
     }
 }
 
@@ -111,32 +110,51 @@ void SceneMgr::OnRender(RenderDevice* rd)
     GameObjectsMap map = staticObjects;
     map.insert(dynamicObjects.begin(), dynamicObjects.end());
 
-    Shader* shader = sResourcesMgr->GetShader("test.glsl");
+    Shader* shader = sResourcesMgr->GetShader("phong.glsl");
     shader->Bind();
 
-    glm::mat4 x = glm::mat4(1.0f); //glm::translate(glm::mat4(1.0f), glm::vec3(-20.0f, 0.0f, -10.0f));
-    rd->SetUniforms(shader, GetCamera()->GetProjMatrix(), GetCamera()->GetViewMatrix(), x, 0.0f);
+    glm::mat4 MV = GetCamera()->GetViewMatrix();
+    shader->SetUniform("in_MVP", GetCamera()->GetProjMatrix()*MV);
+    shader->SetUniform("in_MV", MV);
+    shader->SetUniform("in_N", glm::inverseTranspose(glm::mat3(MV)));
+    shader->SetUniform("in_V", GetCamera()->GetViewMatrix());
+    shader->SetUniform("textureSampler", 0);
+    shader->SetUniform("textureFlag", 0.0f);
+
     terrain->OnRender(rd);
 
     shader->Unbind();
 
-    shader = sResourcesMgr->GetShader("test.glsl");
+    shader = sResourcesMgr->GetShader("phong.glsl");
+    shader->Bind();
     for (auto i = map.begin(); i != map.end(); ++i)
     {
-        shader->Bind();
-
         GameObject* ob = i->second;
 
-        rd->SetUniforms(shader, GetCamera()->GetProjMatrix(), GetCamera()->GetViewMatrix(), ob->GetModelMatrix(), renderTexture ? ob->IsTextured() : 0.0f);
-        i->second->OnRender(rd);
+        glm::mat4 MV = GetCamera()->GetViewMatrix() * ob->GetModelMatrix();
+        shader->SetUniform("in_MVP", GetCamera()->GetProjMatrix()*MV);
+        shader->SetUniform("in_MV", MV);
+        shader->SetUniform("in_N", glm::inverseTranspose(glm::mat3(MV)));
+        shader->SetUniform("in_V", GetCamera()->GetViewMatrix());
 
-        if (renderBounds)
+        shader->SetUniform("textureSampler", 0);
+        shader->SetUniform("textureFlag", renderTexture ? ob->IsTextured() : 0.0f);
+
+        ob->OnRender(rd);
+    }
+    shader->Unbind();
+
+    if (renderBounds)
+    {
+        shader = sResourcesMgr->GetShader("simple.glsl");
+        shader->Bind();
+        for (auto i = boundingBoxes.begin(); i != boundingBoxes.end(); ++i)
         {
-            if (AABoundingBox* bounds = ob->GetBoundingObject())
-            {
-                rd->SetUniforms(shader, GetCamera()->GetProjMatrix(), GetCamera()->GetViewMatrix(), bounds->GetModelMatrix(), ob->coll);
-                bounds->OnRender(rd);
-            }
+            AABoundingBox* bounds = (*i);
+            glm::mat4 MV = GetCamera()->GetViewMatrix() * bounds->GetModelMatrix();
+            shader->SetUniform("in_MVP", GetCamera()->GetProjMatrix()*MV);
+
+            bounds->OnRender(rd);
         }
         shader->Unbind();
     }
@@ -170,6 +188,9 @@ void SceneMgr::RegisterObject(GameObject* object)
         dynamicObjects[GUID] = object;
     else
         staticObjects[GUID] = object;
+
+    if (AABoundingBox* bounds = object->GetBoundingObject())
+        boundingBoxes.insert(bounds);
 }
 
 Camera* SceneMgr::GetCamera()
@@ -189,4 +210,9 @@ void SceneMgr::OnResize(uint32 width, uint32 height)
 {
     for (auto i = cameras.begin(); i != cameras.end(); ++i)
         (*i)->OnResize(width, height);
+}
+
+float SceneMgr::GetHeight(float x, float z)
+{
+    return terrain->GetHeight(x, z);
 }

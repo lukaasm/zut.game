@@ -26,9 +26,6 @@ class RenderDevice
         void OnResize(int32, int32);
         void OnUpdate(const uint32 &);
 
-        void SetUniforms(Shader*, const glm::mat4&, const glm::mat4&, const glm::mat4&, float);
-        void SetUniforms(Shader*);
-
         int32 GetWidth() const { return width; }
         int32 GetHeight() const { return height; }
 

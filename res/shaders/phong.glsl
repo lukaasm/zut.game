@@ -72,7 +72,7 @@ Material frontMaterial = Material
     vec4(0.2f, 0.2f, 0.2f, 1.0f),
     vec4(0.5f, 0.5f, 0.5f, 1.0f),
     vec4(0.0f, 0.0f, 0.5f, 1.0f),
-    20.0f
+    40.0f
 );
 
 LightSource light = LightSource

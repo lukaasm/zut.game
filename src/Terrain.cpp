@@ -9,6 +9,7 @@
 #include "Exception.h"
 #include "GameObject.h"
 #include "RenderDevice.h"
+#include "ResourcesMgr.h"
 
 #define SCALE 1.0f
 
@@ -57,6 +58,7 @@ Terrain::~Terrain()
 
 void Terrain::OnRender(RenderDevice* rd)
 {
+    //rd->ActivateTexture(GL_TEXTURE0, sResourcesMgr->GetTextureId("terrain_texture.tga"));
     rd->DrawTriangles(vao);
     //rd->DrawLines(vao);
 }
@@ -160,11 +162,6 @@ void Terrain::createVAO()
 
 float Terrain::GetHeight(float x, float z)
 {
-    //glm::mat4 modelMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(-20.0f, 0.0f, -10.0f));
-    //glm::vec4 localPos = modelMatrix * glm::vec4(x, 0.0f, z, 1.0f);
-    //return 0.075;
-    // we first get the height of four points of the quad underneath the point
-    // Check to make sure this point is not off the map at all
     int ix = (int)(x / SCALE);      
     int iz = (int)(z / SCALE);
     if (ix < 0 || ix > terrainSize.x || iz < 0 || iz > terrainSize.y)

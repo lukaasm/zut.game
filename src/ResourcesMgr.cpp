@@ -15,11 +15,6 @@
 #include "Shader.h"
 #include "VertexArrayObject.h"
 
-// warning C4482: nonstandard extension used: enum 'VertexArray::Attrib' used in qualified name
-#pragma warning(disable : 4482)
-// warning C4996: 'fscanf': This function or variable may be unsafe. Consider using fscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-#pragma warning(disable : 4996)
-
 void ResourcesMgr::OnInit()
 {
     loadTextures();
@@ -31,12 +26,6 @@ ResourcesMgr::~ResourcesMgr()
 {
     unloadModels();
     unloadTextures();
-}
-
-void ResourcesMgr::loadModels()
-{
-    loadModel("cube.obj");
-    loadModel("mb.obj");
 }
 
 void ResourcesMgr::unloadModels()
@@ -227,6 +216,26 @@ void ResourcesMgr::loadTexture(std::string fileName)
     textures[fileName] = textureId;
 }
 
+void ResourcesMgr::unloadTextures()
+{
+    std::for_each(textures.begin(), textures.end(), [](std::pair<std::string, uint32> p) { glDeleteTextures(1, &(p.second)); });
+    textures.clear();
+}
+
+void ResourcesMgr::unloadShaders()
+{
+    std::for_each(shaders.begin(), shaders.end(), [](std::pair<std::string, Shader*> p) { delete p.second;});
+    shaders.clear();
+}
+
+Shader* ResourcesMgr::GetShader(std::string key)
+{
+    if (shaders.find(key) != shaders.end())
+        return shaders[key];
+
+    return nullptr;
+}
+
 void ResourcesMgr::loadTextures()
 {
     loadTexture("mb.tga");
@@ -234,15 +243,15 @@ void ResourcesMgr::loadTextures()
     loadTexture("font.tga");
 }
 
-void ResourcesMgr::unloadTextures()
+void ResourcesMgr::loadModels()
 {
-    std::for_each(textures.begin(), textures.end(), [](std::pair<std::string, uint32> p) { glDeleteTextures(1, &(p.second)); });
-    textures.clear();
+    loadModel("cube.obj");
+    loadModel("mb.obj");
 }
 
 void ResourcesMgr::loadShaders()
 {
-    Shader* shader = (new Shader())->LoadFromFile("../res/shaders/test.glsl");
+    Shader* shader = (new Shader())->LoadFromFile("../res/shaders/phong.glsl");
 
     shader->AddUniform("in_MVP");
     shader->AddUniform("in_MV");
@@ -257,7 +266,7 @@ void ResourcesMgr::loadShaders()
     shader->AddAttribute(VertexArray::Attrib::NORMAL, "in_Normal");
     shader->AddAttribute(VertexArray::Attrib::COLOR, "in_Color");
 
-    shaders["test.glsl"] = shader;
+    shaders["phong.glsl"] = shader;
 
     shader = (new Shader())->LoadFromFile("../res/shaders/text2d.glsl");
 
@@ -274,18 +283,4 @@ void ResourcesMgr::loadShaders()
     shader->AddAttribute(VertexArray::Attrib::POSITION, "in_Position");
     shader->AddAttribute(VertexArray::Attrib::TEXCOORD, "in_TexCoord");
     shaders["simple.glsl"] = shader;
-}
-
-void ResourcesMgr::unloadShaders()
-{
-    std::for_each(shaders.begin(), shaders.end(), [](std::pair<std::string, Shader*> p) { delete p.second;});
-    shaders.clear();
-}
-
-Shader* ResourcesMgr::GetShader(std::string key)
-{
-    if (shaders.find(key) != shaders.end())
-        return shaders[key];
-
-    return nullptr;
 }

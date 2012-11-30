@@ -2,12 +2,14 @@
 #define H_SCENEMGR
 
 #include <unordered_map>
+#include <unordered_set>
 #include <vector>
 
 #include "Common.h"
 #include "Singleton.h"
 #include "Text2d.h"
 
+class AABoundingBox;
 class Camera;
 class GameObject;
 class Player;
@@ -16,12 +18,7 @@ class Shader;
 class Terrain;
 
 typedef std::unordered_map<uint32, GameObject*> GameObjectsMap;
-
-struct DirectionalLight
-{
-    glm::vec3 color;
-    float ambientIntensity;
-};
+typedef std::unordered_set<AABoundingBox*> BoundingBoxSet;
 
 class SceneMgr
 {
@@ -42,6 +39,7 @@ class SceneMgr
         Camera* GetCamera();
         Player* GetPlayer() { return player; }
 
+        float GetHeight(float, float);
         void CollisionTest(GameObject*);
 
     private:
@@ -56,6 +54,8 @@ class SceneMgr
 
         GameObjectsMap staticObjects;
         GameObjectsMap dynamicObjects;
+        BoundingBoxSet boundingBoxes;
+
 };
 
 #define sSceneMgr Singleton<SceneMgr>::Instance()

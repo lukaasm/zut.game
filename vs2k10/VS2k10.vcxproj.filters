@@ -8,9 +8,6 @@
     <Filter Include="Misc">
       <UniqueIdentifier>{dce3ca2a-2e05-43fb-8345-34e6dd4d67f5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="BaseApp">
-      <UniqueIdentifier>{c6e2b98a-5a7a-4f6b-b9e2-38f43980e79d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Camera">
       <UniqueIdentifier>{07e8c40b-1de0-4a9a-9ffc-c33e55123c46}</UniqueIdentifier>
     </Filter>
@@ -19,9 +16,6 @@
     </Filter>
     <Filter Include="GameObjects\Grid">
       <UniqueIdentifier>{6d030ae7-ccf5-4280-a91c-f2eb1a3afe86}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Input">
-      <UniqueIdentifier>{8e5f17cd-bab1-43cf-81ab-6daea38bf936}</UniqueIdentifier>
     </Filter>
     <Filter Include="Managers">
       <UniqueIdentifier>{c939f2d2-8b76-412a-9f04-8a3944cd91d0}</UniqueIdentifier>
@@ -33,28 +27,28 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="RenderDevice">
-      <UniqueIdentifier>{badbeb3f-e774-421d-bf6d-28ebdace9ab5}</UniqueIdentifier>
+    <Filter Include="Terrain">
+      <UniqueIdentifier>{f6dae73d-637b-48c1-8910-2f136dd0d5d7}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Config">
+    <Filter Include="Misc\Config">
       <UniqueIdentifier>{660ce1ed-0264-48e1-912e-dbc33ff3e7f4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Misc\BaseApp">
+      <UniqueIdentifier>{c6e2b98a-5a7a-4f6b-b9e2-38f43980e79d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Misc\Input">
+      <UniqueIdentifier>{8e5f17cd-bab1-43cf-81ab-6daea38bf936}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Misc\RenderDevice">
+      <UniqueIdentifier>{badbeb3f-e774-421d-bf6d-28ebdace9ab5}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\src\Common.h">
-      <Filter>Other</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\BaseApp.h">
-      <Filter>BaseApp</Filter>
+      <Filter>Misc\BaseApp</Filter>
     </ClInclude>
     <ClInclude Include="..\src\RenderDevice.h">
-      <Filter>RenderDevice</Filter>
-    </ClInclude>
-    <ClInclude Include="resource.h">
-      <Filter>Other</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\CallBack.h">
-      <Filter>Other</Filter>
+      <Filter>Misc\RenderDevice</Filter>
     </ClInclude>
     <ClInclude Include="..\src\Grid.h">
       <Filter>GameObjects\Grid</Filter>
@@ -66,7 +60,7 @@
       <Filter>Camera</Filter>
     </ClInclude>
     <ClInclude Include="..\src\Input.h">
-      <Filter>Input</Filter>
+      <Filter>Misc\Input</Filter>
     </ClInclude>
     <ClInclude Include="..\src\GameObject.h">
       <Filter>GameObjects</Filter>
@@ -102,15 +96,27 @@
       <Filter>GameObjects</Filter>
     </ClInclude>
     <ClInclude Include="..\src\Config.h">
-      <Filter>Config</Filter>
+      <Filter>Misc\Config</Filter>
     </ClInclude>
     <ClInclude Include="..\src\Timer.h">
       <Filter>Misc</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\Exception.h">
-      <Filter>Other</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\Terrain.h">
+      <Filter>Terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\CallBack.h">
+      <Filter>Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Common.h">
+      <Filter>Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Exception.h">
+      <Filter>Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\FrameBufferObject.h">
       <Filter>Other</Filter>
     </ClInclude>
   </ItemGroup>
@@ -124,7 +130,7 @@
       <Filter>Resource Files</Filter>
     </None>
     <None Include="..\bin\config.ini">
-      <Filter>Config</Filter>
+      <Filter>Misc\Config</Filter>
     </None>
     <None Include="..\res\shaders\test.glsl">
       <Filter>Resource Files</Filter>
@@ -135,10 +141,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\BaseApp.cpp">
-      <Filter>BaseApp</Filter>
+      <Filter>Misc\BaseApp</Filter>
     </ClCompile>
     <ClCompile Include="..\src\RenderDevice.cpp">
-      <Filter>RenderDevice</Filter>
+      <Filter>Misc\RenderDevice</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Grid.cpp">
       <Filter>GameObjects\Grid</Filter>
@@ -150,7 +156,7 @@
       <Filter>Camera</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Input.cpp">
-      <Filter>Input</Filter>
+      <Filter>Misc\Input</Filter>
     </ClCompile>
     <ClCompile Include="..\src\GameObject.cpp">
       <Filter>GameObjects</Filter>
@@ -183,9 +189,12 @@
       <Filter>GameObjects</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Config.cpp">
-      <Filter>Config</Filter>
+      <Filter>Misc\Config</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Terrain.cpp">
+      <Filter>Terrain</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\FrameBufferObject.cpp">
       <Filter>Other</Filter>
     </ClCompile>
   </ItemGroup>
