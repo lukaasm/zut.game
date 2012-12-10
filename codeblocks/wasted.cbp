@@ -42,10 +42,10 @@
 			<Add library="GLEW" />
 		</Linker>
 		<Unit filename="../res/models/cube.obj" />
-		<Unit filename="../res/models/trashbin.obj" />
-		<Unit filename="../res/shaders/font.vert" />
-		<Unit filename="../res/shaders/shader.frag" />
-		<Unit filename="../res/shaders/shader.vert" />
+		<Unit filename="../res/shaders/lighting.glsl" />
+		<Unit filename="../res/shaders/phong.glsl" />
+		<Unit filename="../res/shaders/simple.glsl" />
+		<Unit filename="../res/shaders/text2d.glsl" />
 		<Unit filename="../src/BaseApp.cpp" />
 		<Unit filename="../src/BaseApp.h" />
 		<Unit filename="../src/BoundingObject.cpp" />
@@ -67,6 +67,8 @@
 		<Unit filename="../src/Grid.h" />
 		<Unit filename="../src/Input.cpp" />
 		<Unit filename="../src/Input.h" />
+		<Unit filename="../src/Light.cpp" />
+		<Unit filename="../src/Light.h" />
 		<Unit filename="../src/ModelData.cpp" />
 		<Unit filename="../src/ModelData.h" />
 		<Unit filename="../src/Player.cpp" />
@@ -80,8 +82,11 @@
 		<Unit filename="../src/Shader.cpp" />
 		<Unit filename="../src/Shader.h" />
 		<Unit filename="../src/Singleton.h" />
+		<Unit filename="../src/Terrain.cpp" />
+		<Unit filename="../src/Terrain.h" />
 		<Unit filename="../src/Text2d.cpp" />
 		<Unit filename="../src/Text2d.h" />
+		<Unit filename="../src/Timer.h" />
 		<Unit filename="../src/VertexArrayObject.cpp" />
 		<Unit filename="../src/VertexArrayObject.h" />
 		<Extensions>
