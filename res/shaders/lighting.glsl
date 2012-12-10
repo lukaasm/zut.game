@@ -95,9 +95,9 @@ void main()
     vec3 viewDirection = normalize(-pass_Position);
     vec3 lightDirection;
     float attenuation;
-  
+
     vec3 totalLighting = vec3(scene_ambient) * vec3(frontMaterial.ambient);
-  
+
     for (int i = 0; i < in_LightSourcesNum; ++i)
     {
         vec4 LightPosition = in_V * in_Lights[i].Position;
@@ -107,26 +107,26 @@ void main()
         {
             attenuation = 1.0;
             lightDirection = normalize(LightPosition.xyz);
-        } 
-        else // point light or spotlight (or other kind of light) 
+        }
+        else // point light or spotlight (or other kind of light)
         {
             vec3 positionToLightSource = vec3(LightPosition.xyz - pass_Position);
             float distance = length(positionToLightSource);
             lightDirection = normalize(positionToLightSource);
             attenuation = 1.0 / (in_Lights[i].ConstantAttenuation + in_Lights[i].LinearAttenuation * distance + in_Lights[i].QuadraticAttenuation * distance * distance);
-      
+
             if (in_Lights[i].SpotCutoff <= 90.0) // spotlight?
             {
                 float clampedCosine = max(0.0, dot(-lightDirection, normalize(in_Lights[i].SpotDirection)));
                 if (clampedCosine < cos(radians(in_Lights[i].SpotCutoff))) // outside of spotlight cone?
                     attenuation = 0.0;
                 else
-                    attenuation = attenuation * pow(clampedCosine, in_Lights[i].SpotExponent);   
+                    attenuation = attenuation * pow(clampedCosine, in_Lights[i].SpotExponent);
             }
         }
-      
+
         vec3 diffuseReflection = attenuation * vec3(in_Lights[i].Diffuse) * vec3(frontMaterial.diffuse) * max(0.0, dot(normalDirection, lightDirection));
-      
+
         vec3 specularReflection;
         if (dot(normalDirection, lightDirection) < 0.0) // light source on the wrong side?
             specularReflection = vec3(0.0, 0.0, 0.0); // no specular reflection
@@ -135,8 +135,8 @@ void main()
 
         totalLighting = totalLighting + diffuseReflection + specularReflection;
     }
-  
-    if (textureFlag)
+
+    if (textureFlag == 1.f)
         out_Color = texture2D(textureSampler, pass_TexCoord) * vec4(totalLighting, 1.0);
     else
         out_Color = vec4(totalLighting, 1.0);

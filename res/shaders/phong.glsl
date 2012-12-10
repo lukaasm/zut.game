@@ -96,7 +96,7 @@ vec4 lightSource(vec3 N, vec3 V)
     float Idiff = NdotL;
     float Ispec = pow(NdotH, frontMaterial.shininess);
 
-    return 
+    return
         frontMaterial.ambient  * light.ambient +
         frontMaterial.diffuse  * light.diffuse  * Idiff +
         frontMaterial.specular * light.specular * Ispec;
@@ -117,7 +117,7 @@ uniform sampler2D textureSampler;
 
 void main(void)
 {
-    if (textureFlag)
+    if (textureFlag == 1.f)
         out_Color = texture2D(textureSampler, pass_TexCoord) * lighting();
     else
         out_Color = vec4(pass_Color, 1.0f) * lighting();
