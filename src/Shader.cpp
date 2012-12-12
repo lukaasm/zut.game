@@ -117,8 +117,8 @@ std::string Shader::loadShaderData(std::ifstream& file, std::string data)
         std::string line(buff);
         if (line.find(data + "_end") == 0)
             return shaderData;
-
-        shaderData.append(line).append("\n");
+            
+        shaderData.append(line).append("\n");        
     }
 
     throw Exception("[Shader] there is NO data terminator for shader:" + data);
@@ -141,119 +141,13 @@ void Shader::AddAttribute(uint32 location, std::string key)
 void Shader::AddUniform(std::string key)
 {
     int loc = glGetUniformLocation(GetId(), key.c_str());
-    if (loc == -1)
+    if (loc == 0xFF)
+    {
+        std::cout << key << " no such uniform in shader" << std::endl;
         return;
+    }
 
     uniformsLocation[key] = loc;
-}
-
-void Shader::AddLightSources(uint32 count)
-{
-    AddUniform("in_LightSourcesNum");
-
-    // clearing stringstringstream is a bit tricky, we could use key.str(""); + key.clear(); or just use new one :P
-    std::stringstream key;
-    for (uint32 i = 0; i < count; ++i)
-    {
-        key.str("");
-        key.clear();
-        key << "in_Lights[" << i << "].Position";
-        AddUniform(key.str());
-
-        key.str("");
-        key.clear();
-        key << "in_Lights[" << i << "].Diffuse";
-        AddUniform(key.str());
-
-        key.str("");
-        key.clear();
-        key << "in_Lights[" << i << "].Specular";
-        AddUniform(key.str());
-
-        key.str("");
-        key.clear();
-        key << "in_Lights[" << i << "].ConstantAttenuation";
-        AddUniform(key.str());
-
-        key.str("");
-        key.clear();
-        key << "in_Lights[" << i << "].LinearAttenuation";
-        AddUniform(key.str());
-
-        key.str("");
-        key.clear();
-        key << "in_Lights[" << i << "].QuadraticAttenuation";
-        AddUniform(key.str());
-
-        key.str("");
-        key.clear();
-        key << "in_Lights[" << i << "].SpotCutoff";
-        AddUniform(key.str());
-
-        key.str("");
-        key.clear();
-        key << "in_Lights[" << i << "].SpotExponent";
-        AddUniform(key.str());
-
-        key.str("");
-        key.clear();
-        key << "in_Lights[" << i << "].SpotDirection";
-        AddUniform(key.str());
-    }
-}
-
-void Shader::SetLightSources(std::vector<LightSource>& lights)
-{
-    SetUniform("in_LightSourcesNum", int(lights.size()));
-
-    std::stringstream key;
-    for (uint32 i = 0; i < lights.size(); ++i)
-    {
-        key.str("");
-        key.clear();
-        key << "in_Lights[" << i << "].Position";
-        SetUniform(key.str(), lights[i].Position);
-
-        key.str("");
-        key.clear();
-        key << "in_Lights[" << i << "].Diffuse";
-        SetUniform(key.str(), lights[i].Diffuse);
-
-        key.str("");
-        key.clear();
-        key << "in_Lights[" << i << "].Specular";
-        SetUniform(key.str(), lights[i].Specular);
-
-        key.str("");
-        key.clear();
-        key << "in_Lights[" << i << "].ConstantAttenuation";
-        SetUniform(key.str(), lights[i].ConstantAttenuation);
-
-        key.str("");
-        key.clear();
-        key << "in_Lights[" << i << "].LinearAttenuation";
-        SetUniform(key.str(), lights[i].LinearAttenuation);
-
-        key.str("");
-        key.clear();
-        key << "in_Lights[" << i << "].QuadraticAttenuation";
-        SetUniform(key.str(), lights[i].QuadraticAttenuation);
-
-        key.str("");
-        key.clear();
-        key << "in_Lights[" << i << "].SpotCutoff";
-        SetUniform(key.str(), lights[i].SpotCutoff);
-
-        key.str("");
-        key.clear();
-        key << "in_Lights[" << i << "].SpotExponent";
-        SetUniform(key.str(), lights[i].SpotExponent);
-
-        key.str("");
-        key.clear();
-        key << "in_Lights[" << i << "].SpotDirection";
-        SetUniform(key.str(), lights[i].SpotDirection);
-    }
 }
 
 void Shader::SetUniform(std::string key, glm::mat4 matrix)
@@ -289,4 +183,32 @@ void Shader::SetUniform(std::string key, float value)
 void Shader::SetUniform(std::string key, int value)
 {
     glUniform1i(GetUniformLocation(key), value);
+}
+
+void Shader::AddDirectionalLight()
+{
+    AddUniform("in_Light.Direction");
+    AddUniform("in_Light.Color");
+}
+
+void Shader::SetDirectionalLight(glm::vec3 direction, glm::vec3 color)
+{
+    SetUniform("in_Light.Direction", direction);
+    SetUniform("in_Light.Color", color);
+}
+
+void Shader::AddPointLight()
+{
+    AddUniform("in_Light.Position");
+    AddUniform("in_Light.Color");
+    AddUniform("in_Light.Radius");
+    AddUniform("in_Light.Intensity");
+}
+
+void Shader::SetPointLight(glm::vec3 position, glm::vec3 color, float radius, float intensity)
+{
+    SetUniform("in_Light.Position", position);
+    SetUniform("in_Light.Color", color);
+    SetUniform("in_Light.Radius", radius);
+    SetUniform("in_Light.Intensity", intensity);
 }

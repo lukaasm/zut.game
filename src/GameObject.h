@@ -48,7 +48,6 @@ struct Vertex
 #define COLOR_VERTEX_POS NORMAL_VERTEX_POS + sizeof(glm::vec3)
 
 class GameObject;
-class RenderDevice;
 
 class AABoundingBox : public BoundingBoxProto
 {
@@ -81,7 +80,7 @@ class GameObject
         explicit GameObject(std::string model, std::string texture);
         virtual ~GameObject() { delete boundingBox; }
 
-        virtual void OnRender(RenderDevice*);
+        virtual void OnRender();
         virtual void OnUpdate(const uint32 &) {}
 
         const glm::mat4& GetModelMatrix() const;
@@ -103,7 +102,7 @@ class GameObject
         virtual bool IsControllable() const { return false; }
         virtual bool IsDynamicObject() const { return false; }
 
-        float IsTextured() const { return GetTexture() != "" ? 1.0f : 0.0f; }
+        //float IsTextured() const { return GetTexture() != "placeholder.tga" ? 1.0f : 0.0f; }
         float coll;
 
         float GetRotationX() const { return rotationX; }

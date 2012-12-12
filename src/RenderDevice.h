@@ -5,38 +5,40 @@
 #ifndef H_RENDERDEVICE
 #define H_RENDERDEVICE
 
-#include <glm/glm.hpp>
+#include <GL/glew.h>
+#include <GL/glfw.h>
 
 #include "Common.h"
+#include "VertexArrayObject.h"
 
-class Camera;
-class Shader;
-class VertexArrayObject;
-
-class RenderDevice
+namespace OGLHelper
 {
-    public:
-        RenderDevice();
-        ~RenderDevice();
+    static void ActivateTexture(uint32 mode, uint32 textureId)
+    {
+        glActiveTexture(mode);
+        glBindTexture(GL_TEXTURE_2D, textureId);
+    }
 
-        void OnInit();
+    static void DrawLines(VertexArrayObject& vao)
+    {
+        vao.Bind(ID_VAO);
+        glDrawArrays(GL_LINES, 0, vao.ElementsCount());
+        vao.Unbind(ID_VAO);
+    }
 
-        void OnRenderStart();
-        void OnRenderEnd();
-        void OnResize(int32, int32);
-        void OnUpdate(const uint32 &);
+    static void DrawTriangles(VertexArrayObject& vao)
+    {
+        vao.Bind(ID_VAO);
+        glDrawArrays(GL_TRIANGLES, 0, vao.ElementsCount());
+        vao.Unbind(ID_VAO);
+    }
 
-        int32 GetWidth() const { return width; }
-        int32 GetHeight() const { return height; }
-
-        void ActivateTexture(uint32, uint32);
-
-        void DrawLines(VertexArrayObject&);
-        void DrawTriangles(VertexArrayObject&);
-
-    private:
-        int32 width;
-        int32 height;
+    static void DrawTriangleStrip(VertexArrayObject& vao)
+    {
+        vao.Bind(ID_VAO);
+        glDrawArrays(GL_TRIANGLES, 0, vao.ElementsCount());
+        vao.Unbind(ID_VAO);
+    }
 };
 
 #endif

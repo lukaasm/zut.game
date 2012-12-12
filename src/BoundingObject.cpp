@@ -83,7 +83,7 @@ void BoundingBoxProto::SetMinMax(const VertexVector& vertexes)
     vao.ElementsCount() = bbox.size();
 }
 
-void BoundingBoxProto::OnRender(RenderDevice* rd)
+void BoundingBoxProto::OnRender()
 {
-    rd->DrawLines(vao);
+    OGLHelper::DrawLines(vao);
 }

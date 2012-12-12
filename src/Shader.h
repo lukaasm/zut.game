@@ -26,9 +26,12 @@ class Shader
         void AddAttribute(uint32, std::string);
 
         void AddUniform(std::string);
-        void AddLightSources(uint32);
 
-        void SetLightSources(std::vector<LightSource>&);
+        void AddDirectionalLight();
+        void SetDirectionalLight(glm::vec3 direction, glm::vec3 color);
+
+        void AddPointLight();
+        void SetPointLight(glm::vec3 position, glm::vec3 color, float radius, float intensity);
 
         void SetUniform(std::string, glm::mat4);
         void SetUniform(std::string, glm::mat3);

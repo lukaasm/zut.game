@@ -84,16 +84,14 @@
     <ClCompile Include="..\src\BoundingObject.cpp" />
     <ClCompile Include="..\src\Camera.cpp" />
     <ClCompile Include="..\src\Config.cpp" />
+    <ClCompile Include="..\src\DeferredRendering.cpp" />
     <ClCompile Include="..\src\DynamicObject.cpp" />
-    <ClCompile Include="..\src\FrameBufferObject.cpp" />
     <ClCompile Include="..\src\Frustum.cpp" />
     <ClCompile Include="..\src\GameObject.cpp" />
-    <ClCompile Include="..\src\Grid.cpp" />
     <ClCompile Include="..\src\Input.cpp" />
     <ClCompile Include="..\src\Light.cpp" />
     <ClCompile Include="..\src\ModelData.cpp" />
     <ClCompile Include="..\src\Player.cpp" />
-    <ClCompile Include="..\src\RenderDevice.cpp" />
     <ClCompile Include="..\src\ResourcesMgr.cpp" />
     <ClCompile Include="..\src\SceneMgr.cpp" />
     <ClCompile Include="..\src\Shader.cpp" />
@@ -108,12 +106,11 @@
     <ClInclude Include="..\src\Camera.h" />
     <ClInclude Include="..\src\Common.h" />
     <ClInclude Include="..\src\Config.h" />
+    <ClInclude Include="..\src\DeferredRendering.h" />
     <ClInclude Include="..\src\DynamicObject.h" />
     <ClInclude Include="..\src\Exception.h" />
-    <ClInclude Include="..\src\FrameBufferObject.h" />
     <ClInclude Include="..\src\Frustum.h" />
     <ClInclude Include="..\src\GameObject.h" />
-    <ClInclude Include="..\src\Grid.h" />
     <ClInclude Include="..\src\Input.h" />
     <ClInclude Include="..\src\Light.h" />
     <ClInclude Include="..\src\ModelData.h" />
@@ -135,7 +132,12 @@
   <ItemGroup>
     <None Include="..\bin\config.ini" />
     <None Include="..\res\icon.ico" />
-    <None Include="..\res\shaders\test.glsl" />
+    <None Include="..\res\shaders\deferred_finalpass.glsl" />
+    <None Include="..\res\shaders\deferred_geopass.glsl" />
+    <None Include="..\res\shaders\deferred_dirlightpass.glsl" />
+    <None Include="..\res\shaders\deferred_pointlightpass.glsl" />
+    <None Include="..\res\shaders\lighting.glsl" />
+    <None Include="..\res\shaders\simple.glsl" />
     <None Include="..\res\shaders\text2d.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

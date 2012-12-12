@@ -6,6 +6,7 @@
 #include <vector>
 
 #include "Common.h"
+#include "DeferredRendering.h"
 #include "Light.h"
 #include "Singleton.h"
 #include "Text2d.h"
@@ -14,12 +15,12 @@ class AABoundingBox;
 class Camera;
 class GameObject;
 class Player;
-class RenderDevice;
 class Shader;
 class Terrain;
 
 typedef std::unordered_map<uint32, GameObject*> GameObjectsMap;
 typedef std::unordered_set<AABoundingBox*> BoundingBoxSet;
+typedef std::vector<PointLight> PointLightVector;
 
 class SceneMgr
 {
@@ -30,20 +31,28 @@ class SceneMgr
 
         void OnInit();
         void OnUpdate(const uint32 & diff);
-        void OnRender(RenderDevice*);
+        void OnRender();
         void OnResize(uint32 width, uint32 height);
 
         void RegisterObject(GameObject* object);
 
         void ToggleCamera();
 
+        GameObjectsMap GetObjects();
+
         Camera* GetCamera();
+        PointLightVector& GetPointLights() { return lights; }
         Player* GetPlayer() { return player; }
+        Terrain* GetTerrain() { return terrain; }
 
         float GetHeight(float, float);
         void CollisionTest(GameObject*);
 
     private:
+        //void renderPass();
+        void renderGUI();
+        void initLights();
+
         uint32 guid;
         Text2D text2D;
 
@@ -55,10 +64,12 @@ class SceneMgr
 
         GameObjectsMap staticObjects;
         GameObjectsMap dynamicObjects;
+
         BoundingBoxSet boundingBoxes;
 
-        typedef std::vector<LightSource> LightVector;
-        LightVector lights;
+        PointLightVector lights;
+
+        DeferredRenderer deferred;
 
 };
 
