@@ -21,18 +21,16 @@
 #define UPDATE_STEP 15
 
 double BaseApp::frameTime = 0;
+float BaseApp::fps = 0;
 
 BaseApp::BaseApp() : stop(false)
 {
-    renderDevice = new RenderDevice();
 }
 
 BaseApp::~BaseApp()
 {
     delete_ptr(BaseApp::CloseCallback)
     delete_ptr(BaseApp::ResizeCallback)
-
-    delete_ptr(renderDevice)
 }
 
 void BaseApp::createContext()
@@ -92,8 +90,6 @@ void BaseApp::Init()
         sResourcesMgr->OnInit();
         sSceneMgr->OnInit();
 
-        GetRenderDevice()->OnInit();
-
         int width, height;
         glfwGetWindowSize(&width, &height);
         resizeWindow(width, height);
@@ -114,15 +110,23 @@ void BaseApp::Run()
     frameTimer.Start(100);
 
     uint32 accDiff = 0;
+    uint32 frameCount = 0;
+
     double start = glfwGetTime();
     while (!Stopped())
     {
+        ++frameCount;
+
         double now = glfwGetTime();
         accDiff += uint32(ceil((now - start)*1000.0f));
+        
+        fps = float(frameCount)*1000.0f / frameTimer.Elapsed();
 
         if (frameTimer.Passed())
         {
-            frameTime = (now - start)*1000.0f;
+            frameCount = 0;
+
+            frameTime = (now - start) * 1000.0f;
             frameTimer.Start(1000);
         }
 
@@ -151,7 +155,6 @@ void BaseApp::ResizeWindow(int32 width, int32 height)
 
 void BaseApp::resizeWindow(int32 width, int32 height)
 {
-    GetRenderDevice()->OnResize(width, height);
     sSceneMgr->OnResize(width, height);
 
     sConfig->Set("width", width);
@@ -176,8 +179,6 @@ void BaseApp::OnUpdate(const uint32 diff)
     try
     {
         sSceneMgr->OnUpdate(diff);
-
-        GetRenderDevice()->OnUpdate(diff);
     }
     catch (Exception& e)
     {
@@ -193,9 +194,7 @@ void BaseApp::OnRender()
 {
     try
     {
-        GetRenderDevice()->OnRenderStart();
-        sSceneMgr->OnRender(GetRenderDevice());
-        GetRenderDevice()->OnRenderEnd();
+        sSceneMgr->OnRender();
     }
     catch (Exception& e)
     {

@@ -7,7 +7,6 @@
 #include "VertexArrayObject.h"
 
 class Camera;
-class RenderDevice;
 class Shader;
 
 class Text2D
@@ -16,7 +15,9 @@ class Text2D
         ~Text2D();
 
         void Init();
-        void Print(RenderDevice*, std::string, int, int, int);
+        void RenderText(std::string, int, int, int);
+        void RenderSprite(int, int, int, int);
+        void RenderSprite(VertexArrayObject&, int);
 
         void unloadFont();
 

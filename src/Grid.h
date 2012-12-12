@@ -10,7 +10,6 @@
 #include "Common.h"
 #include "GameObject.h"
 
-class RenderDevice;
 class Shader;
 
 class Grid : public GameObject
@@ -18,7 +17,7 @@ class Grid : public GameObject
     public:
         Grid();
 
-        void OnRender(RenderDevice*) override;
+        void OnRender() override;
 };
 
 #endif

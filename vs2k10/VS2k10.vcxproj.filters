@@ -14,9 +14,6 @@
     <Filter Include="GameObjects">
       <UniqueIdentifier>{c5c2562e-f095-4192-ba81-935fb5c1db3f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="GameObjects\Grid">
-      <UniqueIdentifier>{6d030ae7-ccf5-4280-a91c-f2eb1a3afe86}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Managers">
       <UniqueIdentifier>{c939f2d2-8b76-412a-9f04-8a3944cd91d0}</UniqueIdentifier>
     </Filter>
@@ -49,9 +46,6 @@
     </ClInclude>
     <ClInclude Include="..\src\RenderDevice.h">
       <Filter>Misc\RenderDevice</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Grid.h">
-      <Filter>GameObjects\Grid</Filter>
     </ClInclude>
     <ClInclude Include="..\src\Shader.h">
       <Filter>Shader</Filter>
@@ -116,12 +110,10 @@
     <ClInclude Include="resource.h">
       <Filter>Misc</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\FrameBufferObject.h">
-      <Filter>Other</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\Light.h">
       <Filter>Other</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\DeferredRendering.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="VS2k10.rc">
@@ -135,22 +127,31 @@
     <None Include="..\bin\config.ini">
       <Filter>Misc\Config</Filter>
     </None>
-    <None Include="..\res\shaders\test.glsl">
+    <None Include="..\res\shaders\text2d.glsl">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="..\res\shaders\text2d.glsl">
+    <None Include="..\res\shaders\lighting.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\res\shaders\simple.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\res\shaders\deferred_geopass.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\res\shaders\deferred_dirlightpass.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\res\shaders\deferred_finalpass.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\res\shaders\deferred_pointlightpass.glsl">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\BaseApp.cpp">
       <Filter>Misc\BaseApp</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\RenderDevice.cpp">
-      <Filter>Misc\RenderDevice</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Grid.cpp">
-      <Filter>GameObjects\Grid</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Shader.cpp">
       <Filter>Shader</Filter>
@@ -197,11 +198,9 @@
     <ClCompile Include="..\src\Terrain.cpp">
       <Filter>Terrain</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\FrameBufferObject.cpp">
-      <Filter>Other</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\Light.cpp">
       <Filter>Other</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\DeferredRendering.cpp" />
   </ItemGroup>
 </Project>

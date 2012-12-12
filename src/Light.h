@@ -3,37 +3,19 @@
 
 #include <glm/glm.hpp>
 
-#define MAX_LIGHTS 2
-
-struct LightSource
+struct DirectionalLight
 {
-    LightSource() {}
-    LightSource(const LightSource& ls)
-    {
-        Position = ls.Position;
-        Diffuse = ls.Diffuse;
-        Specular = ls.Specular;
+    glm::vec3 Direction;
+    glm::vec3 Color;
+};
 
-        ConstantAttenuation = ls.ConstantAttenuation;
-        LinearAttenuation = ls.LinearAttenuation;
-        QuadraticAttenuation = ls.QuadraticAttenuation;
+struct PointLight
+{
+    glm::vec3 Position;
+    glm::vec3 Color;
 
-        SpotCutoff = ls.SpotCutoff;
-        SpotExponent = ls.SpotExponent;
-        SpotDirection = ls.SpotDirection;
-    }
-
-    glm::vec4 Position;
-    glm::vec4 Diffuse;
-    glm::vec4 Specular;
-
-    float ConstantAttenuation;
-    float LinearAttenuation;
-    float QuadraticAttenuation;
-
-    float SpotCutoff;
-    float SpotExponent;
-    glm::vec3 SpotDirection;
+    float Radius;
+    float Intensity;
 };
 
 #endif

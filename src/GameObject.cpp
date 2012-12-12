@@ -11,12 +11,12 @@
 #include "RenderDevice.h"
 #include "ResourcesMgr.h"
 
-void GameObject::OnRender(RenderDevice* rd)
+void GameObject::OnRender()
 {
-    rd->ActivateTexture(GL_TEXTURE0, sResourcesMgr->GetTextureId(textureName));
+    //rd->ActivateTexture(GL_TEXTURE0, sResourcesMgr->GetTextureId(textureName));
 
     ModelData* modelData = sResourcesMgr->GetModelData(modelName);
-    rd->DrawTriangles(modelData->vao);
+    OGLHelper::DrawTriangles(modelData->vao);
 }
 
 void GameObject::recreateModelMatrix()

@@ -21,6 +21,12 @@
 #include "Shader.h"
 #include "Terrain.h"
 
+#define POPULATE_CUBE(a,b,c) cube = new GameObject("cube.obj", "cube.tga"); \
+    cube->SetPosition(glm::vec3(a, terrain->GetHeight(a, c) + b, c)); \
+    cube->SetScale(glm::vec3(0.25f)); \
+    cube->SetBoundingObject(sResourcesMgr->GetModelData(cube->GetModel())->boundingBox); \
+    RegisterObject(cube); \
+
 void SceneMgr::OnInit()
 {
     guid = 0;
@@ -45,12 +51,6 @@ void SceneMgr::OnInit()
 
     GameObject* cube;
 
-#define POPULATE_CUBE(a,b,c) cube = new GameObject("cube.obj", "cube.tga"); \
-    cube->SetPosition(glm::vec3(a, terrain->GetHeight(a, c) + b, c)); \
-    cube->SetScale(glm::vec3(0.25f)); \
-    cube->SetBoundingObject(sResourcesMgr->GetModelData(cube->GetModel())->boundingBox); \
-    RegisterObject(cube); \
-
     POPULATE_CUBE(14.25f, 0.25f, 15.0f)
     POPULATE_CUBE(15.75f, 0.25f, 15.0f)
     POPULATE_CUBE(14.625f, 0.875f, 15.0f)
@@ -68,26 +68,8 @@ void SceneMgr::OnInit()
 
     text2D.Init();
 
-    // directional
-    LightSource light;
-    light.Position = glm::vec4(0.0, 5.0, 1.0, 0.0),
-    light.Diffuse = glm::vec4(1.0f, 1.0f, 1.0f, 1.0),
-    light.Specular = glm::vec4(1.0f, 1.0f, 1.0f, 1.0);
-
-    lights.push_back(light);
-
-    // point
-    light.Position = glm::vec4(15.0, 3.0, 12.5, 1.0),
-    light.Diffuse = glm::vec4(1.0, 1.0, 1.0, 1.0),
-    light.Specular = glm::vec4(0.4, 0.1, 0.1, 1.0),
-    light.ConstantAttenuation = 0.0f;
-    light.LinearAttenuation = 0.0f;
-    light.QuadraticAttenuation = 0.1f;
-    light.SpotCutoff = 100.0;
-    light.SpotExponent = 30.0;
-    light.SpotDirection = glm::vec3(0.0, 0.0, -1.0);
-
-    lights.push_back(light);
+    initLights();
+    deferred.Init();
 }
 
 void SceneMgr::OnUpdate(const uint32& diff)
@@ -121,73 +103,6 @@ void SceneMgr::CollisionTest(GameObject* object)
         else
             ob->coll = 0.0f;
     }
-}
-
-void SceneMgr::OnRender(RenderDevice* rd)
-{
-    bool renderTexture = sConfig->GetDefault("render.textures", true);
-    bool renderBounds = sConfig->GetDefault("render.bounds", true);
-
-    GameObjectsMap map = staticObjects;
-    map.insert(dynamicObjects.begin(), dynamicObjects.end());
-
-    Shader* shader = sResourcesMgr->GetShader("lighting.glsl");
-    shader->Bind();
-
-    glm::mat4 MV = GetCamera()->GetViewMatrix();
-    shader->SetUniform("in_MVP", GetCamera()->GetProjMatrix()*MV);
-    shader->SetUniform("in_MV", MV);
-    shader->SetUniform("in_N", glm::inverseTranspose(glm::mat3(MV)));
-    shader->SetUniform("in_V", GetCamera()->GetViewMatrix());
-
-    shader->SetUniform("textureFlag", 0.0f);
-
-    shader->SetLightSources(lights);
-
-    terrain->OnRender(rd);
-
-    //shader->Unbind();
-
-    //shader = sResourcesMgr->GetShader("phong.glsl");
-    //shader->Bind();
-    for (auto i = map.begin(); i != map.end(); ++i)
-    {
-        GameObject* ob = i->second;
-
-        glm::mat4 MV = GetCamera()->GetViewMatrix() * ob->GetModelMatrix();
-        shader->SetUniform("in_MVP", GetCamera()->GetProjMatrix()*MV);
-        shader->SetUniform("in_MV", MV);
-        shader->SetUniform("in_N", glm::inverseTranspose(glm::mat3(MV)));
-        //shader->SetUniform("in_V", GetCamera()->GetViewMatrix());
-
-        shader->SetUniform("textureSampler", 0);
-        shader->SetUniform("textureFlag", renderTexture ? ob->IsTextured() : 0.0f);
-
-        ob->OnRender(rd);
-    }
-    shader->Unbind();
-
-    if (renderBounds)
-    {
-        shader = sResourcesMgr->GetShader("simple.glsl");
-        shader->Bind();
-        for (auto i = boundingBoxes.begin(); i != boundingBoxes.end(); ++i)
-        {
-            AABoundingBox* bounds = (*i);
-            glm::mat4 MV = GetCamera()->GetViewMatrix() * bounds->GetModelMatrix();
-            shader->SetUniform("in_MVP", GetCamera()->GetProjMatrix()*MV);
-
-            bounds->OnRender(rd);
-        }
-        shader->Unbind();
-    }
-
-    std::stringstream fps;
-    fps << "FrameTime: " << std::setprecision(3) << BaseApp::frameTime << "ms" << " FPS: " << int(1000.0f/BaseApp::frameTime);
-
-    text2D.Print(rd, fps.str(), 10, sConfig->GetDefault("height", 600) - 12, 12);
-    text2D.Print(rd, "WSAD - movement, <- -> - rotate", 10, 10, 12);
-    text2D.Print(rd, "K - change camera, L - toggle textures", 10, 25, 12);
 }
 
 SceneMgr::~SceneMgr()
@@ -238,4 +153,151 @@ void SceneMgr::OnResize(uint32 width, uint32 height)
 float SceneMgr::GetHeight(float x, float z)
 {
     return terrain->GetHeight(x, z);
+}
+
+void SceneMgr::OnRender()
+{
+    deferred.GeometryPass();
+    deferred.LightsPass();
+    deferred.FinalPass();
+    //renderPass();
+
+    renderGUI();
+}
+
+/*
+void SceneMgr::renderPass()
+{
+    glEnable(GL_DEPTH_TEST);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    bool renderTexture = sConfig->GetDefault("render.textures", true);
+    bool renderBounds = sConfig->GetDefault("render.bounds", true);
+
+    Shader* shader = sResourcesMgr->GetShader("lighting.glsl");
+    shader->Bind();
+
+    glm::mat4 MV = GetCamera()->GetViewMatrix();
+    shader->SetUniform("in_MVP", GetCamera()->GetProjMatrix()*MV);
+    shader->SetUniform("in_MV", MV);
+    shader->SetUniform("in_N", glm::inverseTranspose(glm::mat3(MV)));
+    shader->SetUniform("in_V", GetCamera()->GetViewMatrix());
+    shader->SetUniform("textureSampler", 0);
+
+    shader->SetLightSources(lights);
+
+    terrain->OnRender();
+
+    GameObjectsMap allObjects = staticObjects;
+    allObjects.insert(dynamicObjects.begin(), dynamicObjects.end());
+    for (auto i = allObjects.begin(); i != allObjects.end(); ++i)
+    {
+        GameObject* ob = i->second;
+
+        glm::mat4 MV = GetCamera()->GetViewMatrix() * ob->GetModelMatrix();
+        shader->SetUniform("in_MVP", GetCamera()->GetProjMatrix()*MV);
+        shader->SetUniform("in_MV", MV);
+        shader->SetUniform("in_N", glm::inverseTranspose(glm::mat3(MV)));
+
+        shader->SetUniform("textureSampler", 0);
+        OGLHelper::ActivateTexture(GL_TEXTURE0, sResourcesMgr->GetTextureId(ob->GetTexture()));
+
+        ob->OnRender();
+    }
+
+    for (uint8 i = 0; i < lights.size(); ++i)
+    {
+        glm::mat4 worldMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(lights[i].Position));
+       
+	    worldMatrix = glm::scale(worldMatrix, glm::vec3(0.15));
+
+        MV = GetCamera()->GetViewMatrix() * worldMatrix;
+        shader->SetUniform("in_MVP", GetCamera()->GetProjMatrix() * MV);
+        shader->SetUniform("in_MV", MV);
+        shader->SetUniform("in_N", glm::inverseTranspose(glm::mat3(MV)));
+
+        shader->SetUniform("textureSampler", 0);
+
+	    ModelData* modelData = sResourcesMgr->GetModelData("sphere.obj");
+        OGLHelper::ActivateTexture(GL_TEXTURE0, sResourcesMgr->GetTextureId("placeholder.tga"));
+        OGLHelper::DrawTriangles(modelData->vao);
+    }
+
+    shader->Unbind();
+
+    if (renderBounds)
+    {
+        shader = sResourcesMgr->GetShader("simple.glsl");
+        shader->Bind();
+        for (auto i = boundingBoxes.begin(); i != boundingBoxes.end(); ++i)
+        {
+            AABoundingBox* bounds = (*i);
+            glm::mat4 MV = GetCamera()->GetViewMatrix() * bounds->GetModelMatrix();
+            shader->SetUniform("in_MVP", GetCamera()->GetProjMatrix()*MV);
+
+            bounds->OnRender();
+        }
+        shader->Unbind();
+    }
+}
+*/
+
+void SceneMgr::renderGUI()
+{
+    std::stringstream fps;
+    fps << "FrameTime: " << std::setprecision(3) << BaseApp::frameTime << "ms" << " FPS: " << BaseApp::fps;
+
+    text2D.RenderText(fps.str(), 10, sConfig->GetDefault("height", 600) - 12, 12);
+    text2D.RenderText("WSAD - movement, <- -> - rotate", 10, 10, 12);
+    text2D.RenderText("K - change camera, L - toggle textures", 10, 25, 12);
+
+    //text2D.RenderSprite(5, 5, 200, deferred.lightTexture);
+}
+
+void SceneMgr::initLights()
+{
+    // point
+    PointLight light;
+    light.Position = glm::vec3(18.0, 3.0, 15.5);
+    light.Color = glm::vec3(1.0, 0.0, 0.0);
+    light.Radius = 5.0f;
+    light.Intensity = 1.0f;
+
+    lights.push_back(light);
+
+    light.Position = glm::vec3(12.0, 3.0, 15.5),
+    light.Color = glm::vec3(0.0, 1.0, 0.0);
+    light.Radius = 5.0f;
+    light.Intensity = 1.0f;
+
+    lights.push_back(light);
+
+    light.Position = glm::vec3(15.0, 3.0, 12.5),
+    light.Color = glm::vec3(0.0, 0.0, 1.0);
+    light.Radius = 6.0f;
+    light.Intensity = 1.0f;
+
+    lights.push_back(light);
+
+    light.Position = glm::vec3(15.0, 7.0, 15.5),
+    light.Color = glm::vec3(1.0, 1.0, 1.0);
+    light.Radius = 10.0f;
+    light.Intensity = 2.0f;
+
+    lights.push_back(light);
+
+    light.Position = glm::vec3(15.0, 7.0, 35.0f),
+    light.Color = glm::vec3(1.0, 0.0, 1.0);
+    light.Radius = 10.0f;
+    light.Intensity = 2.0f;
+
+    lights.push_back(light);
+}
+
+GameObjectsMap SceneMgr::GetObjects()
+{
+    GameObjectsMap allObjects = staticObjects;
+    allObjects.insert(dynamicObjects.begin(), dynamicObjects.end());
+
+    return allObjects;
 }

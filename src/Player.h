@@ -5,13 +5,13 @@
 
 class Player : public DynamicObject
 {
-public:
-    Player() : DynamicObject() {}
-    ~Player() {}
+    public:
+        Player() : DynamicObject() { modelName = "sphere.obj"; textureName = "placeholder.tga"; }
+        ~Player() {}
 
-    virtual bool IsControllable() const override { return true; }
-    virtual void OnUpdate(const uint32 &) override;
-private:
+        virtual bool IsControllable() const override { return true; }
+        virtual void OnUpdate(const uint32 &) override;
+    private:
 
 };
 

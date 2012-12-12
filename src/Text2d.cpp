@@ -6,6 +6,7 @@
 #include <vector>
 
 #include "Camera.h"
+#include "Config.h"
 #include "GameObject.h"
 #include "RenderDevice.h"
 #include "ResourcesMgr.h"
@@ -43,8 +44,9 @@ void Text2D::Init()
     vao.Unbind(ID_VAO);
 }
 
-void Text2D::Print(RenderDevice* rd, std::string text, int x, int y, int fontSize)
+void Text2D::RenderText(std::string text, int x, int y, int fontSize)
 {
+    //glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
     // Fill buffers
     std::vector<FontVert> vertices;
 
@@ -79,19 +81,74 @@ void Text2D::Print(RenderDevice* rd, std::string text, int x, int y, int fontSiz
     vao.Unbind(ID_VBO);
     vao.Unbind(ID_VAO);
 
-    glDisable(GL_DEPTH_TEST);
+    Shader* shader = sResourcesMgr->GetShader("text2d.glsl");
+
+    // Bind shader
+    shader->Bind();
+
+    OGLHelper::ActivateTexture(GL_TEXTURE0, textureId);
+    shader->SetUniform("textureSampler", 0);
+
+    uint32 hWidth = sConfig->GetDefault("width", 800)/2;
+    uint32 hHeight = sConfig->GetDefault("height", 600)/2;
+    shader->SetUniform("in_ScreenSize", glm::vec2(hWidth, hHeight));
+
+    OGLHelper::DrawTriangles(vao);
+
+    shader->Unbind();
+}
+
+void Text2D::RenderSprite(int x, int y, int size, int textureId)
+{
+    // Fill buffers
+    std::vector<FontVert> vertices;
+    FontVert vert[6] =
+    {
+        { glm::vec2(x     , y+size), glm::vec2(0,1) },
+        { glm::vec2(x     , y     ), glm::vec2(0,0) },
+        { glm::vec2(x+size, y+size), glm::vec2(1,1) },
+        { glm::vec2(x+size, y     ), glm::vec2(1,0) },
+        { glm::vec2(x+size, y+size), glm::vec2(1,1) },
+        { glm::vec2(x     , y     ), glm::vec2(0,0) },
+    };
+
+    for (uint8 j = 0; j < 6; ++j)
+        vertices.push_back(vert[j]);
+
+    vao.ElementsCount() = vertices.size();
+
+    vao.Bind(ID_VAO);
+    vao.Bind(ID_VBO);
+
+    vao.FillBuffer(GL_DYNAMIC_DRAW, &vertices[0], sizeof(FontVert)*vertices.size());
+
+    vao.Unbind(ID_VBO);
+    vao.Unbind(ID_VAO);
 
     Shader* shader = sResourcesMgr->GetShader("text2d.glsl");
 
     // Bind shader
     shader->Bind();
 
-    rd->ActivateTexture(GL_TEXTURE0, textureId);
+    OGLHelper::ActivateTexture(GL_TEXTURE0, textureId);
     shader->SetUniform("textureSampler", 0);
 
-    rd->DrawTriangles(vao);
+    OGLHelper::DrawTriangles(vao);
 
     shader->Unbind();
+}
 
-    glEnable(GL_DEPTH_TEST);
+void Text2D::RenderSprite(VertexArrayObject& vao, int textureId)
+{
+    Shader* shader = sResourcesMgr->GetShader("text2d.glsl");
+
+    // Bind shader
+    shader->Bind();
+
+    OGLHelper::ActivateTexture(GL_TEXTURE0, textureId);
+    shader->SetUniform("textureSampler", 0);
+
+    OGLHelper::DrawTriangles(vao);
+
+    shader->Unbind();
 }

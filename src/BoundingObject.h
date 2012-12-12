@@ -8,7 +8,6 @@
 
 class AABoundingBox;
 class Frustum;
-class RenderDevice;
 
 struct Vertex;
 
@@ -28,7 +27,7 @@ class BoundingBoxProto
 
         BoundingType GetType() const { return BOUNDING_BOX_PROTO; }
 
-        void OnRender(RenderDevice*);
+        void OnRender();
 
         //virtual bool Intersection(const glm::vec3& point) const = 0;
         //virtual bool Intersection(const AABoundingBox& box) const = 0;

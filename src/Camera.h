@@ -10,7 +10,6 @@
 #include "Common.h"
 //#include "Frustum.h"
 
-class RenderDevice;
 class DynamicObject;
 
 class Camera
@@ -29,6 +28,7 @@ class Camera
         glm::mat4 GetViewMatrix() const { return viewMatrix; }
 
         virtual void SetPosition(Position& pos) { position = pos; }
+        glm::vec3& GetPosition() { return position; }
         //Frustum& GetFrustum() { return frustum; }
 
     protected:

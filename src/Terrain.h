@@ -8,8 +8,6 @@
 
 #include "VertexArrayObject.h"
 
-class RenderDevice;
-
 struct PolygonFace
 {
     PolygonFace() {}
@@ -33,7 +31,7 @@ class Terrain
         Terrain();
         ~Terrain();
 
-        void OnRender(RenderDevice*);
+        void OnRender();
 
         void calculateFaces(GLFWimage*);
         void calculateNormals();

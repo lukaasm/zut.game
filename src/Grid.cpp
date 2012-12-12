@@ -22,8 +22,8 @@ Grid::Grid() : GameObject("grid", "")
     SetScale(glm::vec3(0.5f));
 }
 
-void Grid::OnRender(RenderDevice* rd)
+void Grid::OnRender()
 {
     ModelData* modelData = sResourcesMgr->GetModelData(modelName);
-    rd->DrawLines(modelData->vao);
+    OGLHelper::DrawLines(modelData->vao);
 }

@@ -56,11 +56,10 @@ Terrain::~Terrain()
     delete [] terrainHeights;
 }
 
-void Terrain::OnRender(RenderDevice* rd)
+void Terrain::OnRender()
 {
-    //rd->ActivateTexture(GL_TEXTURE0, sResourcesMgr->GetTextureId("terrain_texture.tga"));
-    rd->DrawTriangles(vao);
-    //rd->DrawLines(vao);
+    OGLHelper::ActivateTexture(GL_TEXTURE0, sResourcesMgr->GetTextureId("placeholder.tga"));
+    OGLHelper::DrawTriangles(vao);
 }
 
 void Terrain::calculateFaces(GLFWimage* image)
@@ -187,7 +186,7 @@ float Terrain::GetHeight(float x, float z)
         height += (triZ1 - triZ3) * (1.0f - sqZ);
         height += (triZ2 - triZ3) * (1.0f - sqX);
     }
-    return height;
+    return height + 0.65;
 }
 
 
