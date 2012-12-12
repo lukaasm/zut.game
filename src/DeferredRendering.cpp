@@ -175,6 +175,9 @@ void DeferredRenderer::DirectionalLightPass(glm::vec3 dir, glm::vec3 color)
 
 void DeferredRenderer::PointLightPass(glm::vec3 position, glm::vec3 color, float radius, float intensity)
 {
+    glEnable(GL_DEPTH_TEST);
+    glClear(GL_DEPTH_BUFFER_BIT);
+
     Shader* shader = sResourcesMgr->GetShader("deferred_pointlightpass.glsl");
     shader->Bind();
 
@@ -189,7 +192,7 @@ void DeferredRenderer::PointLightPass(glm::vec3 position, glm::vec3 color, float
 
     Camera* camera = sSceneMgr->GetCamera();
 
-    glm::mat4 model = glm::scale(glm::translate(glm::mat4(1.0f), position), glm::vec3(radius));
+    glm::mat4 model = glm::scale(glm::translate(glm::mat4(1.0f), position), glm::vec3(radius * 1.4f));
     glm::mat4 mvp = camera->GetProjMatrix() * camera->GetViewMatrix() * model;
 
     shader->SetUniform("in_CameraPosition", camera->GetPosition());
@@ -201,11 +204,12 @@ void DeferredRenderer::PointLightPass(glm::vec3 position, glm::vec3 color, float
     glEnable(GL_CULL_FACE);
     glCullFace(GL_FRONT);
     
-    ModelData* data = sResourcesMgr->GetModelData("cube.obj");
+    ModelData* data = sResourcesMgr->GetModelData("sphere.obj");
     OGLHelper::DrawTriangleStrip(data->vao);
     //OGLHelper::DrawTriangles(quadVAO);
     shader->Unbind();
 
+    glDisable(GL_DEPTH_TEST);
     glDisable(GL_CULL_FACE);
 }
 
