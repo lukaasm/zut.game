@@ -261,7 +261,7 @@ void SceneMgr::initLights()
     light.Position = glm::vec3(18.0, 3.0, 15.5);
     light.Color = glm::vec3(1.0, 0.0, 0.0);
     light.Radius = 5.0f;
-    light.Intensity = 1.0f;
+    light.Intensity = 0.6f;
 
     lights.push_back(light);
 
@@ -281,15 +281,15 @@ void SceneMgr::initLights()
 
     light.Position = glm::vec3(15.0, 7.0, 15.5),
     light.Color = glm::vec3(1.0, 1.0, 1.0);
-    light.Radius = 10.0f;
-    light.Intensity = 2.0f;
+    light.Radius = 6.0f;
+    light.Intensity = 2.6f;
 
     lights.push_back(light);
 
     light.Position = glm::vec3(15.0, 7.0, 35.0f),
     light.Color = glm::vec3(1.0, 0.0, 1.0);
-    light.Radius = 10.0f;
-    light.Intensity = 2.0f;
+    light.Radius = 6.0f;
+    light.Intensity = 1.0f;
 
     lights.push_back(light);
 }
