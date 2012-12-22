@@ -19,6 +19,7 @@
 #include "RenderDevice.h"
 #include "ResourcesMgr.h"
 #include "Shader.h"
+#include "Timer.h"
 #include "Terrain.h"
 
 void SceneMgr::OnInit()
@@ -59,12 +60,23 @@ void SceneMgr::OnInit()
 
     initLights();
     deferred.Init();
+
+    stuff =0;
 }
 
 void SceneMgr::OnUpdate(const uint32& diff)
 {
     for (auto i = dynamicObjects.begin(); i != dynamicObjects.end(); ++i)
         i->second->OnUpdate(diff);
+
+    stuff += diff*0.1;
+    for (uint8 i = 0; i < GetPointLights().size(); ++i)
+    {
+        GetPointLights()[i].Position.y = 3.0f + sin((stuff/180)*3.14)*1.5f;
+        GetPointLights()[i].Position.x = 18.0f + cos((stuff/180)*3.14)*4;
+        GetPointLights()[i].Position.z = 13.5f + sin((stuff/180)*3.14)*4;
+    }
+
 
     GetCamera()->OnUpdate(diff);
 }
@@ -167,8 +179,6 @@ void SceneMgr::renderGUI()
 
 void SceneMgr::initLights()
 {
-    return;
-
     // point
     PointLight light;
     light.Position = glm::vec3(18.0, 3.0, 15.5);
@@ -177,7 +187,7 @@ void SceneMgr::initLights()
     light.Intensity = 0.6f;
 
     lights.push_back(light);
-
+        return;
     light.Position = glm::vec3(12.0, 3.0, 15.5),
     light.Color = glm::vec3(0.0, 1.0, 0.0);
     light.Radius = 5.0f;
