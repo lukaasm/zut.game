@@ -29,9 +29,8 @@ class BoundingBoxProto
 
         void OnRender();
 
-        //virtual bool Intersection(const glm::vec3& point) const = 0;
-        //virtual bool Intersection(const AABoundingBox& box) const = 0;
-        //virtual bool Intersection(const Frustum& frustum) const = 0;
+        glm::vec3 GetMin() { return min; }
+        glm::vec3 GetMax() { return max; }
 
     protected:
         glm::vec3 min;

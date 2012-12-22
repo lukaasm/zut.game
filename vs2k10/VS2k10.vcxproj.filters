@@ -71,9 +71,6 @@
     <ClInclude Include="..\src\Text2d.h">
       <Filter>Other</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\Frustum.h">
-      <Filter>Camera</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\BoundingObject.h">
       <Filter>GameObjects</Filter>
     </ClInclude>
@@ -130,9 +127,6 @@
     <None Include="..\res\shaders\text2d.glsl">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="..\res\shaders\lighting.glsl">
-      <Filter>Resource Files</Filter>
-    </None>
     <None Include="..\res\shaders\simple.glsl">
       <Filter>Resource Files</Filter>
     </None>
@@ -173,9 +167,6 @@
     </ClCompile>
     <ClCompile Include="..\src\Text2d.cpp">
       <Filter>Other</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Frustum.cpp">
-      <Filter>Camera</Filter>
     </ClCompile>
     <ClCompile Include="..\src\BoundingObject.cpp">
       <Filter>GameObjects</Filter>

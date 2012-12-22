@@ -15,6 +15,8 @@ struct ModelData
     std::string modelName;
     std::string textureName;
 
+    float height;
+
     uint32 textureId;
 
     BoundingBoxProto* boundingBox;

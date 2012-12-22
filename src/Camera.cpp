@@ -29,8 +29,6 @@ void FppCamera::OnUpdate(const uint32& diff)
 {
     if (DynamicObject* object = GetLinkedObject())
     {
-       // glm::vec3 offset = object->GetPosition() - position;
-
         SetPosition(object->GetPosition());
 
         glm::vec3 lookPosition = position + object->GetDirVector();
@@ -55,12 +53,11 @@ void TppCamera::OnUpdate(const uint32 & diff)
 {
     if (DynamicObject* object = GetLinkedObject())
     {
-       // glm::vec3 offset = object->GetPosition() - position;
-
         position = glm::vec3(0.0f, 1.5f, -3.5f);
 
         position = glm::rotate(position, object->GetRotationX(), glm::cross(object->GetUpVector(), object->GetDirVector()));
         position = glm::rotate(position, object->GetRotationY(), object->GetUpVector());
+        
         // move to owner position
         position += owner->GetPosition();
 

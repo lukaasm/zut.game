@@ -164,7 +164,7 @@ float Terrain::GetHeight(float x, float z)
     int ix = (int)(x / SCALE);      
     int iz = (int)(z / SCALE);
     if (ix < 0 || ix > terrainSize.x || iz < 0 || iz > terrainSize.y)
-        return 3.0f;
+        return -1.0f;
 
     float triZ0 = terrainHeights[iz * int(terrainSize.x) + ix];
     float triZ1 = terrainHeights[iz * int(terrainSize.x) + ix+1];
@@ -186,7 +186,7 @@ float Terrain::GetHeight(float x, float z)
         height += (triZ1 - triZ3) * (1.0f - sqZ);
         height += (triZ2 - triZ3) * (1.0f - sqX);
     }
-    return height + 0.65;
+    return height;
 }
 
 

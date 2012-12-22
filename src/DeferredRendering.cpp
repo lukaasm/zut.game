@@ -66,8 +66,6 @@ void DeferredRenderer::Init()
     if (Status != GL_FRAMEBUFFER_COMPLETE)
         throw Exception("[FrameBuffer][E] frame buffer incomplete!");
 
-    std::cout << Status << std::endl;
-
     glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 }
 
@@ -89,22 +87,26 @@ void DeferredRenderer::GeometryPass()
     glDrawBuffers(3, buffers);
 
     glEnable(GL_DEPTH_TEST);
-
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     Shader* shader = sResourcesMgr->GetShader("deferred_geopass.glsl");
     shader->Bind();
-    glEnable(GL_CULL_FACE);
-    glCullFace(GL_BACK);
-
     Camera* camera = sSceneMgr->GetCamera();
-    Terrain* terrain = sSceneMgr->GetTerrain();
-
-    glm::mat4 mvp = camera->GetProjMatrix() * camera->GetViewMatrix();
-    shader->SetUniform("in_M", glm::mat4(1.0f));
+    GameObject* skybox = sSceneMgr->GetSkyBox();
+    glm::mat4 mvp = camera->GetProjMatrix() * camera->GetViewMatrix() * skybox->GetModelMatrix();
+    shader->SetUniform("in_M", skybox->GetModelMatrix());
     shader->SetUniform("in_MVP", mvp);
 
     shader->SetUniform("Texture", 0);
+
+    OGLHelper::ActivateTexture(GL_TEXTURE0, sResourcesMgr->GetTextureId(skybox->GetTexture()));
+    skybox->OnRender();
+
+    Terrain* terrain = sSceneMgr->GetTerrain();
+
+    mvp = camera->GetProjMatrix() * camera->GetViewMatrix();
+    shader->SetUniform("in_M", glm::mat4(1.0f));
+    shader->SetUniform("in_MVP", mvp);
 
     OGLHelper::ActivateTexture(GL_TEXTURE0, sResourcesMgr->GetTextureId("placeholder.tga"));
 
@@ -115,7 +117,7 @@ void DeferredRenderer::GeometryPass()
     {
         GameObject* ob = i->second;
 
-        glm::mat4 mvp = camera->GetProjMatrix() * camera->GetViewMatrix() * ob->GetModelMatrix();
+        mvp = camera->GetProjMatrix() * camera->GetViewMatrix() * ob->GetModelMatrix();
         shader->SetUniform("in_M", ob->GetModelMatrix());
         shader->SetUniform("in_MVP", mvp);
 
@@ -138,10 +140,9 @@ void DeferredRenderer::GeometryPass()
         OGLHelper::ActivateTexture(GL_TEXTURE0, sResourcesMgr->GetTextureId("light.tga"));
 
         ModelData* data = sResourcesMgr->GetModelData("sphere.obj");
-        OGLHelper::DrawTriangleStrip(data->vao);
+        OGLHelper::DrawTriangles(data->vao);
     }
 
-    glDisable(GL_CULL_FACE);
     glDisable(GL_DEPTH_TEST);
     shader->Unbind();
     Unbind();
@@ -205,8 +206,8 @@ void DeferredRenderer::PointLightPass(glm::vec3 position, glm::vec3 color, float
     glCullFace(GL_FRONT);
     
     ModelData* data = sResourcesMgr->GetModelData("sphere.obj");
-    OGLHelper::DrawTriangleStrip(data->vao);
-    //OGLHelper::DrawTriangles(quadVAO);
+    OGLHelper::DrawTriangles(data->vao);
+
     shader->Unbind();
 
     glDisable(GL_DEPTH_TEST);
@@ -258,10 +259,11 @@ void DeferredRenderer::LightsPass()
     glBlendEquation(GL_FUNC_ADD);
     glBlendFunc(GL_ONE, GL_ONE);
 
-    //DirectionalLightPass(glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
     for (uint8 i = 0; i < sSceneMgr->GetPointLights().size(); ++i)
         PointLightPass(sSceneMgr->GetPointLights()[i].Position, sSceneMgr->GetPointLights()[i].Color, sSceneMgr->GetPointLights()[i].Radius, sSceneMgr->GetPointLights()[i].Intensity);
 
+    DirectionalLightPass(glm::vec3(0.0f, -1.0f, 1.0f), glm::vec3(0.4f, 0.4f, 1.0f));
+    //DirectionalLightPass(glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.4f, 1.4f, 1.0f));
     glDisable(GL_BLEND);
 
     Unbind();

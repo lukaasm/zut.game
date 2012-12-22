@@ -37,10 +37,6 @@ class ResourcesMgr
         void loadShaders();
 
     private:
-        void loadTextures();
-        void loadModels();
-       // void loadShaders();
-
         void unloadModels();
         void unloadTextures();
         void unloadShaders();
@@ -48,8 +44,8 @@ class ResourcesMgr
         uint32 createTexture(std::string);
         bool loadOBJ(std::string, std::vector<Vertex>&);
 
-        void loadTexture(std::string fileName);
-        bool loadModel(std::string fileName);
+        uint32 loadTexture(std::string fileName);
+        ModelData* loadModel(std::string fileName);
 
         ModelDataMap modelsData;
         TexturesMap textures;

@@ -21,12 +21,6 @@
 #include "Shader.h"
 #include "Terrain.h"
 
-#define POPULATE_CUBE(a,b,c) cube = new GameObject("cube.obj", "cube.tga"); \
-    cube->SetPosition(glm::vec3(a, terrain->GetHeight(a, c) + b, c)); \
-    cube->SetScale(glm::vec3(0.25f)); \
-    cube->SetBoundingObject(sResourcesMgr->GetModelData(cube->GetModel())->boundingBox); \
-    RegisterObject(cube); \
-
 void SceneMgr::OnInit()
 {
     guid = 0;
@@ -47,24 +41,19 @@ void SceneMgr::OnInit()
 
     currentCamera = 0;
 
-    //RegisterObject(new Grid());
+    skybox = new GameObject("cube.obj", "skybox.tga");
+    skybox->SetPosition(Position(0,0,0));
+    skybox->SetScale(glm::vec3(200));
 
-    GameObject* cube;
+    GameObject* ob = new GameObject("ruiny.obj", "placeholder.tga");
+    ob->SetPosition(Position(14.25f,0.25f,19.0f));
+    ob->SetScale(glm::vec3(1));
+    RegisterObject(ob);
 
-    POPULATE_CUBE(14.25f, 0.25f, 15.0f)
-    POPULATE_CUBE(15.75f, 0.25f, 15.0f)
-    POPULATE_CUBE(14.625f, 0.875f, 15.0f)
-    POPULATE_CUBE(15.375f, 0.875f, 15.0f)
-    POPULATE_CUBE(15.0f, 0.875f+0.625f, 15.0f)
-
-    DynamicObject* ccube = new DynamicObject();
-    ccube->SetPosition(glm::vec3(15.0f, terrain->GetHeight(15.0f, 15.0f) + 0.875f+1.5f, 15.0f));
-    ccube->SetScale(glm::vec3(0.25f));
-    ccube->SetBoundingObject(sResourcesMgr->GetModelData(ccube->GetModel())->boundingBox);
-
-    ccube->scripts.push_back([](DynamicObject& ob){ ob.coll ? ob.AddMoveType(moveInfos[MOVE_TYPE_FORWARD]) : ob.ClearMoveType(MOVE_FLAG_FORWARD); });
-    ccube->AddMoveType(moveInfos[MOVE_TYPE_ROTATE_LEFT]);
-    RegisterObject(ccube);
+    ob = new GameObject("shrooms.obj", "placeholder.tga");
+    ob->SetPosition(Position(14.25f,0.25f,17.0f));
+    ob->SetScale(glm::vec3(6));
+    RegisterObject(ob);
 
     text2D.Init();
 
@@ -160,87 +149,9 @@ void SceneMgr::OnRender()
     deferred.GeometryPass();
     deferred.LightsPass();
     deferred.FinalPass();
-    //renderPass();
 
     renderGUI();
 }
-
-/*
-void SceneMgr::renderPass()
-{
-    glEnable(GL_DEPTH_TEST);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-    bool renderTexture = sConfig->GetDefault("render.textures", true);
-    bool renderBounds = sConfig->GetDefault("render.bounds", true);
-
-    Shader* shader = sResourcesMgr->GetShader("lighting.glsl");
-    shader->Bind();
-
-    glm::mat4 MV = GetCamera()->GetViewMatrix();
-    shader->SetUniform("in_MVP", GetCamera()->GetProjMatrix()*MV);
-    shader->SetUniform("in_MV", MV);
-    shader->SetUniform("in_N", glm::inverseTranspose(glm::mat3(MV)));
-    shader->SetUniform("in_V", GetCamera()->GetViewMatrix());
-    shader->SetUniform("textureSampler", 0);
-
-    shader->SetLightSources(lights);
-
-    terrain->OnRender();
-
-    GameObjectsMap allObjects = staticObjects;
-    allObjects.insert(dynamicObjects.begin(), dynamicObjects.end());
-    for (auto i = allObjects.begin(); i != allObjects.end(); ++i)
-    {
-        GameObject* ob = i->second;
-
-        glm::mat4 MV = GetCamera()->GetViewMatrix() * ob->GetModelMatrix();
-        shader->SetUniform("in_MVP", GetCamera()->GetProjMatrix()*MV);
-        shader->SetUniform("in_MV", MV);
-        shader->SetUniform("in_N", glm::inverseTranspose(glm::mat3(MV)));
-
-        shader->SetUniform("textureSampler", 0);
-        OGLHelper::ActivateTexture(GL_TEXTURE0, sResourcesMgr->GetTextureId(ob->GetTexture()));
-
-        ob->OnRender();
-    }
-
-    for (uint8 i = 0; i < lights.size(); ++i)
-    {
-        glm::mat4 worldMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(lights[i].Position));
-       
-	    worldMatrix = glm::scale(worldMatrix, glm::vec3(0.15));
-
-        MV = GetCamera()->GetViewMatrix() * worldMatrix;
-        shader->SetUniform("in_MVP", GetCamera()->GetProjMatrix() * MV);
-        shader->SetUniform("in_MV", MV);
-        shader->SetUniform("in_N", glm::inverseTranspose(glm::mat3(MV)));
-
-        shader->SetUniform("textureSampler", 0);
-
-	    ModelData* modelData = sResourcesMgr->GetModelData("sphere.obj");
-        OGLHelper::ActivateTexture(GL_TEXTURE0, sResourcesMgr->GetTextureId("placeholder.tga"));
-        OGLHelper::DrawTriangles(modelData->vao);
-    }
-
-    shader->Unbind();
-
-    if (renderBounds)
-    {
-        shader = sResourcesMgr->GetShader("simple.glsl");
-        shader->Bind();
-        for (auto i = boundingBoxes.begin(); i != boundingBoxes.end(); ++i)
-        {
-            AABoundingBox* bounds = (*i);
-            glm::mat4 MV = GetCamera()->GetViewMatrix() * bounds->GetModelMatrix();
-            shader->SetUniform("in_MVP", GetCamera()->GetProjMatrix()*MV);
-
-            bounds->OnRender();
-        }
-        shader->Unbind();
-    }
-}
-*/
 
 void SceneMgr::renderGUI()
 {
@@ -256,6 +167,8 @@ void SceneMgr::renderGUI()
 
 void SceneMgr::initLights()
 {
+    return;
+
     // point
     PointLight light;
     light.Position = glm::vec3(18.0, 3.0, 15.5);

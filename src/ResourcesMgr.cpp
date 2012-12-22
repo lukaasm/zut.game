@@ -17,8 +17,6 @@
 
 void ResourcesMgr::OnInit()
 {
-    loadTextures();
-    loadModels();
     loadShaders();
 }
 
@@ -38,16 +36,16 @@ ModelData* ResourcesMgr::GetModelData(std::string name)
 {
     if (modelsData.find(name) != modelsData.end())
         return modelsData[name];
-
-    return nullptr;
+    else
+        return loadModel(name);
 }
 
 uint32 ResourcesMgr::GetTextureId(std::string name)
 {
     if (textures.find(name) != textures.end())
         return textures[name];
-
-    return 0;
+    else
+        return loadTexture(name);
 }
 
 uint32 ResourcesMgr::createTexture(std::string fileName)
@@ -69,15 +67,15 @@ uint32 ResourcesMgr::createTexture(std::string fileName)
     return 0;
 }
 
-bool ResourcesMgr::loadModel(std::string fileName)
+ModelData* ResourcesMgr::loadModel(std::string fileName)
 {
     std::cout << std::endl << "[Model] loading file: " << fileName;
 
-    if (GetModelData(fileName) != nullptr)
+    /*if (GetModelData(fileName) != nullptr)
     {
         std::string what = "[E][Model] file: " + fileName + " were already loaded.";
         throw Exception(what);
-    }
+    }*/
 
     std::vector<Vertex> vertexes;
     if (!loadOBJ("../res/models/" + fileName, vertexes))
@@ -111,10 +109,11 @@ bool ResourcesMgr::loadModel(std::string fileName)
     BoundingBoxProto* box = new BoundingBoxProto();
     box->SetMinMax(vertexes);
 
+    modelData->height = box->GetMax().z - box->GetMin().z;
     modelData->boundingBox = box;
 
     modelsData[fileName] = modelData;
-    return true;
+    return modelData;
 }
 
 bool ResourcesMgr::loadOBJ(std::string fileName, std::vector<Vertex>& vert)
@@ -198,14 +197,14 @@ bool ResourcesMgr::loadOBJ(std::string fileName, std::vector<Vertex>& vert)
     return true;
 }
 
-void ResourcesMgr::loadTexture(std::string fileName)
+uint32 ResourcesMgr::loadTexture(std::string fileName)
 {
     std::cout << std::endl << "[Texture] loading file: " << fileName;
-    if (GetTextureId(fileName))
-    {
-        std::string what = "[E][Texture] file: " + fileName + " were already loaded.";
-        throw Exception(what);
-    }
+//     if (GetTextureId(fileName))
+//     {
+//         std::string what = "[E][Texture] file: " + fileName + " were already loaded.";
+//         throw Exception(what);
+//     }
 
     uint32 textureId = createTexture("../res/textures/" + fileName);
     if (textureId == 0)
@@ -215,6 +214,7 @@ void ResourcesMgr::loadTexture(std::string fileName)
     }
 
     textures[fileName] = textureId;
+    return textureId;
 }
 
 void ResourcesMgr::unloadTextures()
@@ -235,23 +235,6 @@ Shader* ResourcesMgr::GetShader(std::string key)
         return shaders[key];
 
     return nullptr;
-}
-
-void ResourcesMgr::loadTextures()
-{
-    loadTexture("mb.tga");
-    loadTexture("cube.tga");
-    loadTexture("font.tga");
-    loadTexture("light.tga");
-    loadTexture("placeholder.tga");
-}
-
-void ResourcesMgr::loadModels()
-{
-    loadModel("cube.obj");
-    loadModel("mb.obj");
-    loadModel("sphere.obj");
-    loadModel("boid.obj");
 }
 
 void ResourcesMgr::loadShaders()
