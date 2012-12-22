@@ -12,7 +12,8 @@ out vec4 pass_Position;
 
 void main(void)
 {
-    gl_Position = in_MVP * vec4(in_Position, 1.0f);
+    gl_Position = in_MVP * vec4(in_Position.xy, 0.0f, 1.0f);
+    //gl_Position = in_MVP * vec4(in_Position.xyz, 1.0f);
     pass_Position = gl_Position;          
 }
 

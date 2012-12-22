@@ -69,19 +69,9 @@ void DeferredRenderer::Init()
     glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 }
 
-void DeferredRenderer::Bind()
-{
-    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, frameBuffer);
-}
-
-void DeferredRenderer::Unbind()
-{
-    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
-}
-
 void DeferredRenderer::GeometryPass()
 {
-    Bind();
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, frameBuffer);
 
     GLenum buffers[] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2 }; 
     glDrawBuffers(3, buffers);
@@ -143,9 +133,7 @@ void DeferredRenderer::GeometryPass()
         OGLHelper::DrawTriangles(data->vao);
     }
 
-    glDisable(GL_DEPTH_TEST);
     shader->Unbind();
-    Unbind();
 }
 
 void DeferredRenderer::DirectionalLightPass(glm::vec3 dir, glm::vec3 color)
@@ -176,9 +164,6 @@ void DeferredRenderer::DirectionalLightPass(glm::vec3 dir, glm::vec3 color)
 
 void DeferredRenderer::PointLightPass(glm::vec3 position, glm::vec3 color, float radius, float intensity)
 {
-    glEnable(GL_DEPTH_TEST);
-    glClear(GL_DEPTH_BUFFER_BIT);
-
     Shader* shader = sResourcesMgr->GetShader("deferred_pointlightpass.glsl");
     shader->Bind();
 
@@ -202,16 +187,15 @@ void DeferredRenderer::PointLightPass(glm::vec3 position, glm::vec3 color, float
 
     shader->SetPointLight(position, color, radius, intensity);
 
-    glEnable(GL_CULL_FACE);
-    glCullFace(GL_FRONT);
+    //glEnable(GL_CULL_FACE);
+    //glCullFace(GL_FRONT);
     
     ModelData* data = sResourcesMgr->GetModelData("sphere.obj");
     OGLHelper::DrawTriangles(data->vao);
 
     shader->Unbind();
 
-    glDisable(GL_DEPTH_TEST);
-    glDisable(GL_CULL_FACE);
+    //glDisable(GL_CULL_FACE);
 }
 
 void DeferredRenderer::InitFSQuad()
@@ -250,10 +234,10 @@ void DeferredRenderer::InitFSQuad()
 
 void DeferredRenderer::LightsPass()
 {
-    Bind();
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, frameBuffer);
 
     glDrawBuffer(GL_COLOR_ATTACHMENT3);
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     glEnable(GL_BLEND);
     glBlendEquation(GL_FUNC_ADD);
@@ -264,13 +248,16 @@ void DeferredRenderer::LightsPass()
 
     DirectionalLightPass(glm::vec3(0.0f, -1.0f, 1.0f), glm::vec3(0.4f, 0.4f, 1.0f));
     //DirectionalLightPass(glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.4f, 1.4f, 1.0f));
-    glDisable(GL_BLEND);
 
-    Unbind();
+    glDisable(GL_BLEND);
 }
 
 void DeferredRenderer::FinalPass()
 {
+    glDisable(GL_DEPTH_TEST);
+
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+
     Shader* shader = sResourcesMgr->GetShader("deferred_finalpass.glsl");
     shader->Bind();
 
