@@ -29,7 +29,6 @@ class Camera
 
         virtual void SetPosition(Position& pos) { position = pos; }
         glm::vec3& GetPosition() { return position; }
-        //Frustum& GetFrustum() { return frustum; }
 
     protected:
         glm::mat4 viewMatrix;

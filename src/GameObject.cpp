@@ -13,8 +13,6 @@
 
 void GameObject::OnRender()
 {
-    //rd->ActivateTexture(GL_TEXTURE0, sResourcesMgr->GetTextureId(textureName));
-
     ModelData* modelData = sResourcesMgr->GetModelData(modelName);
     OGLHelper::DrawTriangles(modelData->vao);
 }

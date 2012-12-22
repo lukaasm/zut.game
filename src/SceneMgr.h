@@ -44,6 +44,7 @@ class SceneMgr
         PointLightVector& GetPointLights() { return lights; }
         Player* GetPlayer() { return player; }
         Terrain* GetTerrain() { return terrain; }
+        GameObject* GetSkyBox() { return skybox; }
 
         float GetHeight(float, float);
         void CollisionTest(GameObject*);
@@ -61,6 +62,7 @@ class SceneMgr
 
         Player* player;
         Terrain* terrain;
+        GameObject* skybox;
 
         GameObjectsMap staticObjects;
         GameObjectsMap dynamicObjects;

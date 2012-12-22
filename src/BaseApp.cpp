@@ -6,6 +6,7 @@
 
 #include <cstdlib>
 #include <iostream>
+#include <fstream>
 #include <GL/glew.h>
 #include <GL/glfw.h>
 
@@ -18,7 +19,7 @@
 #include "SceneMgr.h"
 #include "Timer.h"
 
-#define UPDATE_STEP 15
+#define UPDATE_STEP 34
 
 double BaseApp::frameTime = 0;
 float BaseApp::fps = 0;
@@ -37,7 +38,7 @@ void BaseApp::createContext()
 {
     if (!glfwInit())
     {
-        std::cout << "GLFW Init failed" << std::endl;
+        std::cerr << "GLFW Init failed" << std::endl;
         std::exit(EXIT_FAILURE);
     }
 
@@ -65,7 +66,7 @@ void BaseApp::CreateWindow()
     uint32 glewInitResult = glewInit();
     if (glewInitResult != GLEW_OK)
     {
-        std::cout << "Error: " << glewGetErrorString(glewInitResult) << std::endl;
+        std::cerr << "Error: " << glewGetErrorString(glewInitResult) << std::endl;
         std::exit(EXIT_FAILURE);
     }
 
@@ -96,10 +97,8 @@ void BaseApp::Init()
     }
     catch (Exception& e)
     {
-        std::cout << e.what() << std::endl;
+        std::cerr << e.what() << std::endl;
         glfwTerminate();
-        int i;
-        std::cin >> i;
         std::exit(EXIT_FAILURE);
     }
 }
@@ -182,10 +181,8 @@ void BaseApp::OnUpdate(const uint32 diff)
     }
     catch (Exception& e)
     {
-        std::cout << e.what() << std::endl;
+        std::cerr << e.what() << std::endl;
         glfwTerminate();
-        int i;
-        std::cin >> i;
         std::exit(EXIT_FAILURE);
     }
 }
@@ -198,16 +195,18 @@ void BaseApp::OnRender()
     }
     catch (Exception& e)
     {
-        std::cout << e.what() << std::endl;
+        std::cerr << e.what() << std::endl;
         glfwTerminate();
-        int i;
-        std::cin >> i;
         std::exit(EXIT_FAILURE);
     }
 }
 
 int main()
 {
+    std::ofstream file("error.log");
+    if (file.is_open())
+        std::cerr.rdbuf(file.rdbuf());
+
     sConfig->LoadFile("config.ini");
 
     BaseApp *app = new BaseApp;
