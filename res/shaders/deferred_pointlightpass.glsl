@@ -48,7 +48,7 @@ void main(void)
     vec4 ScreenPosition = pass_Position;
     ScreenPosition.xy = ScreenPosition.xy /= ScreenPosition.w;
 
-    vec2 texCoord = gl_FragCoord.xy / vec2(800,600); //0.5f * (vec2(ScreenPosition.x, -ScreenPosition.y) + 1);
+    vec2 texCoord = 0.5f * (vec2(ScreenPosition.x, ScreenPosition.y) + 1.0f);
 
 	vec4 normalData = texture2D(NormalTexture, texCoord);
     vec3 normal = 2.0f * normalData.xyz - 1.0f;
@@ -56,11 +56,9 @@ void main(void)
     //float specularPower = normalData.a * 255;
     //float specularIntensity = texture2D(ColorTexture, texCoord).a;
 
-    float depthVal = texture2D(DepthTexture, texCoord).r;
-
     vec4 position;
     position.xy = ScreenPosition.xy;
-    position.z = depthVal;
+    position.z = texture2D(DepthTexture, texCoord).x;
     position.w = 1.0f;
 
     position = in_InvVP * position;
