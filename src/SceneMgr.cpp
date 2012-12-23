@@ -70,11 +70,11 @@ void SceneMgr::OnUpdate(const uint32& diff)
         i->second->OnUpdate(diff);
 
     stuff += diff*0.1;
-    for (uint8 i = 0; i < GetPointLights().size(); ++i)
+    //for (uint8 i = 0; i < GetPointLights().size(); ++i)
     {
-        GetPointLights()[i].Position.y = 3.0f + sin((stuff/180)*3.14)*1.5f;
-        GetPointLights()[i].Position.x = 18.0f + cos((stuff/180)*3.14)*4;
-        GetPointLights()[i].Position.z = 13.5f + sin((stuff/180)*3.14)*4;
+        GetPointLights()[0].Position.y = 3.0f + sin((stuff/180)*3.14)*1.5f;
+        GetPointLights()[0].Position.x = 18.0f + cos((stuff/180)*3.14)*4;
+        GetPointLights()[0].Position.z = 13.5f + sin((stuff/180)*3.14)*4;
     }
 
 
@@ -174,7 +174,7 @@ void SceneMgr::renderGUI()
     text2D.RenderText("WSAD - movement, <- -> - rotate", 10, 10, 12);
     text2D.RenderText("K - change camera, L - toggle textures", 10, 25, 12);
 
-    //text2D.RenderSprite(5, 5, 200, deferred.lightTexture);
+    //text2D.RenderSprite(5, 5, 200, deferred.depthTexture);
 }
 
 void SceneMgr::initLights()
@@ -187,7 +187,7 @@ void SceneMgr::initLights()
     light.Intensity = 0.6f;
 
     lights.push_back(light);
-        return;
+
     light.Position = glm::vec3(12.0, 3.0, 15.5),
     light.Color = glm::vec3(0.0, 1.0, 0.0);
     light.Radius = 5.0f;

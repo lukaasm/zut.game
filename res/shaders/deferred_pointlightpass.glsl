@@ -12,8 +12,7 @@ out vec4 pass_Position;
 
 void main(void)
 {
-    gl_Position = in_MVP * vec4(in_Position.xy, 0.0f, 1.0f);
-    //gl_Position = in_MVP * vec4(in_Position.xyz, 1.0f);
+    gl_Position = in_MVP * vec4(in_Position.xyz, 1.0f);
     pass_Position = gl_Position;          
 }
 
@@ -54,8 +53,8 @@ void main(void)
 	vec4 normalData = texture2D(NormalTexture, texCoord);
     vec3 normal = 2.0f * normalData.xyz - 1.0f;
 
-    float specularPower = normalData.a * 255;
-    float specularIntensity = texture2D(ColorTexture, texCoord).a;
+    //float specularPower = normalData.a * 255;
+    //float specularIntensity = texture2D(ColorTexture, texCoord).a;
 
     float depthVal = texture2D(DepthTexture, texCoord).r;
 
@@ -67,8 +66,8 @@ void main(void)
     position = in_InvVP * position;
     position /= position.w;
 
-    vec3 lightVector = in_Light.Position - position;
-    float attenuation = clamp(1.0f - length(lightVector)/in_Light.Radius, 0.0f, 1.0f); 
+    vec3 lightVector = in_Light.Position - position.xyz;
+    float attenuation = clamp(1.0f - length(lightVector) / in_Light.Radius, 0.0f, 1.0f); 
 
     lightVector = normalize(lightVector); 
     //compute diffuse light
@@ -76,14 +75,14 @@ void main(void)
     vec3 diffuseLight = NdL * in_Light.Color.rgb;
 
     //reflexion vector
-    vec3 reflectionVector = normalize(reflect(-lightVector, normal));
+    //vec3 reflectionVector = normalize(reflect(-lightVector, normal));
     //camera-to-surface vector
-    vec3 directionToCamera = normalize(in_CameraPosition - position.xyz);
+    //vec3 directionToCamera = normalize(in_CameraPosition - position.xyz);
     //compute specular light
-    float specularLight = specularIntensity * pow(clamp(dot(reflectionVector, directionToCamera), 0.0, 1.0), specularPower);
+    //float specularLight = specularIntensity * pow(clamp(dot(reflectionVector, directionToCamera), 0.0, 1.0), specularPower);
 
     //output the two lights
-    out_Color = attenuation * in_Light.Intensity * vec4(diffuseLight.rgb, specularLight);
+    out_Color = attenuation * in_Light.Intensity * vec4(diffuseLight.rgb, 0.0);
 }
 
 #frag_end
