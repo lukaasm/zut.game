@@ -70,11 +70,11 @@ void SceneMgr::OnUpdate(const uint32& diff)
         i->second->OnUpdate(diff);
 
     stuff += diff*0.1;
-    //for (uint8 i = 0; i < GetPointLights().size(); ++i)
+    for (uint8 i = 0; i < GetPointLights().size(); ++i)
     {
-        GetPointLights()[0].Position.y = 3.0f + sin((stuff/180)*3.14)*1.5f;
-        GetPointLights()[0].Position.x = 18.0f + cos((stuff/180)*3.14)*4;
-        GetPointLights()[0].Position.z = 13.5f + sin((stuff/180)*3.14)*4;
+        GetPointLights()[i].Position.y = 2.0f + sin((stuff/180)*3.14)*i;
+        GetPointLights()[i].Position.x = 18.0f + cos((stuff/180)*3.14)*2*i*.7f;
+        GetPointLights()[i].Position.z = 14.5f + sin((stuff/180)*3.14)*4*i*.7f;
     }
 
 
@@ -183,36 +183,22 @@ void SceneMgr::initLights()
     PointLight light;
     light.Position = glm::vec3(18.0, 3.0, 15.5);
     light.Color = glm::vec3(1.0, 0.0, 0.0);
-    light.Radius = 5.0f;
-    light.Intensity = 0.6f;
+    light.Radius = 4.0f;
+    light.Intensity = 1.0f;
 
     lights.push_back(light);
 
-    light.Position = glm::vec3(12.0, 3.0, 15.5),
+    light.Position = glm::vec3(12.0, 1.5, 15.5),
     light.Color = glm::vec3(0.0, 1.0, 0.0);
-    light.Radius = 5.0f;
+    light.Radius = 3.0f;
     light.Intensity = 1.0f;
 
     lights.push_back(light);
 
-    light.Position = glm::vec3(15.0, 3.0, 12.5),
+    light.Position = glm::vec3(15.0, 3.0, 16.5),
     light.Color = glm::vec3(0.0, 0.0, 1.0);
-    light.Radius = 6.0f;
-    light.Intensity = 1.0f;
-
-    lights.push_back(light);
-
-    light.Position = glm::vec3(15.0, 7.0, 15.5),
-    light.Color = glm::vec3(1.0, 1.0, 1.0);
-    light.Radius = 6.0f;
-    light.Intensity = 2.6f;
-
-    lights.push_back(light);
-
-    light.Position = glm::vec3(15.0, 7.0, 35.0f),
-    light.Color = glm::vec3(1.0, 0.0, 1.0);
-    light.Radius = 6.0f;
-    light.Intensity = 1.0f;
+    light.Radius = 4.0f;
+    light.Intensity = 2.0f;
 
     lights.push_back(light);
 }

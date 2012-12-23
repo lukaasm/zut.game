@@ -41,10 +41,10 @@ layout(location = 1) out vec4 out_Normal;
 void main(void)
 {
 	out_Color = texture2D(Texture, pass_TexCoord);
-    out_Color.a = 0.0f; //specularIntensity;
+    //out_Color.a = 0.0f; //specularIntensity;
         
 	out_Normal.rgb = 0.5f * (normalize(pass_Normal) + 1.0f);	
-    out_Normal.a = 0.0f; //specularPower;
+    //out_Normal.a = 0.0f; //specularPower;
 }
 
 #frag_end

@@ -36,12 +36,12 @@ void DeferredRenderer::Init()
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16F, width, height, 0, GL_RGB, GL_FLOAT, NULL);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB8, width, height, 0, GL_RGB, GL_FLOAT, NULL);
     glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, colorTexture, 0);
 
     glGenTextures(1, &normalTexture);
     glBindTexture(GL_TEXTURE_2D, normalTexture);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16F, width, height, 0, GL_RGB, GL_FLOAT, NULL);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB8, width, height, 0, GL_RGB, GL_FLOAT, NULL);
     glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, normalTexture, 0);
 
     glGenTextures(1, &depthTexture);
@@ -61,7 +61,7 @@ void DeferredRenderer::Init()
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16F, width, height, 0, GL_RGB, GL_FLOAT, NULL);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB8, width, height, 0, GL_RGB, GL_FLOAT, NULL);
     glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT3, GL_TEXTURE_2D, lightTexture, 0);
     glBindTexture(GL_TEXTURE_2D, 0);
 
@@ -142,7 +142,6 @@ void DeferredRenderer::GeometryPass()
 
     shader->Unbind();
 
-    //glDepthMask(GL_FALSE);
     glDisable(GL_DEPTH_TEST);
 }
 
@@ -174,7 +173,6 @@ void DeferredRenderer::DirectionalLightPass(glm::vec3 dir, glm::vec3 color)
 
 void DeferredRenderer::PointLightPass(glm::vec3 position, glm::vec3 color, float radius, float intensity)
 {
-    //glEnable(GL_DEPTH_TEST);
     Shader* shader = sResourcesMgr->GetShader("deferred_pointlightpass.glsl");
     shader->Bind();
 
@@ -189,7 +187,7 @@ void DeferredRenderer::PointLightPass(glm::vec3 position, glm::vec3 color, float
 
     Camera* camera = sSceneMgr->GetCamera();
 
-    glm::mat4 model = glm::scale(glm::translate(glm::mat4(1.0f), position), glm::vec3(radius * 1.4f));
+    glm::mat4 model = glm::scale(glm::translate(glm::mat4(1.0f), position), glm::vec3(radius*1.3));
     glm::mat4 mvp = camera->GetProjMatrix() * camera->GetViewMatrix() * model;
 
     shader->SetUniform("in_CameraPosition", camera->GetPosition());
@@ -198,16 +196,16 @@ void DeferredRenderer::PointLightPass(glm::vec3 position, glm::vec3 color, float
 
     shader->SetPointLight(position, color, radius, intensity);
 
-    glEnable(GL_CULL_FACE);
-    glCullFace(GL_BACK);
+    //glEnable(GL_CULL_FACE);
+    //glCullFace(GL_FRONT);
     
     ModelData* data = sResourcesMgr->GetModelData("sphere.obj");
     OGLHelper::DrawTriangles(data->vao);
 
     shader->Unbind();
 
-    glCullFace(GL_BACK);
-    glDisable(GL_CULL_FACE);
+    //glCullFace(GL_BACK);
+    //glDisable(GL_CULL_FACE);
 }
 
 void DeferredRenderer::InitFSQuad()
