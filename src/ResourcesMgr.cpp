@@ -69,7 +69,7 @@ uint32 ResourcesMgr::createTexture(std::string fileName)
 
 ModelData* ResourcesMgr::loadModel(std::string fileName)
 {
-    std::cout << std::endl << "[Model] loading file: " << fileName;
+    std::cout << "[Model] loading file: " << fileName << std::endl;
 
     /*if (GetModelData(fileName) != nullptr)
     {
@@ -199,7 +199,7 @@ bool ResourcesMgr::loadOBJ(std::string fileName, std::vector<Vertex>& vert)
 
 uint32 ResourcesMgr::loadTexture(std::string fileName)
 {
-    std::cout << std::endl << "[Texture] loading file: " << fileName;
+    std::cout << "[Texture] loading file: " << fileName << std::endl;
 //     if (GetTextureId(fileName))
 //     {
 //         std::string what = "[E][Texture] file: " + fileName + " were already loaded.";

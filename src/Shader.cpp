@@ -57,7 +57,7 @@ Shader* Shader::LoadFromFile(std::string fileName)
     if (!file.is_open())
         throw Exception("[Shader] problem occurred while trying to open file: " + fileName);
 
-    std::cout << std::endl << "[Shader] loading file: " << fileName << std::endl;
+    std::cout << "[Shader] loading file: " << fileName << std::endl;
     id = glCreateProgram();
 
     while (!file.eof())
@@ -82,7 +82,7 @@ Shader* Shader::LoadFromFile(std::string fileName)
             glShaderSource(vertShader, 1, &temp, 0);
             glCompileShader(vertShader);
 
-            std::cout << getShaderInfo(vertShader);
+            std::cout << "Shader info (#vert_start): " << getShaderInfo(vertShader) << std::endl;
 
             glAttachShader(GetId(), vertShader);
         }
@@ -97,7 +97,7 @@ Shader* Shader::LoadFromFile(std::string fileName)
             glShaderSource(fragShader, 1, &temp, 0);
             glCompileShader(fragShader);
 
-            std::cout << getShaderInfo(fragShader);
+            std::cout << "Shader info (#frag_start): " <<getShaderInfo(fragShader) << std::endl;
 
             glAttachShader(GetId(), fragShader);
         }
@@ -117,8 +117,8 @@ std::string Shader::loadShaderData(std::ifstream& file, std::string data)
         std::string line(buff);
         if (line.find(data + "_end") == 0)
             return shaderData;
-            
-        shaderData.append(line).append("\n");        
+
+        shaderData.append(line).append("\n");
     }
 
     throw Exception("[Shader] there is NO data terminator for shader:" + data);
