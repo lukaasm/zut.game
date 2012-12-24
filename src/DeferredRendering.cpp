@@ -255,7 +255,8 @@ void DeferredRenderer::LightsPass()
 
     for (uint8 i = 0; i < sSceneMgr->GetPointLights().size(); ++i)
         PointLightPass(sSceneMgr->GetPointLights()[i].Position, sSceneMgr->GetPointLights()[i].Color, sSceneMgr->GetPointLights()[i].Radius, sSceneMgr->GetPointLights()[i].Intensity);
-
+   
+    glDisable(GL_DEPTH_TEST);
     DirectionalLightPass(glm::vec3(0.0f, -1.0f, 1.0f), glm::vec3(0.4f, 0.4f, 1.0f));
     //DirectionalLightPass(glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.4f, 1.4f, 1.0f));
 
