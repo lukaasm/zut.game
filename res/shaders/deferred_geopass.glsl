@@ -39,8 +39,8 @@ in vec4 pass_Position;
 
 uniform sampler2D Texture;
 
-out vec4 out_Color;
-out vec4 out_Normal;
+layout(location = 0) out vec4 out_Color;
+layout(location = 1) out vec4 out_Normal;
 
 void main(void)
 {

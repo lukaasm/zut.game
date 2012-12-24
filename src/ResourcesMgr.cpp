@@ -252,9 +252,6 @@ void ResourcesMgr::loadShaders()
 
     shader->AddUniform("Texture");
 
-    shader->AddFragDataLocation(0, "out_Color");
-    shader->AddFragDataLocation(1, "out_Normal");
-
     shader->AddAttribute(VertexArray::Attrib::POSITION, "in_Position");
     shader->AddAttribute(VertexArray::Attrib::TEXCOORD, "in_TexCoord");
     shader->AddAttribute(VertexArray::Attrib::NORMAL, "in_Normal");
