@@ -71,12 +71,6 @@ ModelData* ResourcesMgr::loadModel(std::string fileName)
 {
     std::cout << "[Model] loading file: " << fileName << std::endl;
 
-    /*if (GetModelData(fileName) != nullptr)
-    {
-        std::string what = "[E][Model] file: " + fileName + " were already loaded.";
-        throw Exception(what);
-    }*/
-
     std::vector<Vertex> vertexes;
     if (!loadOBJ("../res/models/" + fileName, vertexes))
     {
@@ -200,11 +194,6 @@ bool ResourcesMgr::loadOBJ(std::string fileName, std::vector<Vertex>& vert)
 uint32 ResourcesMgr::loadTexture(std::string fileName)
 {
     std::cout << "[Texture] loading file: " << fileName << std::endl;
-//     if (GetTextureId(fileName))
-//     {
-//         std::string what = "[E][Texture] file: " + fileName + " were already loaded.";
-//         throw Exception(what);
-//     }
 
     uint32 textureId = createTexture("../res/textures/" + fileName);
     if (textureId == 0)
@@ -262,6 +251,9 @@ void ResourcesMgr::loadShaders()
     shader->AddUniform("in_M");
 
     shader->AddUniform("Texture");
+
+    shader->AddFragDataLocation(0, "out_Color");
+    shader->AddFragDataLocation(1, "out_Normal");
 
     shader->AddAttribute(VertexArray::Attrib::POSITION, "in_Position");
     shader->AddAttribute(VertexArray::Attrib::TEXCOORD, "in_TexCoord");

@@ -26,6 +26,7 @@ class Shader
         void AddAttribute(uint32, std::string);
 
         void AddUniform(std::string);
+        void AddFragDataLocation(uint32, std::string);
 
         void AddDirectionalLight();
         void SetDirectionalLight(glm::vec3 direction, glm::vec3 color);
