@@ -43,7 +43,7 @@ out vec4 out_Color;
 
 void main(void)
 {
-	vec4 normalData = texture2D(NormalTexture, pass_TexCoord);
+    vec4 normalData = texture2D(NormalTexture, pass_TexCoord);
     vec3 normal = 2.0f * normalData.xyz - 1.0f;
 
     float specularPower = normalData.a * 255;

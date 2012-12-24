@@ -12,9 +12,9 @@ layout(location = ATTR_TEXCOORD) in vec2 in_TexCoord;
 
 void main()
 {
-    vec2 vertexPosition_homoneneousspace = in_Position - vec2(400,300); // [0..800][0..600] -> [-400..400][-300..300]
-    vertexPosition_homoneneousspace /= vec2(400,300);
-    gl_Position =  vec4(vertexPosition_homoneneousspace,0,1);
+    vec2 EyePos = in_Position - vec2(400,300); // [0..800][0..600] -> [-400..400][-300..300]
+    EyePos /= vec2(400,300);
+    gl_Position =  vec4(EyePos, 0.0f, 1.0f);
  
     // UV of the vertex. No special space for this one.
     pass_TexCoord = in_TexCoord;
@@ -39,7 +39,7 @@ void main(void)
     if (out_Color == vec4(1.0f, 0.0f, 0.0f, 1.0f))
         discard;
         
-    out_Color.a = 1.0f;
+   // out_Color.a = 1.0f;
 }
 
 #frag_end

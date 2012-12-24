@@ -2,8 +2,8 @@
 
 #version 330 core
 
-#define ATTR_POSITION	0
-#define ATTR_TEXCOORD	1
+#define ATTR_POSITION    0
+#define ATTR_TEXCOORD    1
 
 layout(location = ATTR_POSITION) in vec3 in_Position;
 layout(location = ATTR_TEXCOORD) in vec2 in_TexCoord;

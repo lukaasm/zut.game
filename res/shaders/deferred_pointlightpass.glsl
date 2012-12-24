@@ -49,35 +49,29 @@ void main(void)
     ScreenPosition.xy = ScreenPosition.xy /= ScreenPosition.w;
 
     vec2 texCoord = 0.5f * (vec2(ScreenPosition.x, ScreenPosition.y) + 1.0f);
+    float depth = texture2D(DepthTexture, texCoord).r;
 
-	vec4 normalData = texture2D(NormalTexture, texCoord);
-    vec3 normal = 2.0f * normalData.xyz - 1.0f;
+    vec4 WorldPosition;
+    WorldPosition.xy = ScreenPosition.xy;
+    WorldPosition.z = depth;
+    WorldPosition.w = 1.0f;
 
-    //float specularPower = normalData.a * 255;
-    //float specularIntensity = texture2D(ColorTexture, texCoord).a;
+    WorldPosition = in_InvVP * WorldPosition;
+    WorldPosition /= WorldPosition.w;
 
-    vec4 position;
-    position.xy = ScreenPosition.xy;
-    position.z = texture2D(DepthTexture, texCoord).x;
-    position.w = 1.0f;
+    vec3 lightVector = in_Light.Position - WorldPosition.xyz;
+    float dist = length(lightVector);
+    if (dist > in_Light.Radius)
+        discard;
 
-    position = in_InvVP * position;
-    position /= position.w;
-
-    vec3 lightVector = in_Light.Position - position.xyz;
-    float attenuation = clamp(1.0f - length(lightVector) / in_Light.Radius, 0.0f, 1.0f); 
+    float attenuation = clamp(1.0f - dist / in_Light.Radius, 0.0f, 1.0f); 
 
     lightVector = normalize(lightVector); 
+
     //compute diffuse light
+    vec3 normal = 2.0f * texture2D(NormalTexture, texCoord).xyz - 1.0f;
     float NdL = max(0, dot(normal, lightVector));
     vec3 diffuseLight = NdL * in_Light.Color.rgb;
-
-    //reflexion vector
-    //vec3 reflectionVector = normalize(reflect(-lightVector, normal));
-    //camera-to-surface vector
-    //vec3 directionToCamera = normalize(in_CameraPosition - position.xyz);
-    //compute specular light
-    //float specularLight = specularIntensity * pow(clamp(dot(reflectionVector, directionToCamera), 0.0, 1.0), specularPower);
 
     //output the two lights
     out_Color = attenuation * in_Light.Intensity * vec4(diffuseLight.rgb, 0.0);

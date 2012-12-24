@@ -196,16 +196,16 @@ void DeferredRenderer::PointLightPass(glm::vec3 position, glm::vec3 color, float
 
     shader->SetPointLight(position, color, radius, intensity);
 
-    //glEnable(GL_CULL_FACE);
-    //glCullFace(GL_FRONT);
+    glEnable(GL_CULL_FACE);
+    glCullFace(GL_FRONT);
     
     ModelData* data = sResourcesMgr->GetModelData("sphere.obj");
     OGLHelper::DrawTriangles(data->vao);
 
     shader->Unbind();
 
-    //glCullFace(GL_BACK);
-    //glDisable(GL_CULL_FACE);
+    glCullFace(GL_BACK);
+    glDisable(GL_CULL_FACE);
 }
 
 void DeferredRenderer::InitFSQuad()
