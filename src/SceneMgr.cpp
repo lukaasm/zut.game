@@ -168,10 +168,10 @@ void SceneMgr::renderGUI()
     fps << "FrameTime: " << std::setprecision(3) << BaseApp::frameTime << "ms" << " FPS: " << BaseApp::fps;
 
     text2D.RenderText(fps.str(), 10, sConfig->GetDefault("height", 600) - 12, 12);
-    text2D.RenderText("WSAD - movement, <- -> - rotate", 10, 10, 12);
-    text2D.RenderText("K - change camera, L - toggle textures", 10, 25, 12);
 
-    //text2D.RenderSprite(5, 5, 200, deferred.depthTexture);
+    text2D.RenderSprite(5, 5, 200, deferred.depthTexture);
+    text2D.RenderSprite(5, 210, 200, deferred.colorTexture);
+    text2D.RenderSprite(5, 415, 200, deferred.normalTexture);
 }
 
 void SceneMgr::initLights()

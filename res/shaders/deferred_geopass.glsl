@@ -39,13 +39,10 @@ in vec4 pass_Position;
 
 uniform sampler2D Texture;
 
-layout(location = 0) out vec3 out_Color;    
-layout(location = 1) out vec3 out_Normal;           
-
 void main(void)
 {
-    out_Color = texture2D(Texture, pass_TexCoord).xyz;        
-    out_Normal = 0.5f * (normalize(pass_Normal) + 1.0f);    
+    gl_FragData[0] = texture2D(Texture, pass_TexCoord);        
+    gl_FragData[1] = vec4(0.5f * (normalize(pass_Normal) + 1.0f), 1.0f);    
 
     gl_FragDepth = pass_Position.z / pass_Position.w;
 }
