@@ -57,8 +57,6 @@ class SceneMgr
         uint32 guid;
         Text2D text2D;
 
-        float stuff;
-
         uint32 currentCamera;
         std::vector<Camera*> cameras;
 

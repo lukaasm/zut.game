@@ -59,8 +59,6 @@ void SceneMgr::OnInit()
 
     initLights();
     deferred.Init();
-
-    stuff =0;
 }
 
 void SceneMgr::OnUpdate(const uint32& diff)
@@ -68,12 +66,12 @@ void SceneMgr::OnUpdate(const uint32& diff)
     for (auto i = dynamicObjects.begin(); i != dynamicObjects.end(); ++i)
         i->second->OnUpdate(diff);
 
-    stuff += diff*0.1;
+    float time = glfwGetTime()*150.0f;
     for (uint8 i = 0; i < GetPointLights().size(); ++i)
     {
-        GetPointLights()[i].Position.y = 2.0f + sin((stuff/180)*3.14)*i;
-        GetPointLights()[i].Position.x = 18.0f + cos((stuff/180)*3.14)*2*i*.7f;
-        GetPointLights()[i].Position.z = 14.5f + sin((stuff/180)*3.14)*4*i*.7f;
+        GetPointLights()[i].Position.y = 3.0f+i + (i % 2 ? sin((time/180)*3.14)*(i + 0.5f) : cos((time/180)*3.14)*(i + 0.5f));
+        GetPointLights()[i].Position.x = 18.0f + cos((time/180)*3.14)*2*(i + 0.5f)*.7f;
+        GetPointLights()[i].Position.z = 12.5f + sin((time/180)*3.14)*4*(i + 0.5f)*.7f;
     }
 
 
