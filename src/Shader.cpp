@@ -212,3 +212,8 @@ void Shader::SetPointLight(glm::vec3 position, glm::vec3 color, float radius, fl
     SetUniform("in_Light.Radius", radius);
     SetUniform("in_Light.Intensity", intensity);
 }
+
+void Shader::AddFragDataLocation(uint32 location, std::string name)
+{
+    glBindFragDataLocation(GetId(), location, name.c_str());
+}
