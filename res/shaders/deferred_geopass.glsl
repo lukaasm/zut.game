@@ -15,6 +15,7 @@ uniform mat4 in_M;
 
 out vec2 pass_TexCoord;
 out vec3 pass_Normal;
+out vec4 pass_Position;
 
 void main(void)
 {
@@ -22,6 +23,8 @@ void main(void)
 
     pass_TexCoord = in_TexCoord;                  
     pass_Normal = (in_M * vec4(in_Normal, 0.0f)).xyz;
+
+    pass_Position = gl_Position;
 }
 
 #vert_end
@@ -32,19 +35,19 @@ void main(void)
 
 in vec2 pass_TexCoord;
 in vec3 pass_Normal;
+in vec4 pass_Position;
 
 uniform sampler2D Texture;
 
-layout(location = 0) out vec4 out_Color;    
-layout(location = 1) out vec4 out_Normal;           
+layout(location = 0) out vec3 out_Color;    
+layout(location = 1) out vec3 out_Normal;           
 
 void main(void)
 {
-	out_Color = texture2D(Texture, pass_TexCoord);
-    //out_Color.a = 0.0f; //specularIntensity;
-        
-	out_Normal.rgb = 0.5f * (normalize(pass_Normal) + 1.0f);	
-    //out_Normal.a = 0.0f; //specularPower;
+    out_Color = texture2D(Texture, pass_TexCoord).xyz;        
+    out_Normal = 0.5f * (normalize(pass_Normal) + 1.0f);    
+
+    gl_FragDepth = pass_Position.z / pass_Position.w;
 }
 
 #frag_end

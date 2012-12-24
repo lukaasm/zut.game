@@ -2,7 +2,7 @@
 
 #version 330 core
 
-#define ATTR_POSITION	0
+#define ATTR_POSITION    0
 
 uniform mat4 in_MVP; // Proj*View*Model matrix
 
