@@ -123,9 +123,12 @@ void DeferredRenderer::GeometryPass()
         ob->OnRender();
     }
 
-    for (uint8 i = 0; i < sSceneMgr->GetPointLights().size(); ++i)
+    for (auto i = sSceneMgr->GetPointLights().begin(); i != sSceneMgr->GetPointLights().end(); ++i)
     {
-        glm::mat4 m = glm::scale(glm::translate(glm::mat4(1.0f), sSceneMgr->GetPointLights()[i].Position), glm::vec3(0.15f));
+        if (i->owner != nullptr)
+             continue;
+
+        glm::mat4 m = glm::scale(glm::translate(glm::mat4(1.0f), i->Position), glm::vec3(0.15f));
         glm::mat4 mvp = camera->GetProjMatrix() * camera->GetViewMatrix() * m;
         shader->SetUniform("in_M", m);
         shader->SetUniform("in_MVP", mvp);
@@ -251,8 +254,8 @@ void DeferredRenderer::LightsPass()
     glBlendEquation(GL_FUNC_ADD);
     glBlendFunc(GL_ONE, GL_ONE);
 
-    for (uint8 i = 0; i < sSceneMgr->GetPointLights().size(); ++i)
-        PointLightPass(sSceneMgr->GetPointLights()[i].Position, sSceneMgr->GetPointLights()[i].Color, sSceneMgr->GetPointLights()[i].Radius, sSceneMgr->GetPointLights()[i].Intensity);
+    for (auto i = sSceneMgr->GetPointLights().begin(); i != sSceneMgr->GetPointLights().end(); ++i)
+        PointLightPass(i->Position, i->Color, i->Radius, i->Intensity);
    
     DirectionalLightPass(glm::vec3(0.0f, -1.0f, 1.0f), glm::vec3(0.4f, 0.4f, 1.0f));
     //DirectionalLightPass(glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.4f, 1.4f, 1.0f));

@@ -3,6 +3,8 @@
 
 #include <glm/glm.hpp>
 
+class GameObject;
+
 struct DirectionalLight
 {
     glm::vec3 Direction;
@@ -11,6 +13,8 @@ struct DirectionalLight
 
 struct PointLight
 {
+    GameObject* owner;
+
     glm::vec3 Position;
     glm::vec3 Color;
 

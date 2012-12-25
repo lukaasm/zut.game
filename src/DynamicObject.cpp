@@ -5,6 +5,7 @@
 #include <glm/gtx/vector_angle.hpp>
 
 #include "SceneMgr.h"
+#include "Timer.h"
 
 void DynamicObject::Move(const uint32& diff)
 {
@@ -76,6 +77,9 @@ void DynamicObject::ClearMoveType(MoveFlags flag)
 
 DynamicObject::DynamicObject() : GameObject("mb.obj", "mb.tga")
 {
+    createTime = new Timer();
+    createTime->Start(0);
+
     lookDirection = glm::vec3(0.0f, 0.0f, 1.0f);
 
     moveFlags = MOVE_FLAG_NONE;
@@ -85,6 +89,9 @@ DynamicObject::DynamicObject() : GameObject("mb.obj", "mb.tga")
 
 DynamicObject::DynamicObject(std::string model, std::string texture) : GameObject(model, texture)
 {
+    createTime = new Timer();
+    createTime->Start(0);
+
     lookDirection = glm::vec3(0.0f, 0.0f, 1.0f);
 
     moveFlags = MOVE_FLAG_NONE;
@@ -137,4 +144,9 @@ float DynamicObject::GetDistance(GameObject* ob)
     float dy = GetPosition().y - ob->GetPosition().y;
     float dz = GetPosition().z - ob->GetPosition().z;
     return sqrt((dx*dx) + (dy*dy) + (dz*dz));
+}
+
+DynamicObject::~DynamicObject()
+{
+    delete createTime;
 }

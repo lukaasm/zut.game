@@ -1,11 +1,11 @@
 #ifndef H_PLAYER
 #define H_PLAYER
 
-#include "GameObject.h"
-
 #include <functional>
 #include <unordered_map>
 #include <vector>
+
+#include "GameObject.h"
 
 enum MoveTypes
 {
@@ -57,6 +57,7 @@ const MoveInfo moveInfos[] =
 };
 
 class DynamicObject;
+struct Timer;
 
 typedef std::function<void (DynamicObject&)> Script;
 typedef std::vector<Script> ScriptsMap;
@@ -67,6 +68,8 @@ class DynamicObject : public GameObject
     public:
         DynamicObject();
         DynamicObject(std::string, std::string);
+
+        ~DynamicObject();
 
         void Move(const uint32 &);
 
@@ -90,6 +93,7 @@ class DynamicObject : public GameObject
         float GetDistance(GameObject*);
 
         ScriptsHolder scripts;
+        Timer* createTime;
 
     private:
         MoveFlags moveFlags;

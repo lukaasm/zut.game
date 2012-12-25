@@ -1,6 +1,7 @@
 #ifndef H_SCENEMGR
 #define H_SCENEMGR
 
+#include <list>
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
@@ -20,7 +21,7 @@ class Terrain;
 
 typedef std::unordered_map<uint32, GameObject*> GameObjectsMap;
 typedef std::unordered_set<AABoundingBox*> BoundingBoxSet;
-typedef std::vector<PointLight> PointLightVector;
+typedef std::list<PointLight> PointLightList;
 
 class SceneMgr
 {
@@ -35,13 +36,14 @@ class SceneMgr
         void OnResize(uint32 width, uint32 height);
 
         void RegisterObject(GameObject* object);
+        void UnregisterObject(GameObject* object);
 
         void ToggleCamera();
 
         GameObjectsMap GetObjects();
 
         Camera* GetCamera();
-        PointLightVector& GetPointLights() { return lights; }
+        PointLightList& GetPointLights() { return lights; }
         DynamicObject* GetPlayer() { return player; }
         Terrain* GetTerrain() { return terrain; }
         GameObject* GetSkyBox() { return skybox; }
@@ -59,6 +61,8 @@ class SceneMgr
         uint32 guid;
         Text2D text2D;
 
+        std::list<GameObject*> unregisterQueue;
+
         uint32 currentCamera;
         std::vector<Camera*> cameras;
 
@@ -71,7 +75,7 @@ class SceneMgr
 
         BoundingBoxSet boundingBoxes;
 
-        PointLightVector lights;
+        PointLightList lights;
 
         DeferredRenderer deferred;
 
