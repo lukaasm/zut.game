@@ -47,6 +47,43 @@ void SceneMgr::OnInit()
             ob.GetPosition().y = sSceneMgr->GetHeight(&ob);
         });
 
+    player->scripts["OnUpdate"].push_back(
+        [](DynamicObject& ob)
+        {
+            if (!ob.createTime->Passed())
+                return;
+
+            ob.createTime->Start(200);
+
+            auto it = sKeyboard->GetKeysMap().find(GLFW_KEY_LCTRL);
+            if (it == sKeyboard->GetKeysMap().end() || it->second == false)
+                return;
+
+            DynamicObject* shoot = new DynamicObject("sphere.obj", "placeholder.tga");
+            shoot->SetPosition(ob.GetPosition());
+            shoot->SetScale(glm::vec3(0.05f));
+            shoot->AddMoveType(moveInfos[MOVE_TYPE_FORWARD]);
+            shoot->SetRotationY(sSceneMgr->GetPlayer()->GetRotationY());
+
+            shoot->scripts["OnUpdate"].push_back(
+                [](DynamicObject& ob)
+                {
+                    ob.SetPosition(Position(ob.GetPosition().x, sSceneMgr->GetHeight(&ob) + 0.25f, ob.GetPosition().z));
+
+                    if (ob.createTime->Elapsed() > 3000)
+                        sSceneMgr->UnregisterObject(&ob);
+                });
+
+            PointLight light;
+            light.owner = shoot;
+            light.Color = glm::vec3(0.5f, 0.2f, 0.6f);
+            light.Intensity = 1.0f;
+            light.Radius = 8.0f;
+
+            sSceneMgr->GetPointLights().push_back(light);
+            sSceneMgr->RegisterObject(shoot);
+        });
+
     RegisterObject(player);
 
     cameras.push_back(new TppCamera());
@@ -105,11 +142,40 @@ void SceneMgr::OnUpdate(const uint32& diff)
         i->second->OnUpdate(diff);
 
     float time = glfwGetTime()*150.0f;
-    for (uint8 i = 0; i < GetPointLights().size(); ++i)
+    uint8 x = 0;
+    for (auto i = GetPointLights().begin(); i != GetPointLights().end();)
     {
-        GetPointLights()[i].Position.y = 3.0f+i + (i % 2 ? sin((time/180)*PI)*(i + 0.5f) : cos((time/180)*PI)*(i + 0.5f));
-        GetPointLights()[i].Position.x = 18.0f + cos((time/180)*PI)*2*(i + 0.5f)*.7f;
-        GetPointLights()[i].Position.z = 12.5f + sin((time/180)*PI)*4*(i + 0.5f)*.7f;
+        if (i->owner != nullptr)
+        {
+            uint32 ownerGuid = i->owner->GetGuid();
+            if (std::find_if(unregisterQueue.begin(), unregisterQueue.end(), [&] (GameObject* ob) -> bool { return ob->GetGuid() == ownerGuid; }) != unregisterQueue.end())
+            {
+                i = GetPointLights().erase(i);
+                continue;
+            }
+
+            i->Position = i->owner->GetPosition();
+        }
+        else
+        {
+            i->Position.y = 3.0f+x + (x % 2 ? sin((time/180)*PI)*(x + 0.5f) : cos((time/180)*PI)*(x + 0.5f));
+            i->Position.x = 18.0f + cos((time/180)*PI)*2*(x + 0.5f)*.7f;
+            i->Position.z = 12.5f + sin((time/180)*PI)*4*(x + 0.5f)*.7f;
+        }
+        ++i;
+        ++x;
+    }
+
+    while (!unregisterQueue.empty())
+    {
+        GameObject* object = unregisterQueue.front();
+        if (object->IsDynamicObject())
+            dynamicObjects.erase(object->GetGuid());
+        else
+            staticObjects.erase(object->GetGuid());
+
+        delete object;
+        unregisterQueue.pop_front();
     }
 
     GetCamera()->OnUpdate(diff);
@@ -226,6 +292,8 @@ void SceneMgr::initLights()
 {
     // point
     PointLight light;
+    light.owner = nullptr;
+
     light.Position = glm::vec3(18.0, 3.0, 15.5);
     light.Color = glm::vec3(1.0, 0.0, 0.0);
     light.Radius = 4.0f;
@@ -254,4 +322,12 @@ GameObjectsMap SceneMgr::GetObjects()
     allObjects.insert(dynamicObjects.begin(), dynamicObjects.end());
 
     return allObjects;
+}
+
+void SceneMgr::UnregisterObject(GameObject* object)
+{
+    if (AABoundingBox* bounds = object->GetBoundingObject())
+        boundingBoxes.erase(bounds);
+
+    unregisterQueue.push_back(object);
 }
