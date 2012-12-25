@@ -45,7 +45,7 @@ layout(location = 1) out vec4 out_Normal;
 void main(void)
 {
     out_Color = texture2D(Texture, pass_TexCoord);        
-    out_Normal = vec4(0.5f * (normalize(pass_Normal) + 1.0f), 1.0f);    
+    out_Normal.xyz = 0.5f * (normalize(pass_Normal) + 1.0f);    
 
     gl_FragDepth = pass_Position.z / pass_Position.w;
 }

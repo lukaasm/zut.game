@@ -13,8 +13,8 @@
 
 class AABoundingBox;
 class Camera;
+class DynamicObject;
 class GameObject;
-class Player;
 class Shader;
 class Terrain;
 
@@ -42,11 +42,13 @@ class SceneMgr
 
         Camera* GetCamera();
         PointLightVector& GetPointLights() { return lights; }
-        Player* GetPlayer() { return player; }
+        DynamicObject* GetPlayer() { return player; }
         Terrain* GetTerrain() { return terrain; }
         GameObject* GetSkyBox() { return skybox; }
 
-        float GetHeight(float, float);
+        float GetHeight(float, float, GameObject* = nullptr);
+        float GetHeight(GameObject*);
+
         void CollisionTest(GameObject*);
 
     private:
@@ -60,7 +62,7 @@ class SceneMgr
         uint32 currentCamera;
         std::vector<Camera*> cameras;
 
-        Player* player;
+        DynamicObject* player;
         Terrain* terrain;
         GameObject* skybox;
 

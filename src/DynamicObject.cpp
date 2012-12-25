@@ -46,16 +46,10 @@ void DynamicObject::Move(const uint32& diff)
     }
 
     if (moveFlags & MOVE_FLAG_ROTATE_LEFT)
-    {
-        lookDirection = glm::rotate(lookDirection, moveInfos[MOVE_TYPE_ROTATE_LEFT].speed *(0.001f * diff), up);
-        rotationY += moveInfos[MOVE_TYPE_ROTATE_LEFT].speed *(0.001f * diff);
-    }
+        SetRotationY(moveInfos[MOVE_TYPE_ROTATE_LEFT].speed *(0.001f * diff) + rotationY);
 
     if (moveFlags & MOVE_FLAG_ROTATE_RIGHT)
-    {
-        lookDirection = glm::rotate(lookDirection, -moveInfos[MOVE_TYPE_ROTATE_RIGHT].speed *(0.001f * diff), up);
-        rotationY -= moveInfos[MOVE_TYPE_ROTATE_RIGHT].speed *(0.001f * diff);
-    }
+        SetRotationY(-moveInfos[MOVE_TYPE_ROTATE_LEFT].speed *(0.001f * diff) + rotationY);
 
     recreateModelMatrix();
 }
@@ -66,7 +60,7 @@ void DynamicObject::OnUpdate(const uint32 & diff)
 
     GameObject::OnUpdate(diff);
 
-    for (auto i = scripts.begin(); i != scripts.end(); ++i)
+    for (auto i = scripts["OnUpdate"].begin(); i != scripts["OnUpdate"].end(); ++i)
         (*i)(*this);
 }
 
@@ -89,11 +83,58 @@ DynamicObject::DynamicObject() : GameObject("mb.obj", "mb.tga")
     up = glm::vec3(0.0f, 1.0f, 0.0f);
 }
 
+DynamicObject::DynamicObject(std::string model, std::string texture) : GameObject(model, texture)
+{
+    lookDirection = glm::vec3(0.0f, 0.0f, 1.0f);
+
+    moveFlags = MOVE_FLAG_NONE;
+
+    up = glm::vec3(0.0f, 1.0f, 0.0f);
+}
+
 void DynamicObject::RedoMoveOnCollision(Position& original, Position& offset)
 {
     SetPosition(original + offset);
 
     sSceneMgr->CollisionTest(this);
     if (coll == 1.0f)
+    {
+        for (auto i = scripts["OnCollision"].begin(); i != scripts["OnCollision"].end(); ++i)
+            (*i)(*this);
+
         SetPosition(original);
+    }
+}
+
+void DynamicObject::SetRotationY(float rotation)
+{
+    lookDirection = glm::rotate(lookDirection, rotation - rotationY, up);
+    rotationY = rotation;
+
+    recreateModelMatrix();
+}
+
+void DynamicObject::SetRotationX(float rotation)
+{
+    lookDirection = glm::rotate(up, rotation - rotationX, lookDirection);
+    rotationX = rotation;
+
+    recreateModelMatrix();
+}
+
+float DynamicObject::GetAngle(GameObject* ob)
+{
+    float dx = ob->GetPosition().x - GetPosition().x;
+    float dz = ob->GetPosition().z - GetPosition().z;
+
+    float ang = atan2(dz, dx) * 180 / PI;
+    return -ang+90;
+}
+
+float DynamicObject::GetDistance(GameObject* ob)
+{
+    float dx = GetPosition().x - ob->GetPosition().x;
+    float dy = GetPosition().y - ob->GetPosition().y;
+    float dz = GetPosition().z - ob->GetPosition().z;
+    return sqrt((dx*dx) + (dy*dy) + (dz*dz));
 }
