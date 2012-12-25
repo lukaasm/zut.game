@@ -4,6 +4,7 @@
 #include "GameObject.h"
 
 #include <functional>
+#include <unordered_map>
 #include <vector>
 
 enum MoveTypes
@@ -59,11 +60,13 @@ class DynamicObject;
 
 typedef std::function<void (DynamicObject&)> Script;
 typedef std::vector<Script> ScriptsMap;
+typedef std::unordered_map<std::string, ScriptsMap> ScriptsHolder;
 
 class DynamicObject : public GameObject
 {
     public:
         DynamicObject();
+        DynamicObject(std::string, std::string);
 
         void Move(const uint32 &);
 
@@ -80,7 +83,13 @@ class DynamicObject : public GameObject
         const glm::vec3 & GetUpVector() const { return up; }
         glm::vec3 GetDirVector() const { return lookDirection; }
 
-        ScriptsMap scripts;
+        void SetRotationX(float rotation) override;
+        void SetRotationY(float rotation) override;
+
+        float GetAngle(GameObject*);
+        float GetDistance(GameObject*);
+
+        ScriptsHolder scripts;
 
     private:
         MoveFlags moveFlags;

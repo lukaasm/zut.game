@@ -29,6 +29,8 @@
 
 typedef glm::vec3 Position;
 
+#define PI 3.14159265358979323846
+
 // warning C4482: nonstandard extension used: enum 'VertexArray::Attrib' used in qualified name
 #pragma warning(disable : 4482)
 // warning C4996: 'fscanf': This function or variable may be unsafe. Consider using fscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.

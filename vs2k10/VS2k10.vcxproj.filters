@@ -80,9 +80,6 @@
     <ClInclude Include="..\src\ModelData.h">
       <Filter>Other</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\Player.h">
-      <Filter>GameObjects</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\DynamicObject.h">
       <Filter>GameObjects</Filter>
     </ClInclude>
@@ -176,9 +173,6 @@
     </ClCompile>
     <ClCompile Include="..\src\ModelData.cpp">
       <Filter>Other</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Player.cpp">
-      <Filter>GameObjects</Filter>
     </ClCompile>
     <ClCompile Include="..\src\DynamicObject.cpp">
       <Filter>GameObjects</Filter>

@@ -86,6 +86,7 @@ class GameObject
         const glm::mat4& GetModelMatrix() const;
 
         void SetGuid(uint32 guid);
+        uint32 GetGuid() const { return guid; }
 
         void SetBoundingObject(BoundingBoxProto* object);
         AABoundingBox* GetBoundingObject() const { return boundingBox; }
@@ -107,6 +108,9 @@ class GameObject
 
         float GetRotationX() const { return rotationX; }
         float GetRotationY() const { return rotationY; }
+
+        virtual void SetRotationX(float rotation) { rotationX = rotation; }
+        virtual void SetRotationY(float rotation) { rotationY = rotation; }
 
     protected:
         void recreateModelMatrix();

@@ -14,7 +14,6 @@
 #include "Grid.h"
 #include "Input.h"
 #include "ModelData.h"
-#include "Player.h"
 #include "RenderDevice.h"
 #include "ResourcesMgr.h"
 #include "Shader.h"
@@ -27,10 +26,27 @@ void SceneMgr::OnInit()
 
     terrain = new Terrain();
 
-    player = new Player();
+    player = new DynamicObject("sphere.obj", "placeholder.tga");
     player->SetPosition(Position(15.0f, terrain->GetHeight(15.0f, 10.0f) + 0.075f, 10.0f));
     player->SetScale(glm::vec3(0.15f));
     player->SetBoundingObject(sResourcesMgr->GetModelData(player->GetModel())->boundingBox);
+    player->scripts["OnUpdate"].push_back(
+        [](DynamicObject& ob)
+        {
+            for (Keyboard::KeysMap::const_iterator i = sKeyboard->GetKeysMap().begin(); i != sKeyboard->GetKeysMap().end(); ++i)
+            {
+                const MoveInfo& info = Keyboard::Key2MoveInfo(i->first);
+                if (info.apply == MOVE_FLAG_NONE)
+                    continue;
+
+                if (i->second)
+                    ob.AddMoveType(info);
+                else
+                    ob.ClearMoveType(info.apply);
+            }
+            ob.GetPosition().y = sSceneMgr->GetHeight(&ob);
+        });
+
     RegisterObject(player);
 
     cameras.push_back(new TppCamera());
@@ -55,6 +71,28 @@ void SceneMgr::OnInit()
     ob->SetScale(glm::vec3(6));
     RegisterObject(ob);
 
+    ob = new DynamicObject("boid.obj", "placeholder.tga");
+    ob->SetScale(glm::vec3(0.25f));
+    ob->SetPosition(Position(14.25f, GetHeight(14.25f, 14.0f, ob), 14.0f));
+
+    ((DynamicObject*)(ob))->scripts["OnUpdate"].push_back(
+        [](DynamicObject& ob)
+        {
+            DynamicObject* player = sSceneMgr->GetPlayer();
+            float dist = ob.GetDistance(player);
+            if (dist < 0.5f || dist > 4.0f)
+                ob.ClearMoveType(MOVE_FLAG_FORWARD);
+            else if (dist < 3.0f)
+            {
+                ob.SetRotationY(ob.GetAngle(player));
+                ob.AddMoveType(moveInfos[MOVE_TYPE_FORWARD]);
+            }
+
+            ob.GetPosition().y = sSceneMgr->GetHeight(&ob);
+        });
+
+    RegisterObject(ob);
+
     text2D.Init();
 
     initLights();
@@ -69,11 +107,10 @@ void SceneMgr::OnUpdate(const uint32& diff)
     float time = glfwGetTime()*150.0f;
     for (uint8 i = 0; i < GetPointLights().size(); ++i)
     {
-        GetPointLights()[i].Position.y = 3.0f+i + (i % 2 ? sin((time/180)*3.14)*(i + 0.5f) : cos((time/180)*3.14)*(i + 0.5f));
-        GetPointLights()[i].Position.x = 18.0f + cos((time/180)*3.14)*2*(i + 0.5f)*.7f;
-        GetPointLights()[i].Position.z = 12.5f + sin((time/180)*3.14)*4*(i + 0.5f)*.7f;
+        GetPointLights()[i].Position.y = 3.0f+i + (i % 2 ? sin((time/180)*PI)*(i + 0.5f) : cos((time/180)*PI)*(i + 0.5f));
+        GetPointLights()[i].Position.x = 18.0f + cos((time/180)*PI)*2*(i + 0.5f)*.7f;
+        GetPointLights()[i].Position.z = 12.5f + sin((time/180)*PI)*4*(i + 0.5f)*.7f;
     }
-
 
     GetCamera()->OnUpdate(diff);
 }
@@ -83,6 +120,8 @@ void SceneMgr::CollisionTest(GameObject* object)
     object->coll = 0.0f;
 
     AABoundingBox* bounds = object->GetBoundingObject();
+    if (bounds == nullptr)
+        return;
 
     GameObjectsMap map = staticObjects;
     map.insert(dynamicObjects.begin(), dynamicObjects.end());
@@ -148,9 +187,18 @@ void SceneMgr::OnResize(uint32 width, uint32 height)
         (*i)->OnResize(width, height);
 }
 
-float SceneMgr::GetHeight(float x, float z)
+float SceneMgr::GetHeight(float x, float z, GameObject* ob)
 {
-    return terrain->GetHeight(x, z);
+    float h = terrain->GetHeight(x, z);
+    if (ob != nullptr)
+        return h + sResourcesMgr->GetModelData(ob->GetModel())->height*ob->GetScale().y*0.5f;
+    return h;
+}
+
+float SceneMgr::GetHeight(GameObject* ob)
+{
+    float h = terrain->GetHeight(ob->GetPosition().x, ob->GetPosition().z);
+    return h + sResourcesMgr->GetModelData(ob->GetModel())->height*ob->GetScale().y*0.5f;
 }
 
 void SceneMgr::OnRender()
@@ -169,9 +217,9 @@ void SceneMgr::renderGUI()
 
     text2D.RenderText(fps.str(), 10, sConfig->GetDefault("height", 600) - 12, 12);
 
-    text2D.RenderSprite(5, 5, 200, deferred.depthTexture);
-    text2D.RenderSprite(5, 210, 200, deferred.colorTexture);
-    text2D.RenderSprite(5, 415, 200, deferred.normalTexture);
+//     text2D.RenderSprite(5, 5, 200, deferred.depthTexture);
+//     text2D.RenderSprite(5, 210, 200, deferred.colorTexture);
+//     text2D.RenderSprite(5, 415, 200, deferred.normalTexture);
 }
 
 void SceneMgr::initLights()
