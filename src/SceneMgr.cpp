@@ -60,6 +60,7 @@ void SceneMgr::OnInit()
                 return;
 
             DynamicObject* shoot = new DynamicObject("sphere.obj", "placeholder.tga");
+            shoot->SetTypeId(TYPEID_PROJECTILE);
             shoot->SetPosition(ob.GetPosition());
             shoot->SetScale(glm::vec3(0.05f));
             shoot->AddMoveType(moveInfos[MOVE_TYPE_FORWARD]);
@@ -138,8 +139,11 @@ void SceneMgr::OnInit()
 
 void SceneMgr::OnUpdate(const uint32& diff)
 {
-    for (auto i = dynamicObjects.begin(); i != dynamicObjects.end(); ++i)
-        i->second->OnUpdate(diff);
+    for (uint8 i = TYPEID_DYNAMIC; i < TYPEID_MAX; ++i)
+    {
+        for (auto it = objects[i].begin(); it != objects[i].end(); ++it)
+            reinterpret_cast<DynamicObject*>(it->second)->OnUpdate(diff);
+    }
 
     float time = glfwGetTime()*150.0f;
     uint8 x = 0;
@@ -169,10 +173,7 @@ void SceneMgr::OnUpdate(const uint32& diff)
     while (!unregisterQueue.empty())
     {
         GameObject* object = unregisterQueue.front();
-        if (object->IsDynamicObject())
-            dynamicObjects.erase(object->GetGuid());
-        else
-            staticObjects.erase(object->GetGuid());
+        objects[object->GetTypeId()].erase(object->GetGuid());
 
         delete object;
         unregisterQueue.pop_front();
@@ -181,18 +182,13 @@ void SceneMgr::OnUpdate(const uint32& diff)
     GetCamera()->OnUpdate(diff);
 }
 
-void SceneMgr::CollisionTest(GameObject* object)
+bool SceneMgr::CollisionTest(GameObject* object, ObjectTypeId type)
 {
-    object->coll = 0.0f;
-
     AABoundingBox* bounds = object->GetBoundingObject();
     if (bounds == nullptr)
-        return;
+        return false;
 
-    GameObjectsMap map = staticObjects;
-    map.insert(dynamicObjects.begin(), dynamicObjects.end());
-
-    for (auto i = map.begin(); i != map.end(); ++i)
+    for (auto i = objects[type].begin(); i != objects[type].end(); ++i)
     {
         GameObject* ob = i->second;
         if (object == ob || ob->GetBoundingObject() == nullptr)
@@ -200,21 +196,25 @@ void SceneMgr::CollisionTest(GameObject* object)
 
         if (bounds->Intersection(*(ob->GetBoundingObject())))
         {
-            object->coll = 1.0f;
-            ob->coll = 1.0f;
+            if (object->GetTypeId() != TYPEID_STATIC)
+                reinterpret_cast<DynamicObject*>(object)->OnCollision();
+            if (ob->GetTypeId() != TYPEID_STATIC)
+                reinterpret_cast<DynamicObject*>(ob)->OnCollision();
+
+            return true;
         }
-        else
-            ob->coll = 0.0f;
     }
+    return false;
 }
 
 SceneMgr::~SceneMgr()
 {
-    GameObjectsMap map = staticObjects;
-    map.insert(dynamicObjects.begin(), dynamicObjects.end());
-
-    staticObjects.clear();
-    dynamicObjects.clear();
+    GameObjectsMap map;
+    for (uint8 i = TYPEID_STATIC; i < TYPEID_MAX; ++i)
+    {
+        map.insert(objects[i].begin(), objects[i].end());
+        objects[i].clear();
+    }
 
     std::for_each(map.begin(), map.end(), [](std::pair<uint32, GameObject*> p) { delete p.second; });
     std::for_each(cameras.begin(), cameras.end(), [](Camera* cam) { delete cam; });
@@ -225,10 +225,7 @@ void SceneMgr::RegisterObject(GameObject* object)
     uint32 GUID = ++guid;
     object->SetGuid(GUID);
 
-    if (object->IsDynamicObject())
-        dynamicObjects[GUID] = object;
-    else
-        staticObjects[GUID] = object;
+    objects[object->GetTypeId()][GUID] = object;
 
     if (AABoundingBox* bounds = object->GetBoundingObject())
         boundingBoxes.insert(bounds);
@@ -318,10 +315,11 @@ void SceneMgr::initLights()
 
 GameObjectsMap SceneMgr::GetObjects()
 {
-    GameObjectsMap allObjects = staticObjects;
-    allObjects.insert(dynamicObjects.begin(), dynamicObjects.end());
+    GameObjectsMap map;
+    for (uint8 i = TYPEID_STATIC; i < TYPEID_MAX; ++i)
+        map.insert(objects[i].begin(), objects[i].end());
 
-    return allObjects;
+    return map;
 }
 
 void SceneMgr::UnregisterObject(GameObject* object)

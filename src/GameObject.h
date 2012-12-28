@@ -74,6 +74,15 @@ class AABoundingBox : public BoundingBoxProto
         glm::vec3 max;
 };
 
+enum ObjectTypeId
+{
+    TYPEID_STATIC     = 0,
+    TYPEID_DYNAMIC    = 1,
+    TYPEID_PROJECTILE = 2,
+
+    TYPEID_MAX,
+};
+
 class GameObject
 {
     public:
@@ -81,12 +90,15 @@ class GameObject
         virtual ~GameObject() { delete boundingBox; }
 
         virtual void OnRender();
-        virtual void OnUpdate(const uint32 &) {}
+        //virtual void OnUpdate(const uint32 &) {}
 
         const glm::mat4& GetModelMatrix() const;
 
         void SetGuid(uint32 guid);
         uint32 GetGuid() const { return guid; }
+
+        void SetTypeId(ObjectTypeId type) { typeId = type; }
+        ObjectTypeId GetTypeId() { return typeId; }
 
         void SetBoundingObject(BoundingBoxProto* object);
         AABoundingBox* GetBoundingObject() const { return boundingBox; }
@@ -116,6 +128,7 @@ class GameObject
         void recreateModelMatrix();
 
         uint32 guid;
+        ObjectTypeId typeId;
 
         std::string modelName;
         std::string textureName;

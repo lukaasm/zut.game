@@ -8,6 +8,7 @@
 
 #include "Common.h"
 #include "DeferredRendering.h"
+#include "GameObject.h"
 #include "Light.h"
 #include "Singleton.h"
 #include "Text2d.h"
@@ -15,7 +16,6 @@
 class AABoundingBox;
 class Camera;
 class DynamicObject;
-class GameObject;
 class Shader;
 class Terrain;
 
@@ -51,10 +51,9 @@ class SceneMgr
         float GetHeight(float, float, GameObject* = nullptr);
         float GetHeight(GameObject*);
 
-        void CollisionTest(GameObject*);
+        bool CollisionTest(GameObject* object, ObjectTypeId type);
 
     private:
-        //void renderPass();
         void renderGUI();
         void initLights();
 
@@ -70,8 +69,7 @@ class SceneMgr
         Terrain* terrain;
         GameObject* skybox;
 
-        GameObjectsMap staticObjects;
-        GameObjectsMap dynamicObjects;
+        GameObjectsMap objects[TYPEID_MAX];
 
         BoundingBoxSet boundingBoxes;
 
