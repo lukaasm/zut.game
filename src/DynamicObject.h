@@ -78,10 +78,9 @@ class DynamicObject : public GameObject
         void AddMoveType(MoveInfo);
         void ClearMoveType(MoveFlags);
 
-        virtual bool IsControllable() const override { return false; }
-        virtual bool IsDynamicObject() const override { return true; }
-
-        virtual void OnUpdate(const uint32 &) override;
+        virtual void OnUpdate(const uint32 &);
+        
+        void OnCollision();
 
         const glm::vec3 & GetUpVector() const { return up; }
         glm::vec3 GetDirVector() const { return lookDirection; }

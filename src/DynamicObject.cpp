@@ -59,9 +59,13 @@ void DynamicObject::OnUpdate(const uint32 & diff)
 {
     Move(diff);
 
-    GameObject::OnUpdate(diff);
-
     for (auto i = scripts["OnUpdate"].begin(); i != scripts["OnUpdate"].end(); ++i)
+        (*i)(*this);
+}
+
+void DynamicObject::OnCollision()
+{
+    for (auto i = scripts["OnCollision"].begin(); i != scripts["OnCollision"].end(); ++i)
         (*i)(*this);
 }
 
@@ -97,20 +101,16 @@ DynamicObject::DynamicObject(std::string model, std::string texture) : GameObjec
     moveFlags = MOVE_FLAG_NONE;
 
     up = glm::vec3(0.0f, 1.0f, 0.0f);
+
+    SetTypeId(TYPEID_DYNAMIC);
 }
 
 void DynamicObject::RedoMoveOnCollision(Position& original, Position& offset)
 {
     SetPosition(original + offset);
 
-    sSceneMgr->CollisionTest(this);
-    if (coll == 1.0f)
-    {
-        for (auto i = scripts["OnCollision"].begin(); i != scripts["OnCollision"].end(); ++i)
-            (*i)(*this);
-
+    if (sSceneMgr->CollisionTest(this, TYPEID_STATIC))
         SetPosition(original);
-    }
 }
 
 void DynamicObject::SetRotationY(float rotation)
