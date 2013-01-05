@@ -33,7 +33,7 @@ void SceneMgr::OnInit()
     player = new DynamicObject("sphere.obj", "placeholder.tga");
     player->SetPosition(Position(15.0f, terrain->GetHeight(15.0f, 10.0f) + 0.075f, 10.0f));
     player->SetScale(glm::vec3(0.15f));
-    player->SetBoundingObject(sResourcesMgr->GetModelData(player->GetModel())->boundingBox);
+    //player->SetBoundingObject(sResourcesMgr->GetModelData(player->GetModel())->boundingBox);
     player->scripts["OnUpdate"].push_back(
         [](DynamicObject& ob)
         {
@@ -257,15 +257,15 @@ void SceneMgr::OnResize(uint32 width, uint32 height)
 float SceneMgr::GetHeight(float x, float z, GameObject* ob)
 {
     float h = terrain->GetHeight(x, z);
-    if (ob != nullptr)
-        return h + sResourcesMgr->GetModelData(ob->GetModel())->height*ob->GetScale().y*0.5f;
+    //if (ob != nullptr)
+    //    return h + sResourcesMgr->GetModelData(ob->GetModel())->height*ob->GetScale().y*0.5f;
     return h;
 }
 
 float SceneMgr::GetHeight(GameObject* ob)
 {
     float h = terrain->GetHeight(ob->GetPosition().x, ob->GetPosition().z);
-    return h + sResourcesMgr->GetModelData(ob->GetModel())->height*ob->GetScale().y*0.5f;
+    return h;// + sResourcesMgr->GetModelData(ob->GetModel())->height*ob->GetScale().y*0.5f;
 }
 
 void SceneMgr::OnRender()

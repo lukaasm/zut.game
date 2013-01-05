@@ -138,7 +138,7 @@ void DeferredRenderer::GeometryPass()
         OGLHelper::ActivateTexture(GL_TEXTURE0, sResourcesMgr->GetTextureId("light.tga"));
 
         ModelData* data = sResourcesMgr->GetModelData("sphere.obj");
-        OGLHelper::DrawTriangles(data->vao);
+        data->Render();
     }
 
     shader->Unbind();
@@ -201,7 +201,7 @@ void DeferredRenderer::PointLightPass(glm::vec3 position, glm::vec3 color, float
     glCullFace(GL_FRONT);
     
     ModelData* data = sResourcesMgr->GetModelData("sphere.obj");
-    OGLHelper::DrawTriangles(data->vao);
+    data->Render();
 
     shader->Unbind();
 
