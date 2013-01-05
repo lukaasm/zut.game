@@ -10,20 +10,24 @@
 class BoundingBoxProto;
 struct Vertex;
 
-struct ModelData
+typedef std::vector<Vertex> VertexVector;
+
+class ModelData
 {
-    std::string modelName;
-    std::string textureName;
+    public:
+        ~ModelData();
 
-    float height;
+        static ModelData* LoadModel(std::string fileName);
 
-    uint32 textureId;
+        void Render();
+   // private:
+        uint32 objectsCount;
 
-    BoundingBoxProto* boundingBox;
-    VertexArrayObject vao;
+        BoundingBoxProto* boundingBox;
 
-    typedef std::vector<Vertex> VertexVector;
-    VertexVector vertexes;
+        uint32* textureId;
+        VertexArrayObject* vao;
+        VertexVector* vertexes;
 };
 
 #endif

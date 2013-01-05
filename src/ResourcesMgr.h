@@ -14,7 +14,7 @@
 #include "Singleton.h"
 
 struct Vertex;
-struct ModelData;
+class ModelData;
 class Shader;
 
 typedef std::unordered_map<std::string, ModelData*> ModelDataMap;
@@ -42,7 +42,6 @@ class ResourcesMgr
         void unloadShaders();
 
         uint32 createTexture(std::string);
-        bool loadOBJ(std::string, std::vector<Vertex>&);
 
         uint32 loadTexture(std::string fileName);
         ModelData* loadModel(std::string fileName);

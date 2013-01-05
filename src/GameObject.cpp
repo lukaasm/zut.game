@@ -14,7 +14,7 @@
 void GameObject::OnRender()
 {
     ModelData* modelData = sResourcesMgr->GetModelData(modelName);
-    OGLHelper::DrawTriangles(modelData->vao);
+    modelData->Render();
 }
 
 void GameObject::recreateModelMatrix()
