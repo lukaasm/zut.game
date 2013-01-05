@@ -11,6 +11,10 @@
 #include "Common.h"
 #include "SceneMgr.h"
 
+Keyboard::Keyboard()
+{
+}
+
 Keyboard::~Keyboard()
 {
     delete_ptr(KeyPressCallBack)
