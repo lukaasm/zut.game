@@ -20,6 +20,10 @@
 #include "Timer.h"
 #include "Terrain.h"
 
+SceneMgr::SceneMgr()
+{
+}
+
 void SceneMgr::OnInit()
 {
     guid = 0;

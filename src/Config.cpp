@@ -6,6 +6,10 @@
 #include "Common.h"
 #include "Exception.h"
 
+Config::Config()
+{
+}
+
 void Config::LoadFile(std::string fileName)
 {
     std::ifstream file(fileName);

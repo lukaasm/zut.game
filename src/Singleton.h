@@ -22,7 +22,7 @@ template<class T>
 T* Singleton<T>::instance = nullptr;
 
 #define SINGLETON(a) friend class Singleton<a>; \
-                          a() {} \
+                          a(); \
                           a(a&);
 
 #endif

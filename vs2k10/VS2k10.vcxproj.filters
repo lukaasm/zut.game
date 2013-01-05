@@ -108,6 +108,9 @@
       <Filter>Other</Filter>
     </ClInclude>
     <ClInclude Include="..\src\DeferredRendering.h" />
+    <ClInclude Include="..\src\Random.h">
+      <Filter>Misc</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="VS2k10.rc">
@@ -187,5 +190,8 @@
       <Filter>Other</Filter>
     </ClCompile>
     <ClCompile Include="..\src\DeferredRendering.cpp" />
+    <ClCompile Include="..\src\Timer.cpp">
+      <Filter>Misc</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

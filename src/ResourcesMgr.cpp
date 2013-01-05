@@ -15,6 +15,10 @@
 #include "Shader.h"
 #include "VertexArrayObject.h"
 
+ResourcesMgr::ResourcesMgr()
+{
+}
+
 void ResourcesMgr::OnInit()
 {
     loadShaders();

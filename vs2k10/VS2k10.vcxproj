@@ -95,6 +95,7 @@
     <ClCompile Include="..\src\Shader.cpp" />
     <ClCompile Include="..\src\Terrain.cpp" />
     <ClCompile Include="..\src\Text2d.cpp" />
+    <ClCompile Include="..\src\Timer.cpp" />
     <ClCompile Include="..\src\VertexArrayObject.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -111,6 +112,7 @@
     <ClInclude Include="..\src\Input.h" />
     <ClInclude Include="..\src\Light.h" />
     <ClInclude Include="..\src\ModelData.h" />
+    <ClInclude Include="..\src\Random.h" />
     <ClInclude Include="..\src\RenderDevice.h" />
     <ClInclude Include="..\src\ResourcesMgr.h" />
     <ClInclude Include="..\src\SceneMgr.h" />
