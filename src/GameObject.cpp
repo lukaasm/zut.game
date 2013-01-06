@@ -10,6 +10,7 @@
 #include "ModelData.h"
 #include "RenderDevice.h"
 #include "ResourcesMgr.h"
+#include "SceneMgr.h"
 
 void GameObject::OnRender()
 {
@@ -61,9 +62,15 @@ void GameObject::SetGuid(uint32 guid)
     this->guid = guid;
 }
 
-void GameObject::SetBoundingObject(BoundingBoxProto* object)
+void GameObject::EnableBoundingBox()
 {
-    boundingBox = new AABoundingBox(*object, this);
+    if (boundingBox != nullptr)
+        return;
+
+    BoundingBoxProto& object = sResourcesMgr->GetModelData(GetModel())->boundingBox[0];
+    boundingBox = new AABoundingBox(object, this);
+
+    //sSceneMgr->RegisterBoundingBox(this);
 }
 
 GameObject::GameObject(std::string model, std::string texture) : coll(0.0f), modelName(model), textureName(texture), rotationX(0.0f), rotationY(0.0f), boundingBox(nullptr)

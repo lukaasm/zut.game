@@ -38,6 +38,8 @@ class SceneMgr
         void RegisterObject(GameObject* object);
         void UnregisterObject(GameObject* object);
 
+        //void RegisterBoundingBox(GameObject* object);
+
         void ToggleCamera();
 
         GameObjectsMap GetObjects();
@@ -71,7 +73,7 @@ class SceneMgr
 
         GameObjectsMap objects[TYPEID_MAX];
 
-        BoundingBoxSet boundingBoxes;
+        //BoundingBoxSet boundingBoxes[TYPEID_MAX];
 
         PointLightList lights;
 

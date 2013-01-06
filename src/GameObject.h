@@ -100,7 +100,7 @@ class GameObject
         void SetTypeId(ObjectTypeId type) { typeId = type; }
         ObjectTypeId GetTypeId() { return typeId; }
 
-        void SetBoundingObject(BoundingBoxProto* object);
+        void EnableBoundingBox();
         AABoundingBox* GetBoundingObject() const { return boundingBox; }
 
         void SetPosition(const Position& pos);
