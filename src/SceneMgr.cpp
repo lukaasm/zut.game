@@ -14,6 +14,7 @@
 #include "Grid.h"
 #include "Input.h"
 #include "ModelData.h"
+#include "Random.h"
 #include "RenderDevice.h"
 #include "ResourcesMgr.h"
 #include "Shader.h"
@@ -33,7 +34,7 @@ void SceneMgr::OnInit()
     player = new DynamicObject("sphere.obj", "placeholder.tga");
     player->SetPosition(Position(15.0f, terrain->GetHeight(15.0f, 10.0f) + 0.075f, 10.0f));
     player->SetScale(glm::vec3(0.15f));
-    //player->SetBoundingObject(sResourcesMgr->GetModelData(player->GetModel())->boundingBox);
+    player->EnableBoundingBox();
     player->scripts["OnUpdate"].push_back(
         [](DynamicObject& ob)
         {
@@ -69,6 +70,7 @@ void SceneMgr::OnInit()
             shoot->SetScale(glm::vec3(0.05f));
             shoot->AddMoveType(moveInfos[MOVE_TYPE_FORWARD]);
             shoot->SetRotationY(sSceneMgr->GetPlayer()->GetRotationY());
+            shoot->EnableBoundingBox();
 
             shoot->scripts["OnUpdate"].push_back(
                 [](DynamicObject& ob)
@@ -76,12 +78,22 @@ void SceneMgr::OnInit()
                     ob.SetPosition(Position(ob.GetPosition().x, sSceneMgr->GetHeight(&ob) + 0.25f, ob.GetPosition().z));
 
                     if (ob.createTime->Elapsed() > 3000)
-                        sSceneMgr->UnregisterObject(&ob);
+                    {
+                         sSceneMgr->UnregisterObject(&ob);
+                         return;
+                    }
+                    sSceneMgr->CollisionTest(&ob, TYPEID_DYNAMIC);
+                });
+
+            shoot->scripts["OnCollision"].push_back(
+                [](DynamicObject& ob)
+                {
+                    sSceneMgr->UnregisterObject(&ob);
                 });
 
             PointLight light;
             light.owner = shoot;
-            light.Color = glm::vec3(0.5f, 0.2f, 0.6f);
+            light.Color = glm::vec3(Random::Float(0.0f, 1.0f), Random::Float(0.0f, 1.0f), Random::Float(0.0f, 1.0f));
             light.Intensity = 1.0f;
             light.Radius = 8.0f;
 
@@ -116,6 +128,7 @@ void SceneMgr::OnInit()
     ob = new DynamicObject("boid.obj", "placeholder.tga");
     ob->SetScale(glm::vec3(0.25f));
     ob->SetPosition(Position(14.25f, GetHeight(14.25f, 14.0f, ob), 14.0f));
+    ob->EnableBoundingBox();
 
     ((DynamicObject*)(ob))->scripts["OnUpdate"].push_back(
         [](DynamicObject& ob)
@@ -131,6 +144,12 @@ void SceneMgr::OnInit()
             }
 
             ob.GetPosition().y = sSceneMgr->GetHeight(&ob);
+        });
+
+    ((DynamicObject*)(ob))->scripts["OnCollision"].push_back(
+        [](DynamicObject& ob)
+        {
+            sSceneMgr->UnregisterObject(&ob);
         });
 
     RegisterObject(ob);
@@ -197,6 +216,9 @@ bool SceneMgr::CollisionTest(GameObject* object, ObjectTypeId type)
         GameObject* ob = i->second;
         if (object == ob || ob->GetBoundingObject() == nullptr)
             continue;
+        
+        if (object->GetTypeId() == TYPEID_PROJECTILE && ob == player)
+            continue;
 
         if (bounds->Intersection(*(ob->GetBoundingObject())))
         {
@@ -230,9 +252,6 @@ void SceneMgr::RegisterObject(GameObject* object)
     object->SetGuid(GUID);
 
     objects[object->GetTypeId()][GUID] = object;
-
-    if (AABoundingBox* bounds = object->GetBoundingObject())
-        boundingBoxes.insert(bounds);
 }
 
 Camera* SceneMgr::GetCamera()
@@ -256,16 +275,23 @@ void SceneMgr::OnResize(uint32 width, uint32 height)
 
 float SceneMgr::GetHeight(float x, float z, GameObject* ob)
 {
-    float h = terrain->GetHeight(x, z);
-    //if (ob != nullptr)
-    //    return h + sResourcesMgr->GetModelData(ob->GetModel())->height*ob->GetScale().y*0.5f;
-    return h;
+    float height = terrain->GetHeight(x, z);
+    if (ob != nullptr)
+    {
+         ModelData* md = sResourcesMgr->GetModelData(ob->GetModel());
+         BoundingBoxProto& bbp = md->boundingBox[0];
+         height += (bbp.GetMax().y - bbp.GetMin().y) * ob->GetScale().y * 0.5f;
+    }
+    return height;
 }
 
 float SceneMgr::GetHeight(GameObject* ob)
 {
-    float h = terrain->GetHeight(ob->GetPosition().x, ob->GetPosition().z);
-    return h;// + sResourcesMgr->GetModelData(ob->GetModel())->height*ob->GetScale().y*0.5f;
+    float height = terrain->GetHeight(ob->GetPosition().x, ob->GetPosition().z);
+    ModelData* md = sResourcesMgr->GetModelData(ob->GetModel());
+    BoundingBoxProto& bbp = md->boundingBox[0];
+    height += (bbp.GetMax().y - bbp.GetMin().y) * ob->GetScale().y * 0.5f;
+    return height;
 }
 
 void SceneMgr::OnRender()
@@ -328,8 +354,8 @@ GameObjectsMap SceneMgr::GetObjects()
 
 void SceneMgr::UnregisterObject(GameObject* object)
 {
-    if (AABoundingBox* bounds = object->GetBoundingObject())
-        boundingBoxes.erase(bounds);
+//     if (AABoundingBox* bounds = object->GetBoundingObject())
+//         boundingBoxes[object->GetTypeId()].erase(bounds);
 
     unregisterQueue.push_back(object);
 }
