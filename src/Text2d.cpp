@@ -84,14 +84,17 @@ void Text2D::RenderText(std::string text, int x, int y, int fontSize)
     Shader* shader = sResourcesMgr->GetShader("text2d.glsl");
 
     // Bind shader
+
+    int w = sConfig->GetDefault("width", WINDOW_WIDTH);
+    int h = sConfig->GetDefault("height", WINDOW_HEIGHT);
+
     shader->Bind();
+
+    shader->SetUniform("in_ScreenHWidth", w/2);
+    shader->SetUniform("in_ScreenHHeight", h/2);
 
     OGLHelper::ActivateTexture(GL_TEXTURE0, textureId);
     shader->SetUniform("textureSampler", 0);
-
-    uint32 hWidth = sConfig->GetDefault("width", 800)/2;
-    uint32 hHeight = sConfig->GetDefault("height", 600)/2;
-    shader->SetUniform("in_ScreenSize", glm::vec2(hWidth, hHeight));
 
     OGLHelper::DrawTriangles(vao);
 

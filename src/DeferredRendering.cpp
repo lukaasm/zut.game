@@ -17,12 +17,12 @@
 #include "RenderDevice.h"
 #include "ResourcesMgr.h"
 
-#include <iostream>
-
 void DeferredRenderer::Init()
 {
-    width = sConfig->GetDefault("width", 800);
-    height = sConfig->GetDefault("height", 600);
+    width = sConfig->GetDefault("width", WINDOW_WIDTH);
+    height = sConfig->GetDefault("height", WINDOW_HEIGHT);
+
+    glViewport(0, 0, width, height);
 
     InitFSQuad();
 
@@ -35,12 +35,12 @@ void DeferredRenderer::Init()
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB8, width, height, 0, GL_RGB, GL_UNSIGNED_INT, NULL);
+    glTexImage2D(GL_TEXTURE_2D, 0, RTFORMAT, width, height, 0, RTFORMAT2, GL_FLOAT, NULL);
     glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, colorTexture, 0);
 
     glGenTextures(1, &normalTexture);
     glBindTexture(GL_TEXTURE_2D, normalTexture);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB8, width, height, 0, GL_RGB, GL_FLOAT, NULL);
+    glTexImage2D(GL_TEXTURE_2D, 0, RTFORMAT, width, height, 0, RTFORMAT2, GL_FLOAT, NULL);
     glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, normalTexture, 0);
 
     glGenTextures(1, &depthTexture);
@@ -60,7 +60,7 @@ void DeferredRenderer::Init()
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB8, width, height, 0, GL_RGB, GL_FLOAT, NULL);
+    glTexImage2D(GL_TEXTURE_2D, 0, RTFORMAT, width, height, 0, RTFORMAT2, GL_FLOAT, NULL);
     glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT3, GL_TEXTURE_2D, lightTexture, 0);
     glBindTexture(GL_TEXTURE_2D, 0);
 
@@ -260,8 +260,8 @@ void DeferredRenderer::LightsPass()
     for (auto i = sSceneMgr->GetPointLights().begin(); i != sSceneMgr->GetPointLights().end(); ++i)
         PointLightPass(i->Position, i->Color, i->Radius, i->Intensity);
    
-    DirectionalLightPass(glm::vec3(0.0f, -1.0f, 1.0f), glm::vec3(0.35f, 0.20f, 0.35f));
-   // DirectionalLightPass(glm::vec3(0.0f, -1.0f, 0.3f), glm::vec3(0.0f, 0.0f, 0.40f));
+   // DirectionalLightPass(glm::vec3(0.0f, -1.0f, 1.0f), glm::vec3(0.35f, 0.20f, 0.35f));
+    DirectionalLightPass(glm::vec3(0.0f, -1.0f, 0.3f), glm::vec3(0.0f, 0.0f, 0.40f));
 
     glDisable(GL_BLEND);
 }

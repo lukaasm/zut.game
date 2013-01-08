@@ -63,8 +63,7 @@ void SceneMgr::OnInit()
 
             ob.createTime->Start(200);
 
-            auto it = sKeyboard->GetKeysMap().find(GLFW_KEY_LCTRL);
-            if (it == sKeyboard->GetKeysMap().end() || it->second == false)
+            if (!sKeyboard->IsKeyPressed(GLFW_KEY_LCTRL))
                 return;
 
             DynamicObject* shoot = new DynamicObject("sphere.obj", "placeholder.tga");
@@ -357,11 +356,16 @@ void SceneMgr::renderGUI()
     std::stringstream fps;
     fps << "FrameTime: " << std::setprecision(3) << BaseApp::frameTime << "ms" << " FPS: " << BaseApp::fps;
 
-    text2D.RenderText(fps.str(), 10, sConfig->GetDefault("height", 600) - 12, 12);
+    int h = sConfig->GetDefault("height", WINDOW_HEIGHT);
 
-//       text2D.RenderSprite(5, 5, 200, sResourcesMgr->GetTextureId("normal_placeholder.tga"));
-//       text2D.RenderSprite(5, 210, 200, deferred.colorTexture);
-//       text2D.RenderSprite(5, 415, 200, deferred.normalTexture);
+    text2D.RenderText(fps.str(), 10, h - h*0.05, 12);
+
+    if (sKeyboard->IsKeyPressed('L'))
+    {
+        text2D.RenderSprite(5, 5, 210, deferred.depthTexture);
+        text2D.RenderSprite(5, 215, 210, deferred.colorTexture);
+        text2D.RenderSprite(5, 425, 210, deferred.normalTexture);
+    }
 }
 
 void SceneMgr::initLights()

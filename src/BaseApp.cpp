@@ -50,10 +50,14 @@ void BaseApp::createContext()
     glfwOpenWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
     // create our window
-    int width = sConfig->GetDefault("width", 800);
-    int height = sConfig->GetDefault("height", 600);
+    int width = sConfig->GetDefault("width", WINDOW_WIDTH);
+    int height = sConfig->GetDefault("height", WINDOW_HEIGHT);
 
-    glfwOpenWindow(width, height, 0, 0, 0, 0, 0, 0, GLFW_WINDOW);
+    uint32 mode = GLFW_WINDOW;
+    if (sConfig->GetDefault("fullscreen", false))
+        mode = GLFW_FULLSCREEN;
+
+    glfwOpenWindow(width, height, 0, 0, 0, 0, 0, 0, mode);
     glfwSetWindowTitle("WastedProject by lukaasm");
 }
 

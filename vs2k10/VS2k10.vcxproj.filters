@@ -130,9 +130,6 @@
     <None Include="..\res\shaders\text2d.glsl">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="..\res\shaders\simple.glsl">
-      <Filter>Resource Files</Filter>
-    </None>
     <None Include="..\res\shaders\deferred_geopass.glsl">
       <Filter>Resource Files</Filter>
     </None>

@@ -13,8 +13,6 @@ class DeferredRenderer
     void Bind();
     void Unbind();
 
-    void Clear();
-
     void GeometryPass();
     void LightsPass();
 
@@ -28,10 +26,8 @@ class DeferredRenderer
     uint32 colorTexture;
     uint32 normalTexture;
     uint32 depthTexture;
-
-    uint32 depthTest;
-
     uint32 lightTexture;
+
     VertexArrayObject quadVAO;
 
     uint32 width;
