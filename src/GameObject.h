@@ -18,7 +18,7 @@ namespace VertexArray
         POSITION = 0,
         TEXCOORD = 1,
         NORMAL   = 2,
-        COLOR    = 3,
+        TANGENT  = 3,
     };
 };
 
@@ -26,7 +26,6 @@ struct Vertex
 {
     Vertex()
     {
-        color = glm::vec3(1.0f, 1.0f, 1.0f);
     }
 
     Vertex(Vertex const& org)
@@ -34,18 +33,18 @@ struct Vertex
         position = org.position;
         uv = org.uv;
         normal = org.normal;
-        color = org.color;
+        tangent = org.tangent;
     }
 
     glm::vec3 position;
     glm::vec2 uv;
     glm::vec3 normal;
-    glm::vec3 color;
+    glm::vec3 tangent;
 };
 
 #define UV_VERTEX_POS sizeof(glm::vec3)
 #define NORMAL_VERTEX_POS UV_VERTEX_POS + sizeof(glm::vec2)
-#define COLOR_VERTEX_POS NORMAL_VERTEX_POS + sizeof(glm::vec3)
+#define TANGENT_VERTEX_POS NORMAL_VERTEX_POS + sizeof(glm::vec3)
 
 class GameObject;
 

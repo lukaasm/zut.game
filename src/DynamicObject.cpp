@@ -9,10 +9,11 @@
 
 void DynamicObject::Move(const uint32& diff)
 {
+    float penalty = this == sSceneMgr->GetPlayer() ? 1.0f : 0.6f;
     Position original = position;
     if (moveFlags & MOVE_FLAG_FORWARD)
     {
-        glm::vec3 offset = lookDirection * moveInfos[MOVE_TYPE_FORWARD].speed *(0.001f * diff);
+        glm::vec3 offset = lookDirection * moveInfos[MOVE_TYPE_FORWARD].speed *(0.001f * diff) * penalty;
         RedoMoveOnCollision(original, offset);
     }
 
