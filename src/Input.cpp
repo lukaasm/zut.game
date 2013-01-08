@@ -82,9 +82,7 @@ void Keyboard::OnKeyPress(int32 key)
 {
     _keyStateMap[key] = true;
 
-    if (key == 'L')
-        sConfig->Set("render.textures", sConfig->Get<bool>("render.textures") ? "0" : "1");
-    else if (key == 'K')
+    if (key == 'K')
         sSceneMgr->ToggleCamera();
     else if (key == 'O')
         std::cerr << sSceneMgr->GetPlayer()->GetPosition().x << ", " << sSceneMgr->GetPlayer()->GetPosition().y << ", " << sSceneMgr->GetPlayer()->GetPosition().z << std::endl;

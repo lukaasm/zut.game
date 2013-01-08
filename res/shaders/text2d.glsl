@@ -10,10 +10,13 @@ out vec2 pass_TexCoord;
 layout(location = ATTR_POSITION) in vec2 in_Position;
 layout(location = ATTR_TEXCOORD) in vec2 in_TexCoord;
 
+uniform int in_ScreenHWidth;// = 512;
+uniform int in_ScreenHHeight;// = 384;
+
 void main()
 {
-    vec2 EyePos = in_Position - vec2(400,300); // [0..800][0..600] -> [-400..400][-300..300]
-    EyePos /= vec2(400,300);
+    vec2 EyePos = in_Position - vec2(in_ScreenHWidth, in_ScreenHHeight);
+    EyePos /= vec2(in_ScreenHWidth, in_ScreenHHeight);
     gl_Position =  vec4(EyePos, 0.0f, 1.0f);
  
     // UV of the vertex. No special space for this one.

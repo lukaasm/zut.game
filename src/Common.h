@@ -26,4 +26,10 @@ typedef glm::vec3 Position;
 #pragma warning(disable : 4996)
 // warning C4244: conversion from 'double' to 'float', possible loss of data
 #pragma warning(disable : 4244)
+
+#define WINDOW_WIDTH  1280
+#define WINDOW_HEIGHT 1024
+
+#define RTFORMAT GL_RGBA16F
+#define RTFORMAT2 GL_RGBA
 #endif

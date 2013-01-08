@@ -9,7 +9,7 @@
 
 void DynamicObject::Move(const uint32& diff)
 {
-    float penalty = this == sSceneMgr->GetPlayer() ? 1.0f : 0.6f;
+    float penalty = (this == sSceneMgr->GetPlayer() ? 1.0f : 0.6f);
     Position original = position;
     if (moveFlags & MOVE_FLAG_FORWARD)
     {

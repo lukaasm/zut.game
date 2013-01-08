@@ -9,6 +9,7 @@
 #include <GL/glfw.h>
 
 #include "BoundingObject.h"
+#include "Config.h"
 #include "Exception.h"
 #include "GameObject.h"
 #include "ModelData.h"
@@ -46,6 +47,12 @@ ModelData* ResourcesMgr::GetModelData(std::string name)
 
 uint32 ResourcesMgr::GetTextureId(std::string name)
 {
+    if (!sConfig->GetDefault("render.textures", true))
+    {
+        if (name.find("normal_") == std::string::npos && name.find("font.tga") == std::string::npos)
+            name = "placeholder.tga";
+    }
+
     if (textures.find(name) != textures.end())
         return textures[name];
     else
@@ -126,19 +133,12 @@ void ResourcesMgr::loadShaders()
     Shader* shader = (new Shader())->LoadFromFile("../res/shaders/text2d.glsl");
 
     shader->AddUniform("textureSampler");
-    shader->AddUniform("in_ScreenSize");
+    shader->AddUniform("in_ScreenHWidth");
+    shader->AddUniform("in_ScreenHHeight");
 
     shader->AddAttribute(VertexArray::Attrib::POSITION, "in_Position");
     shader->AddAttribute(VertexArray::Attrib::TEXCOORD, "in_TexCoord");
     shaders["text2d.glsl"] = shader;
-
-    shader = (new Shader())->LoadFromFile("../res/shaders/simple.glsl");
-
-    shader->AddUniform("in_MVP");
-
-    shader->AddAttribute(VertexArray::Attrib::POSITION, "in_Position");
-    shader->AddAttribute(VertexArray::Attrib::TEXCOORD, "in_TexCoord");
-    shaders["simple.glsl"] = shader;
 
     shader = (new Shader())->LoadFromFile("../res/shaders/deferred_geopass.glsl");
 
