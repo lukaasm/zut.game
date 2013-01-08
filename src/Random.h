@@ -5,23 +5,29 @@
 
 #include "Singleton.h"
 
-namespace Random
+class Random
 {
-    float Float(float min, float max)
-    {
-        std::random_device rd;
-        std::mt19937 gen(rd);
-        std::uniform_real_distribution<> dis(min, max);
-        return dis(gen);
-    }
+    SINGLETON(Random)
 
-    int Int(int min, int max)
-    {
+    public:
+        float Float(float min, float max)
+        {
+            std::uniform_real_distribution<> dis(min, max);
+            return dis(gen);
+        }
+
+        int Int(int min, int max)
+        {
+            std::uniform_int_distribution<> dis(min, max);
+            return dis(gen);
+        }
+
+    private:
         std::random_device rd;
-        std::mt19937 gen(rd);
-        std::uniform_int_distribution<> dis(min, max);
-        return dis(gen);
-    }
+        std::mt19937 gen;
 };
 
+Random::Random() : gen(rd) {};
+
+#define sRandom Singleton<Random>::Instance()
 #endif

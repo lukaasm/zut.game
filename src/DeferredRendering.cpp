@@ -92,9 +92,13 @@ void DeferredRenderer::GeometryPass()
     glm::mat4 mvp = camera->GetProjMatrix() * camera->GetViewMatrix() * skybox->GetModelMatrix();
     shader->SetUniform("in_M", skybox->GetModelMatrix());
     shader->SetUniform("in_MVP", mvp);
-    shader->SetUniform("Texture", 0);
+
+    shader->SetUniform("DiffuseTexture", 0);
+    shader->SetUniform("NormalTexture", 1);
 
     OGLHelper::ActivateTexture(GL_TEXTURE0, sResourcesMgr->GetTextureId(skybox->GetTexture()));
+    OGLHelper::ActivateTexture(GL_TEXTURE1, sResourcesMgr->GetTextureId("normal_placeholder.tga"));
+
     skybox->OnRender();
 
     Terrain* terrain = sSceneMgr->GetTerrain();
@@ -104,6 +108,7 @@ void DeferredRenderer::GeometryPass()
     shader->SetUniform("in_MVP", mvp);
 
     OGLHelper::ActivateTexture(GL_TEXTURE0, sResourcesMgr->GetTextureId("placeholder.tga"));
+    OGLHelper::ActivateTexture(GL_TEXTURE1, sResourcesMgr->GetTextureId("normal_placeholder.tga"));
 
     terrain->OnRender();
 
@@ -116,9 +121,8 @@ void DeferredRenderer::GeometryPass()
         shader->SetUniform("in_M", ob->GetModelMatrix());
         shader->SetUniform("in_MVP", mvp);
 
-        shader->SetUniform("Texture", 0);
-
         OGLHelper::ActivateTexture(GL_TEXTURE0, sResourcesMgr->GetTextureId(ob->GetTexture()));
+        OGLHelper::ActivateTexture(GL_TEXTURE1, sResourcesMgr->GetTextureId("normal_placeholder.tga"));
 
         ob->OnRender();
     }
@@ -133,9 +137,8 @@ void DeferredRenderer::GeometryPass()
         shader->SetUniform("in_M", m);
         shader->SetUniform("in_MVP", mvp);
 
-        shader->SetUniform("Texture", 0);
-
         OGLHelper::ActivateTexture(GL_TEXTURE0, sResourcesMgr->GetTextureId("light.tga"));
+        OGLHelper::ActivateTexture(GL_TEXTURE1, sResourcesMgr->GetTextureId("normal_placeholder.tga"));
 
         ModelData* data = sResourcesMgr->GetModelData("sphere.obj");
         data->Render();
@@ -257,8 +260,8 @@ void DeferredRenderer::LightsPass()
     for (auto i = sSceneMgr->GetPointLights().begin(); i != sSceneMgr->GetPointLights().end(); ++i)
         PointLightPass(i->Position, i->Color, i->Radius, i->Intensity);
    
-    DirectionalLightPass(glm::vec3(0.0f, -1.0f, 1.0f), glm::vec3(0.4f, 0.4f, 1.0f));
-    //DirectionalLightPass(glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.4f, 1.4f, 1.0f));
+    DirectionalLightPass(glm::vec3(0.0f, -1.0f, 1.0f), glm::vec3(0.35f, 0.20f, 0.35f));
+   // DirectionalLightPass(glm::vec3(0.0f, -1.0f, 0.3f), glm::vec3(0.0f, 0.0f, 0.40f));
 
     glDisable(GL_BLEND);
 }

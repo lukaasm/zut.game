@@ -112,6 +112,7 @@
     <ClInclude Include="..\src\GameObject.h" />
     <ClInclude Include="..\src\Input.h" />
     <ClInclude Include="..\src\Light.h" />
+    <ClInclude Include="..\src\Macros.h" />
     <ClInclude Include="..\src\ModelData.h" />
     <ClInclude Include="..\src\Random.h" />
     <ClInclude Include="..\src\RenderDevice.h" />

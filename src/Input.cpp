@@ -5,6 +5,7 @@
 #include "Input.h"
 
 #include <GL/glfw.h>
+#include <iostream>
 
 #include "BaseApp.h"
 #include "Config.h"
@@ -86,7 +87,7 @@ void Keyboard::OnKeyPress(int32 key)
     else if (key == 'K')
         sSceneMgr->ToggleCamera();
     else if (key == 'O')
-        sResourcesMgr->loadShaders();
+        std::cerr << sSceneMgr->GetPlayer()->GetPosition().x << ", " << sSceneMgr->GetPlayer()->GetPosition().y << ", " << sSceneMgr->GetPlayer()->GetPosition().z << std::endl;
     else if (key == GLFW_KEY_ESC)
         BaseApp::CloseWindow();
 }

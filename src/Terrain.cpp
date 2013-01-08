@@ -126,7 +126,6 @@ void Terrain::createVAO()
         for (uint8 j = 0; j < 3; j++)
         {
             Vertex vertex;
-            vertex.color = glm::vec3(1.0f, 1.0f, 1.0f);
             vertex.position = vertVector[face.v[j]];
             vertex.normal = normVector[face.vn[j]];
             vertex.uv = texVector[face.vt[j]];
@@ -146,9 +145,6 @@ void Terrain::createVAO()
 
     vao.EnableAttrib(VertexArray::Attrib::NORMAL);
     vao.AddAttribToBuffer(VertexArray::Attrib::NORMAL, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), BUFFER_OFFSET(NORMAL_VERTEX_POS));
-
-    vao.EnableAttrib(VertexArray::Attrib::COLOR);
-    vao.AddAttribToBuffer(VertexArray::Attrib::COLOR, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), BUFFER_OFFSET(COLOR_VERTEX_POS));
 
     vao.EnableAttrib(VertexArray::Attrib::TEXCOORD);
     vao.AddAttribToBuffer(VertexArray::Attrib::TEXCOORD, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), BUFFER_OFFSET(UV_VERTEX_POS));

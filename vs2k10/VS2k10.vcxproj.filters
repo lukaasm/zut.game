@@ -111,6 +111,9 @@
     <ClInclude Include="..\src\Random.h">
       <Filter>Misc</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\Macros.h">
+      <Filter>GameObjects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="VS2k10.rc">

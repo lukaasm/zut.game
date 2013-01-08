@@ -72,10 +72,9 @@ void BoundingBoxProto::SetMinMax(const VertexVector& vertexes)
     vao.Bind(ID_VAO);
     vao.Bind(ID_VBO);
     vao.FillBuffer(GL_STATIC_DRAW, &bbox[0], bbox.size()*sizeof(glm::vec3));
+
     vao.EnableAttrib(VertexArray::Attrib::POSITION);
     vao.AddAttribToBuffer(VertexArray::Attrib::POSITION, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), 0);
-    vao.EnableAttrib(VertexArray::Attrib::COLOR);
-    vao.AddAttribToBuffer(VertexArray::Attrib::COLOR, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), 0);
 
     vao.Unbind(ID_VBO);
     vao.Unbind(ID_VAO);

@@ -145,11 +145,14 @@ void ResourcesMgr::loadShaders()
     shader->AddUniform("in_MVP");
     shader->AddUniform("in_M");
 
-    shader->AddUniform("Texture");
+    shader->AddUniform("DiffuseTexture");
+    shader->AddUniform("NormalTexture");
 
     shader->AddAttribute(VertexArray::Attrib::POSITION, "in_Position");
     shader->AddAttribute(VertexArray::Attrib::TEXCOORD, "in_TexCoord");
     shader->AddAttribute(VertexArray::Attrib::NORMAL, "in_Normal");
+    shader->AddAttribute(VertexArray::Attrib::TANGENT, "in_Tangent");
+
     shaders["deferred_geopass.glsl"] = shader;
 
     shader = (new Shader())->LoadFromFile("../res/shaders/deferred_dirlightpass.glsl");

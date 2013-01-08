@@ -21,6 +21,8 @@
 #include "Timer.h"
 #include "Terrain.h"
 
+#include "Macros.h"
+
 SceneMgr::SceneMgr()
 {
 }
@@ -32,7 +34,8 @@ void SceneMgr::OnInit()
     terrain = new Terrain();
 
     player = new DynamicObject("sphere.obj", "placeholder.tga");
-    player->SetPosition(Position(15.0f, terrain->GetHeight(15.0f, 10.0f) + 0.075f, 10.0f));
+
+    player->SETPOSITION2(18.06f, 6.6f, 0.075f, player);
     player->SetScale(glm::vec3(0.15f));
     player->EnableBoundingBox();
     player->scripts["OnUpdate"].push_back(
@@ -93,7 +96,7 @@ void SceneMgr::OnInit()
 
             PointLight light;
             light.owner = shoot;
-            light.Color = glm::vec3(Random::Float(0.0f, 1.0f), Random::Float(0.0f, 1.0f), Random::Float(0.0f, 1.0f));
+            light.Color = glm::vec3(sRandom->Float(0.0f, 1.0f), sRandom->Float(0.0f, 1.0f), sRandom->Float(0.0f, 1.0f));
             light.Intensity = 1.0f;
             light.Radius = 8.0f;
 
@@ -115,43 +118,89 @@ void SceneMgr::OnInit()
     skybox->SetPosition(Position(0,0,0));
     skybox->SetScale(glm::vec3(200));
 
-    GameObject* ob = new GameObject("ruiny.obj", "placeholder.tga");
-    ob->SetPosition(Position(14.25f,0.25f,19.0f));
+    GameObject* ob = new GameObject("ruiny.obj", "ruins.tga");
+    ob->SETPOSITION(14.25f, 19.0f, 1.0f);
     ob->SetScale(glm::vec3(1));
     RegisterObject(ob);
 
-    ob = new GameObject("shrooms.obj", "placeholder.tga");
-    ob->SetPosition(Position(14.25f,0.25f,17.0f));
-    ob->SetScale(glm::vec3(6));
+    ob = new GameObject("palm.obj", "palm.tga");
+    ob->SETPOSITION(22.9049f, 17.905f, 0.0f);
+    ob->SetScale(glm::vec3(2));
+    RegisterObject(ob);
+
+    
+    ob = new GameObject("palm.obj", "palm.tga");
+    ob->SETPOSITION(11.855f, 8.93753f, 0.0f);
+    ob->SetScale(glm::vec3(1.2f));
+    RegisterObject(ob);
+
+    ob = new GameObject("shrooms.obj", "shrooms1.tga");
+    ob->SETPOSITION(14.25f, 17.0f, 0.25f);
+    ob->SetScale(glm::vec3(2.0f));
     RegisterObject(ob);
 
     ob = new DynamicObject("boid.obj", "placeholder.tga");
     ob->SetScale(glm::vec3(0.25f));
-    ob->SetPosition(Position(14.25f, GetHeight(14.25f, 14.0f, ob), 14.0f));
+    ob->SETPOSITION(14.25f, 14.0f, 0.35f);
     ob->EnableBoundingBox();
 
-    ((DynamicObject*)(ob))->scripts["OnUpdate"].push_back(
-        [](DynamicObject& ob)
-        {
-            DynamicObject* player = sSceneMgr->GetPlayer();
-            float dist = ob.GetDistance(player);
-            if (dist < 0.5f || dist > 4.0f)
-                ob.ClearMoveType(MOVE_FLAG_FORWARD);
-            else if (dist < 3.0f)
-            {
-                ob.SetRotationY(ob.GetAngle(player));
-                ob.AddMoveType(moveInfos[MOVE_TYPE_FORWARD]);
-            }
+    ENEMYSCRIPT
+    RegisterObject(ob);
 
-            ob.GetPosition().y = sSceneMgr->GetHeight(&ob);
-        });
+    ob = new DynamicObject("boid.obj", "placeholder.tga");
+    ob->SetScale(glm::vec3(0.35f));
+    ob->SETPOSITION(18.25f, 12.0f, 0.55f);
+    ob->EnableBoundingBox();
 
-    ((DynamicObject*)(ob))->scripts["OnCollision"].push_back(
-        [](DynamicObject& ob)
-        {
-            sSceneMgr->UnregisterObject(&ob);
-        });
+    ENEMYSCRIPT
+    RegisterObject(ob);
 
+    ob = new DynamicObject("boid.obj", "placeholder.tga");
+    ob->SetScale(glm::vec3(0.35f));
+    ob->SETPOSITION(21.25f, 11.0f, 0.55f);
+    ob->EnableBoundingBox();
+
+    ENEMYSCRIPT
+    RegisterObject(ob);
+
+    ob = new DynamicObject("boid.obj", "placeholder.tga");
+    ob->SetScale(glm::vec3(0.25f));
+    ob->SETPOSITION(11.25f, 14.0f, 0.35f);
+    ob->EnableBoundingBox();
+
+    ENEMYSCRIPT
+    RegisterObject(ob);
+
+    ob = new DynamicObject("boid.obj", "placeholder.tga");
+    ob->SetScale(glm::vec3(0.25f));
+    ob->SETPOSITION(20.4f, 17.99f, 0.35f);
+    ob->EnableBoundingBox();
+
+    ENEMYSCRIPT
+    RegisterObject(ob);
+
+    ob = new DynamicObject("boid.obj", "placeholder.tga");
+    ob->SetScale(glm::vec3(0.25f));
+    ob->SETPOSITION(27.06f, 15.49f, 0.35f);
+    ob->EnableBoundingBox();
+
+    ENEMYSCRIPT
+    RegisterObject(ob);
+
+    ob = new DynamicObject("boid.obj", "placeholder.tga");
+    ob->SetScale(glm::vec3(0.25f));
+    ob->SETPOSITION(7.26f, 14.719f, 0.35f);
+    ob->EnableBoundingBox();
+
+    ENEMYSCRIPT
+    RegisterObject(ob);
+
+    ob = new DynamicObject("boid.obj", "placeholder.tga");
+    ob->SetScale(glm::vec3(0.25f));
+    ob->SETPOSITION(8.11f, 8.82f, 0.35f);
+    ob->EnableBoundingBox();
+
+    ENEMYSCRIPT
     RegisterObject(ob);
 
     text2D.Init();
@@ -310,9 +359,9 @@ void SceneMgr::renderGUI()
 
     text2D.RenderText(fps.str(), 10, sConfig->GetDefault("height", 600) - 12, 12);
 
-//     text2D.RenderSprite(5, 5, 200, deferred.depthTexture);
-//     text2D.RenderSprite(5, 210, 200, deferred.colorTexture);
-//     text2D.RenderSprite(5, 415, 200, deferred.normalTexture);
+//       text2D.RenderSprite(5, 5, 200, sResourcesMgr->GetTextureId("normal_placeholder.tga"));
+//       text2D.RenderSprite(5, 210, 200, deferred.colorTexture);
+//       text2D.RenderSprite(5, 415, 200, deferred.normalTexture);
 }
 
 void SceneMgr::initLights()

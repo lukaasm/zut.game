@@ -21,7 +21,7 @@ glm::vec3 ai2glm(const aiColor4D& vec)
 ModelData* ModelData::LoadModel(std::string fileName)
 {
     Assimp::Importer importer;
-    const aiScene* scene = importer.ReadFile(fileName.c_str(), aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_FlipUVs);
+    const aiScene* scene = importer.ReadFile(fileName.c_str(), aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_CalcTangentSpace);
 
     if (scene == nullptr)
         return nullptr;
@@ -43,8 +43,8 @@ ModelData* ModelData::LoadModel(std::string fileName)
             Vertex vertex;
             vertex.position = ai2glm(mesh->mVertices[j]);
             vertex.normal = mesh->HasNormals() ? ai2glm(mesh->mNormals[j]) : vecZero;
-            vertex.color = mesh->HasVertexColors(0) ? ai2glm(mesh->mColors[0][j]) : vecZero;
             vertex.uv = mesh->HasTextureCoords(0) ? glm::vec2(ai2glm(mesh->mTextureCoords[0][j])) : glm::vec2(0.0f, 0.0f);
+            vertex.tangent = mesh->HasTangentsAndBitangents() ? ai2glm(mesh->mTangents[j]) : vecZero;
 
             md->vertexes[i].push_back(vertex);
         }
@@ -67,16 +67,16 @@ ModelData* ModelData::LoadModel(std::string fileName)
             md->vao[i].AddAttribToBuffer(VertexArray::Attrib::NORMAL, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), BUFFER_OFFSET(NORMAL_VERTEX_POS));
         }
 
-        if (mesh->HasVertexColors(0))
-        {
-            md->vao[i].EnableAttrib(VertexArray::Attrib::COLOR);
-            md->vao[i].AddAttribToBuffer(VertexArray::Attrib::COLOR, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), BUFFER_OFFSET(COLOR_VERTEX_POS));
-        }
-
         if (mesh->HasTextureCoords(0))
         {
             md->vao[i].EnableAttrib(VertexArray::Attrib::TEXCOORD);
             md->vao[i].AddAttribToBuffer(VertexArray::Attrib::TEXCOORD, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), BUFFER_OFFSET(UV_VERTEX_POS));
+        }
+
+        if (mesh->HasTangentsAndBitangents())
+        {
+            md->vao[i].EnableAttrib(VertexArray::Attrib::TANGENT);
+            md->vao[i].AddAttribToBuffer(VertexArray::Attrib::TANGENT, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), BUFFER_OFFSET(TANGENT_VERTEX_POS));
         }
 
         md->vao[i].Unbind(ID_VBO);
