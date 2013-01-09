@@ -32,13 +32,13 @@ out vec4 out_Color;
 
 void main(void)
 {
-    vec3 diffuseColor = texture2D(ColorTexture, pass_TexCoord).rgb;
+    vec4 diffuseColor = texture2D(ColorTexture, pass_TexCoord);
     vec4 light = texture2D(LightTexture, pass_TexCoord);
 
     vec3 diffuseLight = light.rgb;
     float specularLight = light.a;
 
-    out_Color = vec4(diffuseColor * (diffuseLight + specularLight*0.2), 1.0f);
+    out_Color = (1.0f - diffuseColor.a) * vec4(diffuseColor.rgb, 0.0f) + diffuseColor.a * (vec4(diffuseColor.rgb * diffuseLight, 0.0f));
 }
 
 #frag_end

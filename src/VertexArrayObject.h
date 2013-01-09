@@ -1,6 +1,8 @@
 #ifndef H_VERTEXARRAYOBJECT
 #define H_VERTEXARRAYOBJECT
 
+#include <vector>
+
 #include "Common.h"
 
 enum 
@@ -29,6 +31,7 @@ class VertexArrayObject
 
         void AddAttribToBuffer(uint32, uint8, uint32, bool, uint32, void*);
         void EnableAttrib(uint32);
+        void DisableAttrib(uint32);
 
         uint32& ElementsCount() { return size; }
 
@@ -37,6 +40,8 @@ class VertexArrayObject
     private:
         uint32 id[ID_MAX];
         uint32 size;
+
+        std::vector<uint32> attribs;
 };
 
 #endif

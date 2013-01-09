@@ -27,25 +27,28 @@
     <Filter Include="Terrain">
       <UniqueIdentifier>{f6dae73d-637b-48c1-8910-2f136dd0d5d7}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Misc\Config">
-      <UniqueIdentifier>{660ce1ed-0264-48e1-912e-dbc33ff3e7f4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Misc\BaseApp">
+    <Filter Include="BaseApp">
       <UniqueIdentifier>{c6e2b98a-5a7a-4f6b-b9e2-38f43980e79d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Misc\Input">
+    <Filter Include="Config">
+      <UniqueIdentifier>{660ce1ed-0264-48e1-912e-dbc33ff3e7f4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Input">
       <UniqueIdentifier>{8e5f17cd-bab1-43cf-81ab-6daea38bf936}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Misc\RenderDevice">
+    <Filter Include="RenderDevice">
       <UniqueIdentifier>{badbeb3f-e774-421d-bf6d-28ebdace9ab5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Deferred">
+      <UniqueIdentifier>{171d3832-2cf4-4610-a632-fad93d5608f4}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\BaseApp.h">
-      <Filter>Misc\BaseApp</Filter>
+      <Filter>BaseApp</Filter>
     </ClInclude>
     <ClInclude Include="..\src\RenderDevice.h">
-      <Filter>Misc\RenderDevice</Filter>
+      <Filter>RenderDevice</Filter>
     </ClInclude>
     <ClInclude Include="..\src\Shader.h">
       <Filter>Shader</Filter>
@@ -54,7 +57,7 @@
       <Filter>Camera</Filter>
     </ClInclude>
     <ClInclude Include="..\src\Input.h">
-      <Filter>Misc\Input</Filter>
+      <Filter>Input</Filter>
     </ClInclude>
     <ClInclude Include="..\src\GameObject.h">
       <Filter>GameObjects</Filter>
@@ -84,7 +87,7 @@
       <Filter>GameObjects</Filter>
     </ClInclude>
     <ClInclude Include="..\src\Config.h">
-      <Filter>Misc\Config</Filter>
+      <Filter>Config</Filter>
     </ClInclude>
     <ClInclude Include="..\src\Timer.h">
       <Filter>Misc</Filter>
@@ -107,12 +110,14 @@
     <ClInclude Include="..\src\Light.h">
       <Filter>Other</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\DeferredRendering.h" />
     <ClInclude Include="..\src\Random.h">
       <Filter>Misc</Filter>
     </ClInclude>
     <ClInclude Include="..\src\Macros.h">
       <Filter>GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\DeferredRendering.h">
+      <Filter>Deferred</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -125,7 +130,7 @@
       <Filter>Resource Files</Filter>
     </None>
     <None Include="..\bin\config.ini">
-      <Filter>Misc\Config</Filter>
+      <Filter>Config</Filter>
     </None>
     <None Include="..\res\shaders\text2d.glsl">
       <Filter>Resource Files</Filter>
@@ -145,7 +150,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\BaseApp.cpp">
-      <Filter>Misc\BaseApp</Filter>
+      <Filter>BaseApp</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Shader.cpp">
       <Filter>Shader</Filter>
@@ -154,7 +159,7 @@
       <Filter>Camera</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Input.cpp">
-      <Filter>Misc\Input</Filter>
+      <Filter>Input</Filter>
     </ClCompile>
     <ClCompile Include="..\src\GameObject.cpp">
       <Filter>GameObjects</Filter>
@@ -181,7 +186,7 @@
       <Filter>GameObjects</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Config.cpp">
-      <Filter>Misc\Config</Filter>
+      <Filter>Config</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Terrain.cpp">
       <Filter>Terrain</Filter>
@@ -189,9 +194,11 @@
     <ClCompile Include="..\src\Light.cpp">
       <Filter>Other</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\DeferredRendering.cpp" />
     <ClCompile Include="..\src\Timer.cpp">
       <Filter>Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\DeferredRendering.cpp">
+      <Filter>Deferred</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

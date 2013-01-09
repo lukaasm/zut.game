@@ -131,69 +131,103 @@ Shader* ResourcesMgr::GetShader(std::string key)
 void ResourcesMgr::loadShaders()
 {
     Shader* shader = (new Shader())->LoadFromFile("../res/shaders/text2d.glsl");
+    shader->Bind();
+    {
+        shader->AddUniform("FontTexture");
+        shader->AddUniform("in_ScreenHWidth");
+        shader->AddUniform("in_ScreenHHeight");
 
-    shader->AddUniform("textureSampler");
-    shader->AddUniform("in_ScreenHWidth");
-    shader->AddUniform("in_ScreenHHeight");
+        shader->AddAttribute(VertexArray::Attrib::POSITION, "in_Position");
+        shader->AddAttribute(VertexArray::Attrib::TEXCOORD, "in_TexCoord");
+    }
+    shader->Unbind();
 
-    shader->AddAttribute(VertexArray::Attrib::POSITION, "in_Position");
-    shader->AddAttribute(VertexArray::Attrib::TEXCOORD, "in_TexCoord");
     shaders["text2d.glsl"] = shader;
 
     shader = (new Shader())->LoadFromFile("../res/shaders/deferred_geopass.glsl");
+    shader->Bind();
+    {
+        shader->AddUniform("in_MVP");
+        shader->AddUniform("in_M");
 
-    shader->AddUniform("in_MVP");
-    shader->AddUniform("in_M");
+        shader->AddUniform("in_NotSkybox");
 
-    shader->AddUniform("DiffuseTexture");
-    shader->AddUniform("NormalTexture");
+        shader->AddUniform("DiffuseTexture");
+        shader->SetUniform("DiffuseTexture", 0);
 
-    shader->AddAttribute(VertexArray::Attrib::POSITION, "in_Position");
-    shader->AddAttribute(VertexArray::Attrib::TEXCOORD, "in_TexCoord");
-    shader->AddAttribute(VertexArray::Attrib::NORMAL, "in_Normal");
-    shader->AddAttribute(VertexArray::Attrib::TANGENT, "in_Tangent");
+        shader->AddUniform("NormalTexture");
+        shader->SetUniform("NormalTexture", 1);
+
+        shader->AddAttribute(VertexArray::Attrib::POSITION, "in_Position");
+        shader->AddAttribute(VertexArray::Attrib::TEXCOORD, "in_TexCoord");
+        shader->AddAttribute(VertexArray::Attrib::NORMAL, "in_Normal");
+        shader->AddAttribute(VertexArray::Attrib::TANGENT, "in_Tangent");
+    }
+    shader->Unbind();
 
     shaders["deferred_geopass.glsl"] = shader;
 
     shader = (new Shader())->LoadFromFile("../res/shaders/deferred_dirlightpass.glsl");
+    shader->Bind();
+    {
+        shader->AddUniform("in_CameraPosition");
+        shader->AddUniform("in_InvVP");
 
-    shader->AddUniform("in_CameraPosition");
-    shader->AddUniform("in_InvVP");
+        shader->AddUniform("ColorTexture");
+        shader->SetUniform("ColorTexture", 0);
 
-    shader->AddUniform("ColorTexture");
-    shader->AddUniform("NormalTexture");
-    shader->AddUniform("DepthTexture");
+        shader->AddUniform("NormalTexture");
+        shader->SetUniform("NormalTexture", 1);
 
-    shader->AddDirectionalLight();
+        shader->AddUniform("DepthTexture");
+        shader->SetUniform("DepthTexture", 2);
 
-    shader->AddAttribute(VertexArray::Attrib::POSITION, "in_Position");
-    shader->AddAttribute(VertexArray::Attrib::TEXCOORD, "in_TexCoord");
+        shader->AddDirectionalLight();
+
+        shader->AddAttribute(VertexArray::Attrib::POSITION, "in_Position");
+        shader->AddAttribute(VertexArray::Attrib::TEXCOORD, "in_TexCoord");
+    }
+    shader->Unbind();
 
     shaders["deferred_dirlightpass.glsl"] = shader;
-
+    
     shader = (new Shader())->LoadFromFile("../res/shaders/deferred_pointlightpass.glsl");
+    shader->Bind();
+    {
+        shader->AddUniform("in_MVP");
+        shader->AddUniform("in_CameraPosition");
+        shader->AddUniform("in_InvVP");
 
-    shader->AddUniform("in_MVP");
-    shader->AddUniform("in_CameraPosition");
-    shader->AddUniform("in_InvVP");
+        shader->AddUniform("ColorTexture");
+        shader->SetUniform("ColorTexture", 0);
 
-    shader->AddUniform("ColorTexture");
-    shader->AddUniform("NormalTexture");
-    shader->AddUniform("DepthTexture");
+        shader->AddUniform("NormalTexture");
+        shader->SetUniform("NormalTexture", 1);
 
-    shader->AddPointLight();
+        shader->AddUniform("DepthTexture");
+        shader->SetUniform("DepthTexture", 2);
 
-    shader->AddAttribute(VertexArray::Attrib::POSITION, "in_Position");
+        shader->AddPointLight();
+
+        shader->AddAttribute(VertexArray::Attrib::POSITION, "in_Position");
+    }
+    shader->Unbind();
 
     shaders["deferred_pointlightpass.glsl"] = shader;
 
     shader = (new Shader())->LoadFromFile("../res/shaders/deferred_finalpass.glsl");
+    shader->Bind();
+    {
+        shader->AddUniform("ColorTexture");
+        shader->SetUniform("ColorTexture", 0);
 
-    shader->AddUniform("ColorTexture");
-    shader->AddUniform("LightTexture");
+        shader->AddUniform("LightTexture");
+        shader->SetUniform("LightTexture", 1);
 
-    shader->AddAttribute(VertexArray::Attrib::POSITION, "in_Position");
-    shader->AddAttribute(VertexArray::Attrib::TEXCOORD, "in_TexCoord");
+        shader->AddAttribute(VertexArray::Attrib::POSITION, "in_Position");
+        shader->AddAttribute(VertexArray::Attrib::TEXCOORD, "in_TexCoord");
+    }
+    shader->Unbind();
 
     shaders["deferred_finalpass.glsl"] = shader;
 }

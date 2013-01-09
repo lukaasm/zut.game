@@ -43,29 +43,12 @@ out vec4 out_Color;
 
 void main(void)
 {
-    float depth = texture2D(DepthTexture, pass_TexCoord).x;
-
-    /*vec4 WorldPosition;
-    WorldPosition.x = pass_TexCoord.x * 2.0f - 1.0f;
-    WorldPosition.y = -(pass_TexCoord.y * 2.0f - 1.0f);
-    WorldPosition.z = depth;
-    WorldPosition.w = 1.0f;
-
-    WorldPosition = in_InvVP * WorldPosition;
-    WorldPosition /= WorldPosition.w;
-    */
     vec3 lightVector = -normalize(in_Light.Direction);
     //compute diffuse light
     vec3 normal = 2.0f * texture2D(NormalTexture, pass_TexCoord).xyz - 1.0f;
     float NdL = max(0, dot(normal, lightVector));
     vec3 diffuseLight = NdL * in_Light.Color.rgb;
-    /*//reflexion vector
-    vec3 reflectionVector = normalize(reflect(lightVector, normal));
-    //camera-to-surface vector
-    vec3 directionToCamera = normalize(in_CameraPosition - position.xyz);
-    //compute specular light
-    float specularLight = specularIntensity * pow(clamp(dot(reflectionVector, directionToCamera), 0.0, 1.0), specularPower);
-    */
+
     //output the two lights
     out_Color = vec4(diffuseLight.rgb, 0.0f);
 }

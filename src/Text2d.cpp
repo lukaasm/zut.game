@@ -94,7 +94,6 @@ void Text2D::RenderText(std::string text, int x, int y, int fontSize)
     shader->SetUniform("in_ScreenHHeight", h/2);
 
     OGLHelper::ActivateTexture(GL_TEXTURE0, textureId);
-    shader->SetUniform("textureSampler", 0);
 
     OGLHelper::DrawTriangles(vao);
 
@@ -134,7 +133,6 @@ void Text2D::RenderSprite(int x, int y, int size, int textureId)
     shader->Bind();
 
     OGLHelper::ActivateTexture(GL_TEXTURE0, textureId);
-    shader->SetUniform("textureSampler", 0);
 
     OGLHelper::DrawTriangles(vao);
 
@@ -149,7 +147,6 @@ void Text2D::RenderSprite(VertexArrayObject& vao, int textureId)
     shader->Bind();
 
     OGLHelper::ActivateTexture(GL_TEXTURE0, textureId);
-    shader->SetUniform("textureSampler", 0);
 
     OGLHelper::DrawTriangles(vao);
 
