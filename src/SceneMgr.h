@@ -57,6 +57,7 @@ class SceneMgr
 
     private:
         void renderGUI();
+        void renderSkyBox();
         void initLights();
 
         uint32 guid;

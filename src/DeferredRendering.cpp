@@ -1,4 +1,4 @@
-#include "DeferredRendering.h"
+﻿#include "DeferredRendering.h"
 
 #include <GL/glew.h>
 #include <GL/glfw.h>
@@ -51,7 +51,7 @@ void DeferredRenderer::Init()
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);    
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT24, width, height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, 0);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT24, width, height, 0, GL_DEPTH_COMPONENT, GL_UNSIGNED_INT, 0);
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthTexture, 0);
 
     glGenTextures(1, &lightTexture);
@@ -89,18 +89,18 @@ void DeferredRenderer::GeometryPass()
     shader->Bind();
     Camera* camera = sSceneMgr->GetCamera();
     GameObject* skybox = sSceneMgr->GetSkyBox();
+
     glm::mat4 mvp = camera->GetProjMatrix() * camera->GetViewMatrix() * skybox->GetModelMatrix();
     shader->SetUniform("in_M", skybox->GetModelMatrix());
     shader->SetUniform("in_MVP", mvp);
-
-    shader->SetUniform("DiffuseTexture", 0);
-    shader->SetUniform("NormalTexture", 1);
+    shader->SetUniform("in_NotSkybox", 0.0f);
 
     OGLHelper::ActivateTexture(GL_TEXTURE0, sResourcesMgr->GetTextureId(skybox->GetTexture()));
     OGLHelper::ActivateTexture(GL_TEXTURE1, sResourcesMgr->GetTextureId("normal_placeholder.tga"));
 
     skybox->OnRender();
 
+    shader->SetUniform("in_NotSkybox", 1.0f);
     Terrain* terrain = sSceneMgr->GetTerrain();
 
     mvp = camera->GetProjMatrix() * camera->GetViewMatrix();
@@ -155,13 +155,8 @@ void DeferredRenderer::DirectionalLightPass(glm::vec3 dir, glm::vec3 color)
     shader->Bind();
 
     OGLHelper::ActivateTexture(GL_TEXTURE0, colorTexture);
-    shader->SetUniform("ColorTexture", 0);
-    
     OGLHelper::ActivateTexture(GL_TEXTURE1, normalTexture);
-    shader->SetUniform("NormalTexture", 1);
-
     OGLHelper::ActivateTexture(GL_TEXTURE2, depthTexture);
-    shader->SetUniform("DepthTexture", 2);
 
     Camera* camera = sSceneMgr->GetCamera();
 
@@ -181,13 +176,8 @@ void DeferredRenderer::PointLightPass(glm::vec3 position, glm::vec3 color, float
     shader->Bind();
 
     OGLHelper::ActivateTexture(GL_TEXTURE0, colorTexture);
-    shader->SetUniform("ColorTexture", 0);
-    
     OGLHelper::ActivateTexture(GL_TEXTURE1, normalTexture);
-    shader->SetUniform("NormalTexture", 1);
-
     OGLHelper::ActivateTexture(GL_TEXTURE2, depthTexture);
-    shader->SetUniform("DepthTexture", 2);
 
     Camera* camera = sSceneMgr->GetCamera();
 
@@ -260,8 +250,8 @@ void DeferredRenderer::LightsPass()
     for (auto i = sSceneMgr->GetPointLights().begin(); i != sSceneMgr->GetPointLights().end(); ++i)
         PointLightPass(i->Position, i->Color, i->Radius, i->Intensity);
    
-   // DirectionalLightPass(glm::vec3(0.0f, -1.0f, 1.0f), glm::vec3(0.35f, 0.20f, 0.35f));
-    DirectionalLightPass(glm::vec3(0.0f, -1.0f, 0.3f), glm::vec3(0.0f, 0.0f, 0.40f));
+    DirectionalLightPass(glm::vec3(0.0f, -1.0f, 1.0f), glm::vec3(0.35f, 0.20f, 0.35f));
+    //DirectionalLightPass(glm::vec3(0.0f, -1.0f, 0.3f), glm::vec3(0.0f, 0.0f, 0.40f));
 
     glDisable(GL_BLEND);
 }
@@ -276,10 +266,7 @@ void DeferredRenderer::FinalPass()
     shader->Bind();
 
     OGLHelper::ActivateTexture(GL_TEXTURE0, colorTexture);
-    shader->SetUniform("ColorTexture", 0);
-
     OGLHelper::ActivateTexture(GL_TEXTURE1, lightTexture);
-    shader->SetUniform("LightTexture", 1);
 
     // render full screen quad
     OGLHelper::DrawTriangles(quadVAO);

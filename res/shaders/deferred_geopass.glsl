@@ -41,6 +41,8 @@ in vec3 pass_Normal;
 in vec4 pass_Position;
 in vec3 pass_Tangent;
 
+uniform float in_NotSkybox;
+
 uniform sampler2D DiffuseTexture;
 uniform sampler2D NormalTexture;
 
@@ -64,7 +66,9 @@ vec3 CalculateBumpNormal()
 
 void main(void)
 {
-    out_Color = texture2D(DiffuseTexture, pass_TexCoord);        
+    out_Color = texture2D(DiffuseTexture, pass_TexCoord);     
+    out_Color.a = in_NotSkybox;
+       
     out_Normal.xyz = 0.5f * (CalculateBumpNormal() + 1.0f);    
 
     gl_FragDepth = pass_Position.z / pass_Position.w;
