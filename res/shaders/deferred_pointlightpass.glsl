@@ -45,6 +45,9 @@ out vec4 out_Color;
 
 void main(void)
 {
+    //if (texture2D(ColorTexture, pass_TexCoord).a < 1.0f)
+     //   discard;
+
     vec4 ScreenPosition = pass_Position;
     ScreenPosition.xy = ScreenPosition.xy /= ScreenPosition.w;
 
@@ -74,7 +77,7 @@ void main(void)
     vec3 diffuseLight = NdL * in_Light.Color.rgb;
 
     //output the two lights
-    out_Color = attenuation * in_Light.Intensity * vec4(diffuseLight.rgb, 0.0);
+    out_Color = attenuation * in_Light.Intensity * vec4(diffuseLight.rgb, 1.0);
 }
 
 #frag_end

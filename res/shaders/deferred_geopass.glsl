@@ -66,7 +66,10 @@ vec3 CalculateBumpNormal()
 
 void main(void)
 {
-    out_Color = texture2D(DiffuseTexture, pass_TexCoord);     
+    out_Color = texture2D(DiffuseTexture, pass_TexCoord);
+    if (out_Color.a < 0.5f)
+        discard;
+             
     out_Color.a = in_NotSkybox;
        
     out_Normal.xyz = 0.5f * (CalculateBumpNormal() + 1.0f);    

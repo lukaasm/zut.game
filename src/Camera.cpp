@@ -55,8 +55,7 @@ void TppCamera::OnUpdate(const uint32 & diff)
     {
         position = glm::vec3(0.0f, 1.5f, -3.5f);
 
-        position = glm::rotate(position, object->GetRotationX(), glm::cross(object->GetUpVector(), object->GetDirVector()));
-        position = glm::rotate(position, object->GetRotationY(), object->GetUpVector());
+        position = glm::rotate(position, object->GetOrientation(), object->GetUpVector());
         
         // move to owner position
         position += owner->GetPosition();
