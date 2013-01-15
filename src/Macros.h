@@ -13,7 +13,7 @@
         ob.ClearMoveType(MOVE_FLAG_FORWARD); \
             else if (dist < 4.5f) \
             { \
-            ob.SetRotationY(ob.GetAngle(player)); \
+            ob.SetOrientation(ob.GetAngle(player)); \
             ob.AddMoveType(moveInfos[MOVE_TYPE_FORWARD]); \
             ob.GetPosition().y = sSceneMgr->GetHeight(&ob); \
             } \
@@ -24,5 +24,24 @@
         { \
         sSceneMgr->UnregisterObject(&ob); \
         }); \
+
+#define ADDSTATICOBJECT(x, a,b,c,d,e) \
+    ob = new GameObject(a, b);\
+    ob->SETPOSITION(c, d,e);\
+    ob->SetScale(glm::vec3(1));\
+    if (x) ob->EnableBoundingBox();\
+    RegisterObject(ob);\
+
+#define ADDGRASS(c,d) ADDSTATICOBJECT(false, "grass.obj","grass.tga",c,d,0.15f) \
+    ob->SetScale(glm::vec3(sRandom->Float(0.46f, 2.0f))); \
+    ob->SetOrientation(sRandom->Float(0.0f, 360.0f)); \
+
+#define ADDSHROOMS(c,d) ADDSTATICOBJECT(false, "shrooms.obj", sRandom->Int(0, 1) ? "shrooms1.tga" : "shrooms2.tga" ,c,d,0.35f) \
+    ob->SetScale(glm::vec3(sRandom->Float(1.0f, 2.0f))); \
+    ob->SetOrientation(sRandom->Float(0.0f, 360.0f)); \
+
+#define ADDROCK(c, d) ADDSTATICOBJECT(true, "rock.obj", "rock.tga", c, d, 0.25f) \
+    ob->SetScale(glm::vec3(sRandom->Float(0.4f, 1.8f))); \
+    ob->SetOrientation(sRandom->Float(0.0f, 360.0f)); \
 
 #endif

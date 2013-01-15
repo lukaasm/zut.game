@@ -48,10 +48,10 @@ void DynamicObject::Move(const uint32& diff)
     }
 
     if (moveFlags & MOVE_FLAG_ROTATE_LEFT)
-        SetRotationY(moveInfos[MOVE_TYPE_ROTATE_LEFT].speed *(0.001f * diff) + rotationY);
+        SetOrientation(moveInfos[MOVE_TYPE_ROTATE_LEFT].speed *(0.001f * diff) + rotationY);
 
     if (moveFlags & MOVE_FLAG_ROTATE_RIGHT)
-        SetRotationY(-moveInfos[MOVE_TYPE_ROTATE_LEFT].speed *(0.001f * diff) + rotationY);
+        SetOrientation(-moveInfos[MOVE_TYPE_ROTATE_LEFT].speed *(0.001f * diff) + rotationY);
 
     recreateModelMatrix();
 }
@@ -114,7 +114,7 @@ void DynamicObject::RedoMoveOnCollision(Position& original, Position& offset)
         SetPosition(original);
 }
 
-void DynamicObject::SetRotationY(float rotation)
+void DynamicObject::SetOrientation(float rotation)
 {
     lookDirection = glm::rotate(lookDirection, rotation - rotationY, up);
     rotationY = rotation;
@@ -122,29 +122,30 @@ void DynamicObject::SetRotationY(float rotation)
     recreateModelMatrix();
 }
 
-void DynamicObject::SetRotationX(float rotation)
-{
-    lookDirection = glm::rotate(up, rotation - rotationX, lookDirection);
-    rotationX = rotation;
-
-    recreateModelMatrix();
-}
-
 float DynamicObject::GetAngle(GameObject* ob)
 {
-    float dx = ob->GetPosition().x - GetPosition().x;
-    float dz = ob->GetPosition().z - GetPosition().z;
+    return GetAngle(ob->GetPosition());
+}
 
+float DynamicObject::GetAngle(glm::vec3 pos)
+{
+    float dx = pos.x - GetPosition().x;// - ;
+    float dz = pos.z - GetPosition().z;// - ;
     float ang = atan2(dz, dx) * 180 / PI;
     return -ang+90;
 }
 
+float DynamicObject::GetDistance(glm::vec3 pos)
+{
+    float dx = GetPosition().x - pos.x;
+    float dy = GetPosition().y - pos.y;
+    float dz = GetPosition().z - pos.z;
+    return sqrt((dx*dx) + (dy*dy) + (dz*dz));
+}
+
 float DynamicObject::GetDistance(GameObject* ob)
 {
-    float dx = GetPosition().x - ob->GetPosition().x;
-    float dy = GetPosition().y - ob->GetPosition().y;
-    float dz = GetPosition().z - ob->GetPosition().z;
-    return sqrt((dx*dx) + (dy*dy) + (dz*dz));
+    return GetDistance(ob->GetPosition());
 }
 
 DynamicObject::~DynamicObject()

@@ -4,10 +4,14 @@
 
 #include "Input.h"
 
+#include <GL/glew.h>
 #include <GL/glfw.h>
+#include <glm/gtc/matrix_transform.hpp>
+
 #include <iostream>
 
 #include "BaseApp.h"
+#include "Camera.h"
 #include "Config.h"
 #include "Common.h"
 #include "SceneMgr.h"
@@ -22,10 +26,8 @@ Keyboard::~Keyboard()
     delete_ptr(KeyReleaseCallBack)
 }
 
-void Keyboard::CreateCallBacks(BaseApp* baseApp)
+void Keyboard::CreateCallBacks()
 {
-    _baseApp = baseApp;
-
     KeyPressCallBack = new KeyStateCallBack(this, &Keyboard::OnKeyPress);
     KeyReleaseCallBack = new KeyStateCallBack(this, &Keyboard::OnKeyRelease);
 
@@ -34,8 +36,9 @@ void Keyboard::CreateCallBacks(BaseApp* baseApp)
 
 bool Keyboard::IsKeyPressed(int32 key)
 {
-    if (_keyStateMap.find(key) != _keyStateMap.end())
-        return _keyStateMap[key];
+    auto i = _keyStateMap.find(key);
+    if (i != _keyStateMap.end())
+        return i->second;
     else
         return false;
 }
@@ -76,8 +79,6 @@ void Keyboard::OnKeyState(int32 key, int32 state)
         (*Keyboard::KeyReleaseCallBack)(key);
 }
 
-#include "ResourcesMgr.h"
-
 void Keyboard::OnKeyPress(int32 key)
 {
     _keyStateMap[key] = true;
@@ -85,12 +86,70 @@ void Keyboard::OnKeyPress(int32 key)
     if (key == 'K')
         sSceneMgr->ToggleCamera();
     else if (key == 'O')
-        std::cerr << sSceneMgr->GetPlayer()->GetPosition().x << ", " << sSceneMgr->GetPlayer()->GetPosition().y << ", " << sSceneMgr->GetPlayer()->GetPosition().z << std::endl;
-    else if (key == GLFW_KEY_ESC)
-        BaseApp::CloseWindow();
+        std::cerr << sSceneMgr->GetPlayer()->GetPosition().x << ", "<< sSceneMgr->GetPlayer()->GetPosition().z << std::endl;
 }
 
 void Keyboard::OnKeyRelease(int32 key)
 {
     _keyStateMap[key] = false;
+}
+
+Mouse::Mouse() {}
+
+ButtonStateCallBack* Mouse::ButtonPressCallBack = nullptr;
+ButtonStateCallBack* Mouse::ButtonReleaseCallBack = nullptr;
+MouseMotionCallBack* Mouse::MousePosChangeCallBack = nullptr;
+
+void Mouse::CreateCallBacks()
+{
+    ButtonPressCallBack = new ButtonStateCallBack(this, &Mouse::OnButtonPress);
+    ButtonReleaseCallBack = new ButtonStateCallBack(this, &Mouse::OnButtonRelease);
+
+    glfwSetMouseButtonCallback(Mouse::OnButtonState);
+
+    MousePosChangeCallBack = new MouseMotionCallBack(this, &Mouse::OnMouseMotion);
+    glfwSetMousePosCallback(Mouse::OnMousePosChange);
+}
+
+void Mouse::OnButtonState(int32 button, int32 state)
+{
+    if (state == GLFW_PRESS)
+        (*Mouse::ButtonPressCallBack)(button);
+    else
+        (*Mouse::ButtonReleaseCallBack)(button);
+}
+
+void Mouse::OnMousePosChange(int32 x, int32 y)
+{
+    (*Mouse::MousePosChangeCallBack)(x, y);
+}
+
+void Mouse::OnMouseMotion(int32 x, int32 y)
+{
+    pos.x = x;
+    pos.y = sConfig->GetDefault("height", WINDOW_HEIGHT) - y - 1;
+}
+
+void Mouse::OnButtonPress(int32 button)
+{
+    _buttonStateMap[button] = true;
+}
+
+void Mouse::OnButtonRelease(int32 button)
+{
+    _buttonStateMap[button] = false;
+}
+
+bool Mouse::IsButtonPressed(int32 button)
+{
+    auto i = _buttonStateMap.find(button);
+    if (i != _buttonStateMap.end())
+        return i->second;
+    else
+        return false;
+}
+
+void Mouse::SetPos(uint32 x, uint32 y)
+{
+    glfwSetMousePos(x, y);
 }

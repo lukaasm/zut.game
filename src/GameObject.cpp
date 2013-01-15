@@ -73,10 +73,17 @@ void GameObject::EnableBoundingBox()
     //sSceneMgr->RegisterBoundingBox(this);
 }
 
-GameObject::GameObject(std::string model, std::string texture) : coll(0.0f), modelName(model), textureName(texture), rotationX(0.0f), rotationY(0.0f), boundingBox(nullptr)
+GameObject::GameObject(std::string model, std::string texture) : modelName(model), textureName(texture), rotationX(0.0f), rotationY(0.0f), boundingBox(nullptr)
 {
     SetTypeId(TYPEID_STATIC);
 }
+
+void GameObject::SetOrientation( float rotation )
+{
+    rotationY = rotation;
+    recreateModelMatrix();
+}
+
 
 AABoundingBox::AABoundingBox(const BoundingBoxProto& proto, GameObject* o) : owner(o)
 {

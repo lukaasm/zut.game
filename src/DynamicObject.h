@@ -85,11 +85,13 @@ class DynamicObject : public GameObject
         const glm::vec3 & GetUpVector() const { return up; }
         glm::vec3 GetDirVector() const { return lookDirection; }
 
-        void SetRotationX(float rotation) override;
-        void SetRotationY(float rotation) override;
+        void SetOrientation(float rotation) override;
 
         float GetAngle(GameObject*);
+        float GetAngle(glm::vec3);
+
         float GetDistance(GameObject*);
+        float GetDistance(glm::vec3 pos);
 
         ScriptsHolder scripts;
         Timer* createTime;

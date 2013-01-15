@@ -38,7 +38,7 @@ void main(void)
     vec3 diffuseLight = light.rgb;
     float specularLight = light.a;
 
-    out_Color = (1.0f - diffuseColor.a) * vec4(diffuseColor.rgb, 0.0f) + diffuseColor.a * (vec4(diffuseColor.rgb * diffuseLight, 0.0f));
+    out_Color = (1.0f - diffuseColor.a) * vec4(diffuseColor.rgb, 1.0f) + diffuseColor.a * (vec4(diffuseColor.rgb * diffuseLight, 1.0f));
 }
 
 #frag_end

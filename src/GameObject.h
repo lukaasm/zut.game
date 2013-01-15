@@ -78,6 +78,7 @@ enum ObjectTypeId
     TYPEID_STATIC     = 0,
     TYPEID_DYNAMIC    = 1,
     TYPEID_PROJECTILE = 2,
+    TYPEID_COIN       = 3,
 
     TYPEID_MAX,
 };
@@ -114,14 +115,9 @@ class GameObject
         virtual bool IsControllable() const { return false; }
         virtual bool IsDynamicObject() const { return false; }
 
-        //float IsTextured() const { return GetTexture() != "placeholder.tga" ? 1.0f : 0.0f; }
-        float coll;
+        float GetOrientation() const { return rotationY; }
 
-        float GetRotationX() const { return rotationX; }
-        float GetRotationY() const { return rotationY; }
-
-        virtual void SetRotationX(float rotation) { rotationX = rotation; }
-        virtual void SetRotationY(float rotation) { rotationY = rotation; }
+        virtual void SetOrientation(float rotation);
 
     protected:
         void recreateModelMatrix();

@@ -85,19 +85,24 @@ void BaseApp::CreateCallBacks()
     BaseApp::CloseCallback = new CloseCallBack(this, &BaseApp::closeWindow);
     glfwSetWindowCloseCallback(BaseApp::CloseWindow);
 
-    sKeyboard->CreateCallBacks(this);
+    sKeyboard->CreateCallBacks();
+    sMouse->CreateCallBacks();
 }
 
 void BaseApp::Init()
 {
     try
     {
+        glfwDisable(GLFW_MOUSE_CURSOR);
+
         sResourcesMgr->OnInit();
         sSceneMgr->OnInit();
 
         int width, height;
         glfwGetWindowSize(&width, &height);
         resizeWindow(width, height);
+
+        sMouse->SetPos(width*0.5f, height*0.5f);
     }
     catch (Exception& e)
     {
@@ -118,6 +123,11 @@ void BaseApp::Run()
     double start = glfwGetTime();
     while (!Stopped())
     {
+        if (sKeyboard->IsKeyPressed('X'))
+        {
+            BaseApp::CloseWindow();
+            return;
+        }
         ++frameCount;
 
         double now = glfwGetTime();

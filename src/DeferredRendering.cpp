@@ -22,12 +22,12 @@ void DeferredRenderer::Init()
     width = sConfig->GetDefault("width", WINDOW_WIDTH);
     height = sConfig->GetDefault("height", WINDOW_HEIGHT);
 
-    glViewport(0, 0, width, height);
-
     InitFSQuad();
 
     glGenFramebuffers(1, &frameBuffer);
     glBindFramebuffer(GL_DRAW_FRAMEBUFFER, frameBuffer);
+
+    glViewport(0, 0, width, height);
 
     glGenTextures(1, &colorTexture);
     glBindTexture(GL_TEXTURE_2D, colorTexture);
@@ -51,7 +51,7 @@ void DeferredRenderer::Init()
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);    
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT24, width, height, 0, GL_DEPTH_COMPONENT, GL_UNSIGNED_INT, 0);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT24, width, height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, 0);
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthTexture, 0);
 
     glGenTextures(1, &lightTexture);
@@ -72,6 +72,7 @@ void DeferredRenderer::Init()
         throw Exception("[FrameBuffer][E] frame buffer incomplete!");
 
     glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+    glViewport(0, 0, width, height);
 }
 
 void DeferredRenderer::GeometryPass()
@@ -107,8 +108,8 @@ void DeferredRenderer::GeometryPass()
     shader->SetUniform("in_M", glm::mat4(1.0f));
     shader->SetUniform("in_MVP", mvp);
 
-    OGLHelper::ActivateTexture(GL_TEXTURE0, sResourcesMgr->GetTextureId("placeholder.tga"));
-    OGLHelper::ActivateTexture(GL_TEXTURE1, sResourcesMgr->GetTextureId("normal_placeholder.tga"));
+    OGLHelper::ActivateTexture(GL_TEXTURE0, sResourcesMgr->GetTextureId("terrain2.tga"));
+    OGLHelper::ActivateTexture(GL_TEXTURE1, sResourcesMgr->GetTextureId("normal_terrain.tga"));
 
     terrain->OnRender();
 
@@ -122,31 +123,14 @@ void DeferredRenderer::GeometryPass()
         shader->SetUniform("in_MVP", mvp);
 
         OGLHelper::ActivateTexture(GL_TEXTURE0, sResourcesMgr->GetTextureId(ob->GetTexture()));
-        OGLHelper::ActivateTexture(GL_TEXTURE1, sResourcesMgr->GetTextureId("normal_placeholder.tga"));
+        OGLHelper::ActivateTexture(GL_TEXTURE1, sResourcesMgr->GetTextureId("normal_" + ob->GetTexture()));
 
         ob->OnRender();
     }
 
-    for (auto i = sSceneMgr->GetPointLights().begin(); i != sSceneMgr->GetPointLights().end(); ++i)
-    {
-        if (i->owner != nullptr)
-             continue;
-
-        glm::mat4 m = glm::scale(glm::translate(glm::mat4(1.0f), i->Position), glm::vec3(0.15f));
-        glm::mat4 mvp = camera->GetProjMatrix() * camera->GetViewMatrix() * m;
-        shader->SetUniform("in_M", m);
-        shader->SetUniform("in_MVP", mvp);
-
-        OGLHelper::ActivateTexture(GL_TEXTURE0, sResourcesMgr->GetTextureId("light.tga"));
-        OGLHelper::ActivateTexture(GL_TEXTURE1, sResourcesMgr->GetTextureId("normal_placeholder.tga"));
-
-        ModelData* data = sResourcesMgr->GetModelData("sphere.obj");
-        data->Render();
-    }
-
     shader->Unbind();
 
-    glDisable(GL_DEPTH_TEST);
+     glDisable(GL_DEPTH_TEST);
 }
 
 void DeferredRenderer::DirectionalLightPass(glm::vec3 dir, glm::vec3 color)
@@ -250,8 +234,7 @@ void DeferredRenderer::LightsPass()
     for (auto i = sSceneMgr->GetPointLights().begin(); i != sSceneMgr->GetPointLights().end(); ++i)
         PointLightPass(i->Position, i->Color, i->Radius, i->Intensity);
    
-    DirectionalLightPass(glm::vec3(0.0f, -1.0f, 1.0f), glm::vec3(0.35f, 0.20f, 0.35f));
-    //DirectionalLightPass(glm::vec3(0.0f, -1.0f, 0.3f), glm::vec3(0.0f, 0.0f, 0.40f));
+    DirectionalLightPass(glm::vec3(0.0f, -1.0f, 1.0f), glm::vec3(0.70f, 0.70f, 0.70f));
 
     glDisable(GL_BLEND);
 }

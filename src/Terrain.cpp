@@ -39,7 +39,7 @@ Terrain::Terrain()
             terrainHeights[y * image.Width + x] = fHeight;
 
             vertVector.push_back(glm::vec3(float(x) * SCALE, fHeight, float(y) * SCALE));
-            texVector.push_back(glm::vec2(float(x) / float(image.Width), float(y) / float(image.Height)));
+            texVector.push_back(glm::vec2(float(x)/* / float(image.Width)*/, float(y)/* / float(image.Height)*/));
         }
     }
 
@@ -58,7 +58,6 @@ Terrain::~Terrain()
 
 void Terrain::OnRender()
 {
-    OGLHelper::ActivateTexture(GL_TEXTURE0, sResourcesMgr->GetTextureId("placeholder.tga"));
     OGLHelper::DrawTriangles(vao);
 }
 

@@ -43,6 +43,9 @@ out vec4 out_Color;
 
 void main(void)
 {
+   // if (texture2D(ColorTexture, pass_TexCoord).a < 1.0f)
+   //     discard;
+
     vec3 lightVector = -normalize(in_Light.Direction);
     //compute diffuse light
     vec3 normal = 2.0f * texture2D(NormalTexture, pass_TexCoord).xyz - 1.0f;
@@ -50,7 +53,7 @@ void main(void)
     vec3 diffuseLight = NdL * in_Light.Color.rgb;
 
     //output the two lights
-    out_Color = vec4(diffuseLight.rgb, 0.0f);
+    out_Color = vec4(diffuseLight.rgb, 1.0f);
 }
 
 #frag_end
