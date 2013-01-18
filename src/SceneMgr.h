@@ -63,7 +63,7 @@ class SceneMgr
         uint32 guid;
         Text2D text2D;
 
-        std::list<GameObject*> unregisterQueue;
+        std::unordered_set<GameObject*> unregisterQueue;
 
         uint32 currentCamera;
         std::vector<Camera*> cameras;

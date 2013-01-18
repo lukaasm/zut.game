@@ -149,6 +149,17 @@ void ResourcesMgr::loadShaders()
 
     shaders["text2d.glsl"] = shader;
 
+    shader = (new Shader())->LoadFromFile("../res/shaders/deferred_shadowpass.glsl");
+    shader->Bind();
+    {
+        shader->AddUniform("in_MVP");
+
+        shader->AddAttribute(VertexArray::Attrib::POSITION, "in_Position");
+    }
+    shader->Unbind();
+
+    shaders["deferred_shadowpass.glsl"] = shader;
+
     shader = (new Shader())->LoadFromFile("../res/shaders/deferred_geopass.glsl");
     shader->Bind();
     {
@@ -176,16 +187,12 @@ void ResourcesMgr::loadShaders()
     shader->Bind();
     {
         shader->AddUniform("in_CameraPosition");
-        shader->AddUniform("in_InvVP");
 
         shader->AddUniform("ColorTexture");
         shader->SetUniform("ColorTexture", 0);
 
         shader->AddUniform("NormalTexture");
         shader->SetUniform("NormalTexture", 1);
-
-        shader->AddUniform("DepthTexture");
-        shader->SetUniform("DepthTexture", 2);
 
         shader->AddDirectionalLight();
 
@@ -200,8 +207,8 @@ void ResourcesMgr::loadShaders()
     shader->Bind();
     {
         shader->AddUniform("in_MVP");
-        shader->AddUniform("in_CameraPosition");
         shader->AddUniform("in_InvVP");
+        shader->AddUniform("in_CameraPosition");
 
         shader->AddUniform("ColorTexture");
         shader->SetUniform("ColorTexture", 0);
@@ -228,6 +235,15 @@ void ResourcesMgr::loadShaders()
 
         shader->AddUniform("LightTexture");
         shader->SetUniform("LightTexture", 1);
+
+        shader->AddUniform("DepthTexture");
+        shader->SetUniform("DepthTexture", 2);
+
+        shader->AddUniform("ShadowTexture");
+        shader->SetUniform("ShadowTexture", 3);
+
+        shader->AddUniform("in_ShadowVP");
+        shader->AddUniform("in_InvVP");
 
         shader->AddAttribute(VertexArray::Attrib::POSITION, "in_Position");
         shader->AddAttribute(VertexArray::Attrib::TEXCOORD, "in_TexCoord");

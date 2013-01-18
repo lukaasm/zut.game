@@ -7,31 +7,37 @@
 class DeferredRenderer
 {
     public:
-    void Init();
-    void InitFSQuad();
+        DeferredRenderer();
+        ~DeferredRenderer();
 
-    void Bind();
-    void Unbind();
+        void Init();
+        void InitFSQuad();
 
-    void GeometryPass();
-    void LightsPass();
+        void Bind();
+        void Unbind();
 
-    void DirectionalLightPass(glm::vec3, glm::vec3);
-    void PointLightPass(glm::vec3 position, glm::vec3 color, float radius, float intensity);
+        void GeometryPass();
+        void LightsPass();
 
-    void FinalPass();
+        void DirectionalLightPass(glm::vec3, glm::vec3);
+        void PointLightPass(glm::vec3 position, glm::vec3 color, float radius, float intensity);
 
-    uint32 frameBuffer;
+        void FinalPass();
+        void ShadowPass();
 
-    uint32 colorTexture;
-    uint32 normalTexture;
-    uint32 depthTexture;
-    uint32 lightTexture;
+        uint32 frameBuffer;
 
-    VertexArrayObject quadVAO;
+        uint32 colorTexture;
+        uint32 normalTexture;
+        uint32 depthTexture;
+        uint32 lightTexture;
 
-    uint32 width;
-    uint32 height;
+        uint32 shadowTexture;
+
+        VertexArrayObject quadVAO;
+
+        uint32 width;
+        uint32 height;
 };
 
 #endif

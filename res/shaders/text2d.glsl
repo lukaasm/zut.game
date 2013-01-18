@@ -41,8 +41,9 @@ void main(void)
     out_Color = texture2D(FontTexture, pass_TexCoord);
     if (out_Color.xyz == vec3(1.0f, 0.0f, 0.0f))
         discard;
-        
-   // out_Color.a = 1.0f;
+
+    //float z = 1.0 - (1.0 - out_Color.x) * 25.0;
+    //out_Color = vec4(z, z, z, 1.0f);
 }
 
 #frag_end

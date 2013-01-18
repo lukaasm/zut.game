@@ -119,7 +119,7 @@ void SceneMgr::OnInit()
 
     skybox = new GameObject("cube.obj", "skybox.tga");
     skybox->SetPosition(Position(0,0,0));
-    skybox->SetScale(glm::vec3(200));
+    skybox->SetScale(glm::vec3(100));
 
     GameObject* ob;
     ADDSTATICOBJECT(true, "wall.obj", "wall.tga", 14.25f, 19.0f, 0.1f)
@@ -145,30 +145,30 @@ void SceneMgr::OnInit()
     ADDSTATICOBJECT(true, "wall.obj", "wall.tga", 27.818, 47.0233, 0.6f)
     ADDSTATICOBJECT(true, "wall_r.obj", "wall.tga", 36.7148, 50.5978, 0.7f)
     // veg
-    ADDSTATICOBJECT(false, "palm.obj", "palm.tga", 11.49f, 20.18f, 0.25f)
-    ADDSTATICOBJECT(false, "palm.obj", "palm.tga", 21.48f, 13.66f, 0.25f)
+    ADDSTATICOBJECT(false, "palm.obj", "palm.tga", 11.49f, 20.18f, 0.35f)
+    ADDSTATICOBJECT(false, "palm.obj", "palm.tga", 21.48f, 13.66f, 0.35f)
     ob->SetOrientation(sRandom->Float(0.0f, 360.0f));
-    ADDSTATICOBJECT(false, "palm.obj", "palm.tga", 30.97f, 20.42f, 0.25f)
+    ADDSTATICOBJECT(false, "palm.obj", "palm.tga", 30.97f, 20.42f, 0.35f)
     ob->SetScale(glm::vec3(sRandom->Float(1.0f, 3.0f)));
     ob->SetOrientation(sRandom->Float(0.0f, 360.0f));
-    ADDSTATICOBJECT(false, "palm.obj", "palm.tga", 37.84f, 14.32f, 0.25f)
+    ADDSTATICOBJECT(false, "palm.obj", "palm.tga", 37.84f, 14.32f, 0.35f)
     ob->SetOrientation(sRandom->Float(0.0f, 360.0f));
-    ADDSTATICOBJECT(false, "palm.obj", "palm.tga", 44.33f, 24.55f, 0.25f)
+    ADDSTATICOBJECT(false, "palm.obj", "palm.tga", 44.33f, 24.55f, 0.35f)
     ob->SetScale(glm::vec3(sRandom->Float(1.0f, 3.0f)));
     ob->SetOrientation(sRandom->Float(0.0f, 360.0f));
-    ADDSTATICOBJECT(false, "palm.obj", "palm.tga", 38.92f, 39.92f, 0.25f)
+    ADDSTATICOBJECT(false, "palm.obj", "palm.tga", 38.92f, 39.92f, 0.35f)
     ob->SetOrientation(sRandom->Float(0.0f, 360.0f));
-    ADDSTATICOBJECT(false, "palm.obj", "palm.tga", 45.56f, 46.99f, 0.25f)
+    ADDSTATICOBJECT(false, "palm.obj", "palm.tga", 45.56f, 46.99f, 0.35f)
     ob->SetOrientation(sRandom->Float(0.0f, 360.0f));
-    ADDSTATICOBJECT(false, "palm.obj", "palm.tga", 25.52f, 55.84f, 0.25f)
+    ADDSTATICOBJECT(false, "palm.obj", "palm.tga", 25.52f, 55.84f, 0.45f)
+    ob->SetScale(glm::vec3(sRandom->Float(1.0f, 3.0f)));
+    ob->SetOrientation(60.0f);
+    ADDSTATICOBJECT(false, "palm.obj", "palm.tga", 12.95f, 44.97f, 0.35f)
+    ob->SetOrientation(sRandom->Float(0.0f, 360.0f));
+    ADDSTATICOBJECT(false, "palm.obj", "palm.tga", 14.94f, 30.96f, 0.35f)
     ob->SetScale(glm::vec3(sRandom->Float(1.0f, 3.0f)));
     ob->SetOrientation(sRandom->Float(0.0f, 360.0f));
-    ADDSTATICOBJECT(false, "palm.obj", "palm.tga", 12.95f, 44.97f, 0.25f)
-    ob->SetOrientation(sRandom->Float(0.0f, 360.0f));
-    ADDSTATICOBJECT(false, "palm.obj", "palm.tga", 14.94f, 30.96f, 0.25f)
-    ob->SetScale(glm::vec3(sRandom->Float(1.0f, 3.0f)));
-    ob->SetOrientation(sRandom->Float(0.0f, 360.0f));
-    ADDSTATICOBJECT(false, "palm.obj", "palm.tga", 21.75f, 38.34f, 0.25f)
+    ADDSTATICOBJECT(false, "palm.obj", "palm.tga", 21.75f, 38.34f, 0.35f)
     ob->SetScale(glm::vec3(sRandom->Float(1.0f, 3.0f)));
     ob->SetOrientation(sRandom->Float(0.0f, 360.0f));
 
@@ -421,7 +421,6 @@ void SceneMgr::OnUpdate(const uint32& diff)
     }
 
     float time = glfwGetTime()*150.0f;
-    uint8 x = 0;
     for (auto i = GetPointLights().begin(); i != GetPointLights().end();)
     {
         if (i->owner != nullptr)
@@ -446,23 +445,19 @@ void SceneMgr::OnUpdate(const uint32& diff)
                 i->Position.z += sin((time/150)*PI)*0.1f;
             }
         }
-        else
-        {
-            i->Position.y = 3.0f+x + (x % 2 ? sin((time/180)*PI)*(x + 0.5f) : cos((time/180)*PI)*(x + 0.5f));
-            i->Position.x = 18.0f + cos((time/180)*PI)*2*(x + 0.5f)*.7f;
-            i->Position.z = 12.5f + sin((time/180)*PI)*4*(x + 0.5f)*.7f;
-        }
+
         ++i;
-        ++x;
     }
 
     while (!unregisterQueue.empty())
     {
-        GameObject* object = unregisterQueue.front();
+        auto i = unregisterQueue.begin();
+
+        GameObject* object = *i;
         objects[object->GetTypeId()].erase(object->GetGuid());
 
         delete object;
-        unregisterQueue.pop_front();
+        unregisterQueue.erase(i);
     }
 
     GetCamera()->OnUpdate(diff);
@@ -559,9 +554,8 @@ float SceneMgr::GetHeight(GameObject* ob)
 
 void SceneMgr::OnRender()
 {
+    deferred.ShadowPass();
     deferred.GeometryPass();
-    //sMouse->ScreenToWorld(deferred.frameBuffer);
-
     deferred.LightsPass();
     deferred.FinalPass();
 
@@ -579,8 +573,8 @@ void SceneMgr::renderGUI()
 
     if (sKeyboard->IsKeyPressed('L'))
     {
-        text2D.RenderSprite(5, 5, 210, deferred.lightTexture);
-        text2D.RenderSprite(5, 215, 210, deferred.colorTexture);
+        text2D.RenderSprite(5, 5, 210, deferred.shadowTexture);
+        text2D.RenderSprite(5, 215, 210, deferred.depthTexture);
         text2D.RenderSprite(5, 425, 210, deferred.normalTexture);
     }
 }
@@ -614,5 +608,5 @@ void SceneMgr::UnregisterObject(GameObject* object)
 //     if (AABoundingBox* bounds = object->GetBoundingObject())
 //         boundingBoxes[object->GetTypeId()].erase(bounds);
 
-    unregisterQueue.push_back(object);
+    unregisterQueue.insert(object);
 }
