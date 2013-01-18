@@ -147,6 +147,9 @@
     <None Include="..\res\shaders\deferred_pointlightpass.glsl">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="..\res\shaders\deferred_shadowpass.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\BaseApp.cpp">

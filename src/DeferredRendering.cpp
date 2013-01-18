@@ -4,6 +4,7 @@
 #include <GL/glfw.h>
 
 #include <glm/gtc/matrix_transform.hpp>
+#include <iostream>
 
 #include "Camera.h"
 #include "Config.h"
@@ -16,6 +17,9 @@
 #include "Terrain.h"
 #include "RenderDevice.h"
 #include "ResourcesMgr.h"
+#include "SceneMgr.h"
+
+#define SHADOW_MAP_RATIO 1.0f
 
 void DeferredRenderer::Init()
 {
@@ -24,44 +28,69 @@ void DeferredRenderer::Init()
 
     InitFSQuad();
 
-    glGenFramebuffers(1, &frameBuffer);
+    glGenFramebuffers(2, &frameBuffer);
     glBindFramebuffer(GL_DRAW_FRAMEBUFFER, frameBuffer);
 
     glViewport(0, 0, width, height);
 
     glGenTextures(1, &colorTexture);
     glBindTexture(GL_TEXTURE_2D, colorTexture);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-    glTexImage2D(GL_TEXTURE_2D, 0, RTFORMAT, width, height, 0, RTFORMAT2, GL_FLOAT, NULL);
-    glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, colorTexture, 0);
+    {
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+        glTexImage2D(GL_TEXTURE_2D, 0, RTFORMAT, width, height, 0, RTFORMAT2, GL_FLOAT, NULL);
+        glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, colorTexture, 0);
+    }
+    glBindTexture(GL_TEXTURE_2D, 0);
 
     glGenTextures(1, &normalTexture);
     glBindTexture(GL_TEXTURE_2D, normalTexture);
-    glTexImage2D(GL_TEXTURE_2D, 0, RTFORMAT, width, height, 0, RTFORMAT2, GL_FLOAT, NULL);
-    glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, normalTexture, 0);
+    {
+        glTexImage2D(GL_TEXTURE_2D, 0, RTFORMAT, width, height, 0, RTFORMAT2, GL_FLOAT, NULL);
+        glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, normalTexture, 0);
+    }
+    glBindTexture(GL_TEXTURE_2D, 0);
 
     glGenTextures(1, &depthTexture);
     glBindTexture(GL_TEXTURE_2D, depthTexture);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_NONE);
-    glTexParameteri(GL_TEXTURE_2D, GL_DEPTH_TEXTURE_MODE, GL_LUMINANCE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);    
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT24, width, height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, 0);
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthTexture, 0);
+    {
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_NONE);
+        glTexParameteri(GL_TEXTURE_2D, GL_DEPTH_TEXTURE_MODE, GL_LUMINANCE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);    
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT24, width, height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, 0);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthTexture, 0);
+    }
+    glBindTexture(GL_TEXTURE_2D, 0);
 
     glGenTextures(1, &lightTexture);
     glBindTexture(GL_TEXTURE_2D, lightTexture);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-    glTexImage2D(GL_TEXTURE_2D, 0, RTFORMAT, width, height, 0, RTFORMAT2, GL_FLOAT, NULL);
-    glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT3, GL_TEXTURE_2D, lightTexture, 0);
+    {
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+        glTexImage2D(GL_TEXTURE_2D, 0, RTFORMAT, width, height, 0, RTFORMAT2, GL_FLOAT, NULL);
+        glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT3, GL_TEXTURE_2D, lightTexture, 0);
+    }
+    glBindTexture(GL_TEXTURE_2D, 0);
+
+    glGenTextures(1, &shadowTexture);
+    glBindTexture(GL_TEXTURE_2D, shadowTexture);
+    {
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_NONE);
+        glTexParameteri(GL_TEXTURE_2D, GL_DEPTH_TEXTURE_MODE, GL_LUMINANCE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT24, width*SHADOW_MAP_RATIO, height*SHADOW_MAP_RATIO, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+    }
     glBindTexture(GL_TEXTURE_2D, 0);
 
     GLenum buffers[] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1 }; 
@@ -73,6 +102,59 @@ void DeferredRenderer::Init()
 
     glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
     glViewport(0, 0, width, height);
+}
+
+void DeferredRenderer::ShadowPass()
+{
+    glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, shadowTexture, 0);
+
+    glDrawBuffer(GL_NONE);
+
+    glEnable(GL_DEPTH_TEST);
+    glClear(GL_DEPTH_BUFFER_BIT);
+
+    glViewport(0, 0, width*SHADOW_MAP_RATIO, height*SHADOW_MAP_RATIO);
+
+    Shader* shader = sResourcesMgr->GetShader("deferred_shadowpass.glsl");
+    shader->Bind();
+
+    glEnable(GL_CULL_FACE);
+
+    glm::mat4 projMat = glm::perspective(70.0f, float(width / height), 0.01f, 500.0f);
+    glm::mat4 viewMat = glm::lookAt(Position(30.0f, 40.0f, -15.0f), Position(30.0f, 0.0f, 30.0f), glm::vec3(0.0f, 1.0f, 0.0f));//
+
+    //Terrain* terrain = sSceneMgr->GetTerrain();
+    glm::mat4 mvp = projMat * viewMat;
+    //shader->SetUniform("in_MVP", mvp);
+
+    //terrain->OnRender();
+
+    GameObjectsMap objects = sSceneMgr->GetObjects();
+    for (auto i = objects.begin(); i != objects.end(); ++i)
+    {
+        GameObject* ob = i->second;
+
+        if (ob->GetModel() == "palm.obj")
+            glCullFace(GL_BACK);
+        else
+            glCullFace(GL_FRONT);
+
+        mvp = projMat * viewMat * ob->GetModelMatrix();
+        shader->SetUniform("in_MVP", mvp);
+
+        ob->OnRender();
+    }
+
+    shader->Unbind();
+
+    glDisable(GL_DEPTH_TEST);
+    glDisable(GL_CULL_FACE);
+
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthTexture, 0);
+
+    glViewport(0, 0, width, height);
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
 void DeferredRenderer::GeometryPass()
@@ -100,6 +182,9 @@ void DeferredRenderer::GeometryPass()
     OGLHelper::ActivateTexture(GL_TEXTURE1, sResourcesMgr->GetTextureId("normal_placeholder.tga"));
 
     skybox->OnRender();
+
+    //glEnable(GL_CULL_FACE);
+    glCullFace(GL_BACK);
 
     shader->SetUniform("in_NotSkybox", 1.0f);
     Terrain* terrain = sSceneMgr->GetTerrain();
@@ -130,7 +215,8 @@ void DeferredRenderer::GeometryPass()
 
     shader->Unbind();
 
-     glDisable(GL_DEPTH_TEST);
+    glDisable(GL_CULL_FACE);
+    glDisable(GL_DEPTH_TEST);
 }
 
 void DeferredRenderer::DirectionalLightPass(glm::vec3 dir, glm::vec3 color)
@@ -140,12 +226,10 @@ void DeferredRenderer::DirectionalLightPass(glm::vec3 dir, glm::vec3 color)
 
     OGLHelper::ActivateTexture(GL_TEXTURE0, colorTexture);
     OGLHelper::ActivateTexture(GL_TEXTURE1, normalTexture);
-    OGLHelper::ActivateTexture(GL_TEXTURE2, depthTexture);
 
     Camera* camera = sSceneMgr->GetCamera();
 
     shader->SetUniform("in_CameraPosition", camera->GetPosition());
-    shader->SetUniform("in_InvVP", glm::inverse(camera->GetProjMatrix() * camera->GetViewMatrix()));
     shader->SetDirectionalLight(dir, color);
 
     // render full screen quad
@@ -234,7 +318,7 @@ void DeferredRenderer::LightsPass()
     for (auto i = sSceneMgr->GetPointLights().begin(); i != sSceneMgr->GetPointLights().end(); ++i)
         PointLightPass(i->Position, i->Color, i->Radius, i->Intensity);
    
-    DirectionalLightPass(glm::vec3(0.0f, -1.0f, 1.0f), glm::vec3(0.70f, 0.70f, 0.70f));
+    DirectionalLightPass(glm::vec3(0.0f, -40.0f, -15.0f), glm::vec3(0.70f, 0.70f, 0.70f));
 
     glDisable(GL_BLEND);
 }
@@ -250,9 +334,36 @@ void DeferredRenderer::FinalPass()
 
     OGLHelper::ActivateTexture(GL_TEXTURE0, colorTexture);
     OGLHelper::ActivateTexture(GL_TEXTURE1, lightTexture);
+    OGLHelper::ActivateTexture(GL_TEXTURE2, depthTexture);
+    OGLHelper::ActivateTexture(GL_TEXTURE3, shadowTexture);
+
+    Camera* camera = sSceneMgr->GetCamera();
+
+    shader->SetUniform("in_InvVP", glm::inverse(camera->GetProjMatrix() * camera->GetViewMatrix()));
+
+    glm::mat4 viewMat = glm::lookAt(Position(30.0f, 40.0f, -15.0f), Position(30.0f, 0.0f, 30.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+    glm::mat4 projMat = camera->GetProjMatrix();
+
+    shader->SetUniform("in_ShadowVP", projMat * viewMat);
 
     // render full screen quad
     OGLHelper::DrawTriangles(quadVAO);
 
     shader->Unbind();
+}
+
+DeferredRenderer::~DeferredRenderer()
+{
+    glDeleteTextures(1 ,&shadowTexture);
+    glDeleteTextures(1 ,&normalTexture);
+    glDeleteTextures(1 ,&colorTexture);
+    glDeleteTextures(1 ,&depthTexture);
+
+    glDeleteFramebuffers(1 ,&frameBuffer);
+}
+
+DeferredRenderer::DeferredRenderer()
+{
+    width = WINDOW_WIDTH;
+    height = WINDOW_HEIGHT;
 }
