@@ -172,6 +172,14 @@ void SceneMgr::OnInit()
     ob->SetScale(glm::vec3(sRandom->Float(1.0f, 3.0f)));
     ob->SetOrientation(sRandom->Float(0.0f, 360.0f));
 
+    ADDSTATICOBJECT(false, "palm.obj", "palm.tga", 24.2228, 24.767, 0.35f)
+    ob->SetScale(glm::vec3(sRandom->Float(0.7f, 2.0f)));
+    ob->SetOrientation(sRandom->Float(0.0f, 360.0f));
+
+    ADDSTATICOBJECT(false, "palm.obj", "palm.tga", 13.4296, 26.2709, 0.35f)
+    ob->SetScale(glm::vec3(sRandom->Float(0.7f, 2.0f)));
+    ob->SetOrientation(sRandom->Float(0.0f, 360.0f));
+
     ADDSTATICOBJECT(true, "rock.obj", "rock.tga", 17.7628, 14.4274, 0.15f)
     ob->SetScale(glm::vec3(sRandom->Float(0.5f, 1.0f)));
     ob->SetOrientation(sRandom->Float(0.0f, 360.0f));
@@ -568,15 +576,21 @@ void SceneMgr::renderGUI()
     fps << "FrameTime: " << std::setprecision(3) << BaseApp::frameTime << "ms" << " FPS: " << BaseApp::fps;
 
     int h = sConfig->GetDefault("height", WINDOW_HEIGHT);
+    int w = sConfig->GetDefault("width", WINDOW_WIDTH);
 
     text2D.RenderText(fps.str(), 10, h - h*0.05, 12);
 
-    if (sKeyboard->IsKeyPressed('L'))
-    {
-        text2D.RenderSprite(5, 5, 210, deferred.shadowTexture);
-        text2D.RenderSprite(5, 215, 210, deferred.depthTexture);
-        text2D.RenderSprite(5, 425, 210, deferred.normalTexture);
-    }
+    std::stringstream kills;
+    kills << "Monsters killed: " << 0;
+    text2D.RenderText(kills.str(), 5, 30, 18);
+
+    std::stringstream points;
+    points << "Coins collected: " << 0 << " of 1";
+    text2D.RenderText(points.str(), 5, 49, 18);
+
+    std::stringstream t;
+    t << "Press X to exit game";
+    text2D.RenderText(t.str(), w/2 - t.str().length()/2 - w*0.05, h - h*0.05, 15);
 }
 
 void SceneMgr::initLights()

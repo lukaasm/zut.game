@@ -90,7 +90,7 @@ void main(void)
     float bias = 0;//0.00001;//0.0005;
     float shadow = 1.0;
 
-    const int m = 10;
+    const int m = 16;
     for (int i = 0; i < m; i++)
     {
         if (ShadowCoord.z-bias > texture2D(ShadowTexture, ShadowCoord.xy + poissonDisk[i]/700.0).x)
