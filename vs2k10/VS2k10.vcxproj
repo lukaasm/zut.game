@@ -93,6 +93,7 @@
     <ClCompile Include="..\src\Input.cpp" />
     <ClCompile Include="..\src\Light.cpp" />
     <ClCompile Include="..\src\ModelData.cpp" />
+    <ClCompile Include="..\src\Random.cpp" />
     <ClCompile Include="..\src\ResourcesMgr.cpp" />
     <ClCompile Include="..\src\SceneMgr.cpp" />
     <ClCompile Include="..\src\Shader.cpp" />

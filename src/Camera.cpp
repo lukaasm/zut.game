@@ -22,7 +22,7 @@ void Camera::LookAt(const Position& pos, const glm::vec3& target, const glm::vec
 
 void Camera::OnResize(int32 width, int32 height)
 {
-    projMatrix = glm::perspective(70.0f, float(width/height), 0.01f, 500.0f);
+    projMatrix = glm::perspective(60.0f, float(width/height), 0.01f, 500.0f);
 }
 
 void FppCamera::OnUpdate(const uint32& diff)

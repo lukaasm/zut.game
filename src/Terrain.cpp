@@ -8,6 +8,7 @@
 #include "Common.h"
 #include "Exception.h"
 #include "GameObject.h"
+#include "Random.h"
 #include "RenderDevice.h"
 #include "ResourcesMgr.h"
 
@@ -35,7 +36,7 @@ Terrain::Terrain()
 
             uint8 height = image.Data[y * pitch + x * bpp];
 
-            float fHeight = float(height) / 10.0f;
+            float fHeight = float(height) / 10.0f + sRandom->Float(0.0f, 0.125f);
             terrainHeights[y * image.Width + x] = fHeight;
 
             vertVector.push_back(glm::vec3(float(x) * SCALE, fHeight, float(y) * SCALE));

@@ -39,8 +39,8 @@ out vec4 out_Color;
 void main(void)
 {
     out_Color = texture2D(FontTexture, pass_TexCoord);
-    if (out_Color.a < 1.0f)
-        discard;
+    //if (out_Color.a < 1.0f)
+    //    discard;
 
     //float z = 1.0 - (1.0 - out_Color.x) * 25.0;
     //out_Color = vec4(z, z, z, 1.0f);

@@ -86,7 +86,7 @@ void Keyboard::OnKeyPress(int32 key)
     if (key == 'K')
         sSceneMgr->ToggleCamera();
     else if (key == 'O')
-        std::cerr << sSceneMgr->GetPlayer()->GetPosition().x << ", "<< sSceneMgr->GetPlayer()->GetPosition().z << std::endl;
+        std::cerr << ";e " << sSceneMgr->GetPlayer()->GetPosition().x << " "<< sSceneMgr->GetPlayer()->GetPosition().z << std::endl;
 }
 
 void Keyboard::OnKeyRelease(int32 key)

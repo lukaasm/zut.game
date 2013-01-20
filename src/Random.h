@@ -27,7 +27,5 @@ class Random
         std::mt19937 gen;
 };
 
-Random::Random() : gen(rd()) {};
-
 #define sRandom Singleton<Random>::Instance()
 #endif

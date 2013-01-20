@@ -46,7 +46,8 @@ void Text2D::Init()
 
 void Text2D::RenderText(std::string text, int x, int y, int fontSize)
 {
-    //glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+    glEnable (GL_BLEND);
+    glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     // Fill buffers
     std::vector<FontVert> vertices;
 
@@ -98,10 +99,13 @@ void Text2D::RenderText(std::string text, int x, int y, int fontSize)
     OGLHelper::DrawTriangles(vao);
 
     shader->Unbind();
+    glDisable(GL_BLEND);
 }
 
 void Text2D::RenderSprite(int x, int y, int size, int textureId)
 {
+    glEnable (GL_BLEND);
+    glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     // Fill buffers
     std::vector<FontVert> vertices;
     FontVert vert[6] =
@@ -137,6 +141,7 @@ void Text2D::RenderSprite(int x, int y, int size, int textureId)
     OGLHelper::DrawTriangles(vao);
 
     shader->Unbind();
+    glDisable(GL_BLEND);
 }
 
 void Text2D::RenderSprite(VertexArrayObject& vao, int textureId)
