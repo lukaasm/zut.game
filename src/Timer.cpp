@@ -10,7 +10,7 @@ void Timer::Start(uint32 time)
 
 bool Timer::Passed()
 {
-    return uint32(glfwGetTime()*1000.0f) > end;
+    return uint32(glfwGetTime()*1000.0f) >= end;
 }
 
 double Timer::Elapsed()

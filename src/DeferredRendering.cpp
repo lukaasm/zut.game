@@ -62,7 +62,7 @@ void DeferredRenderer::Init()
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
         glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
         glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);    
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT24, width, height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, 0);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT32F, width, height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, 0);
         glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthTexture, 0);
     }
     glBindTexture(GL_TEXTURE_2D, 0);
@@ -89,7 +89,7 @@ void DeferredRenderer::Init()
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT24, width*SHADOW_MAP_RATIO, height*SHADOW_MAP_RATIO, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT32F, width*SHADOW_MAP_RATIO, height*SHADOW_MAP_RATIO, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
     }
     glBindTexture(GL_TEXTURE_2D, 0);
 
@@ -121,7 +121,7 @@ void DeferredRenderer::ShadowPass()
 
     glEnable(GL_CULL_FACE);
 
-    glm::mat4 projMat = glm::perspective(70.0f, float(width / height), 0.01f, 500.0f);
+    glm::mat4 projMat = sSceneMgr->GetCamera()->GetProjMatrix(); //glm::perspective(70.0f, float(width / height), 0.001f, 500.0f);
     glm::mat4 viewMat = glm::lookAt(Position(30.0f, 40.0f, -15.0f), Position(30.0f, 0.0f, 30.0f), glm::vec3(0.0f, 1.0f, 0.0f));//
 
     //Terrain* terrain = sSceneMgr->GetTerrain();
@@ -183,7 +183,7 @@ void DeferredRenderer::GeometryPass()
 
     skybox->OnRender();
 
-    //glEnable(GL_CULL_FACE);
+    glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
 
     shader->SetUniform("in_NotSkybox", 1.0f);
@@ -202,6 +202,11 @@ void DeferredRenderer::GeometryPass()
     for (auto i = objects.begin(); i != objects.end(); ++i)
     {
         GameObject* ob = i->second;
+
+        if (ob->GetModel() != "palm.obj")
+            glEnable(GL_CULL_FACE);
+        else
+            glDisable(GL_CULL_FACE);
 
         mvp = camera->GetProjMatrix() * camera->GetViewMatrix() * ob->GetModelMatrix();
         shader->SetUniform("in_M", ob->GetModelMatrix());

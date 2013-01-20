@@ -66,7 +66,6 @@ typedef std::unordered_map<std::string, ScriptsMap> ScriptsHolder;
 class DynamicObject : public GameObject
 {
     public:
-        DynamicObject();
         DynamicObject(std::string, std::string);
 
         ~DynamicObject();
@@ -93,11 +92,19 @@ class DynamicObject : public GameObject
         float GetDistance(GameObject*);
         float GetDistance(glm::vec3 pos);
 
+        void DamageTaken(GameObject* ob, uint32 dmg);
+
+        int GetHealth() { return health; }
+
         ScriptsHolder scripts;
-        Timer* createTime;
+        Timer* timers;
 
     private:
         MoveFlags moveFlags;
+
+        int health;
+
+        std::unordered_map<GameObject*, uint32> damageDealers;
 
         glm::vec3 up;
         glm::vec3 lookDirection;

@@ -23,6 +23,15 @@ typedef std::unordered_map<uint32, GameObject*> GameObjectsMap;
 typedef std::unordered_set<AABoundingBox*> BoundingBoxSet;
 typedef std::list<PointLight> PointLightList;
 
+enum GameState
+{
+    GAME_MENU        = 0,
+    GAME_INPROGRESS  = 1,
+    GAME_END_SUCCESS = 2,
+    GAME_END_FAIL    = 3,
+    GAME_END_EXIT    = 4
+};
+
 class SceneMgr
 {
     SINGLETON(SceneMgr)
@@ -59,9 +68,15 @@ class SceneMgr
         void renderGUI();
         void renderSkyBox();
         void initLights();
+        void loadScene(std::string fileName);
 
         uint32 guid;
         Text2D text2D;
+
+        uint32 state;
+
+        uint32 monstersKilled;
+        uint32 coinsOnMap;
 
         std::unordered_set<GameObject*> unregisterQueue;
 

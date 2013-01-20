@@ -57,7 +57,7 @@ void BaseApp::createContext()
     if (sConfig->GetDefault("fullscreen", false))
         mode = GLFW_FULLSCREEN;
 
-    glfwOpenWindow(width, height, 0, 0, 0, 0, 0, 0, mode);
+    glfwOpenWindow(width, height, 8, 8, 8, 8, 0, 0, mode);
     glfwSetWindowTitle("WastedProject by lukaasm");
 }
 
@@ -123,11 +123,6 @@ void BaseApp::Run()
     double start = glfwGetTime();
     while (!Stopped())
     {
-        if (sKeyboard->IsKeyPressed('X'))
-        {
-            BaseApp::CloseWindow();
-            return;
-        }
         ++frameCount;
 
         double now = glfwGetTime();

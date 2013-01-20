@@ -203,5 +203,8 @@
     <ClCompile Include="..\src\DeferredRendering.cpp">
       <Filter>Deferred</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\Random.cpp">
+      <Filter>Misc</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

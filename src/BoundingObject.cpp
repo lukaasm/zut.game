@@ -33,8 +33,8 @@ void BoundingBoxProto::SetMinMax(const VertexVector& vertexes)
     max = vertexes.front().position;
 
     std::for_each(vertexes.begin(), vertexes.end(), FindMinMax(min, max));
-    //min -= 0.1;
-    //max += 0.1f;
+    min += 0.1;
+    max -= 0.1f;
 
     std::vector<glm::vec3> bbox;
     bbox.push_back(glm::vec3(min.x, min.y, min.z));

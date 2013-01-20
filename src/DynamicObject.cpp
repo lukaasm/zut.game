@@ -9,7 +9,7 @@
 
 void DynamicObject::Move(const uint32& diff)
 {
-    float penalty = (this == sSceneMgr->GetPlayer() ? 1.0f : 0.6f);
+    float penalty = (this == sSceneMgr->GetPlayer() ? 1.0f : GetTypeId() == TYPEID_PROJECTILE ? 1.6f : 0.6f);
     Position original = position;
     if (moveFlags & MOVE_FLAG_FORWARD)
     {
@@ -80,38 +80,36 @@ void DynamicObject::ClearMoveType(MoveFlags flag)
     moveFlags = MoveFlags(moveFlags & ~flag);
 }
 
-DynamicObject::DynamicObject() : GameObject("mb.obj", "mb.tga")
-{
-    createTime = new Timer();
-    createTime->Start(0);
-
-    lookDirection = glm::vec3(0.0f, 0.0f, 1.0f);
-
-    moveFlags = MOVE_FLAG_NONE;
-
-    up = glm::vec3(0.0f, 1.0f, 0.0f);
-}
-
 DynamicObject::DynamicObject(std::string model, std::string texture) : GameObject(model, texture)
 {
-    createTime = new Timer();
-    createTime->Start(0);
+    timers = new Timer[4];
+    for (uint8 i = 0; i < 4; ++i)
+        timers[i].Start(0);
 
     lookDirection = glm::vec3(0.0f, 0.0f, 1.0f);
 
     moveFlags = MOVE_FLAG_NONE;
 
     up = glm::vec3(0.0f, 1.0f, 0.0f);
+
+    health = 100;
 
     SetTypeId(TYPEID_DYNAMIC);
 }
 
 void DynamicObject::RedoMoveOnCollision(Position& original, Position& offset)
 {
-    SetPosition(original + offset);
+    Position dest = original + offset;
+    if (this == sSceneMgr->GetPlayer())
+        dest.y = sSceneMgr->GetHeight(this);
 
-    if (sSceneMgr->CollisionTest(this, TYPEID_STATIC))
-        SetPosition(original);
+    SetPosition(dest);
+
+    if (GetTypeId() == TYPEID_PROJECTILE || this == sSceneMgr->GetPlayer())
+    {
+        if (sSceneMgr->CollisionTest(this, TYPEID_STATIC))
+            SetPosition(original);
+    }
 }
 
 void DynamicObject::SetOrientation(float rotation)
@@ -150,5 +148,17 @@ float DynamicObject::GetDistance(GameObject* ob)
 
 DynamicObject::~DynamicObject()
 {
-    delete createTime;
+    delete [] timers;
+}
+
+void DynamicObject::DamageTaken(GameObject* ob, uint32 dmg)
+{
+    auto it = damageDealers.find(ob);
+    if (it == damageDealers.end() || it->second + 700 < timers[0].Elapsed())
+    {
+        health -= dmg;
+        damageDealers[ob] = timers[0].Elapsed();
+
+        timers[3].Start(300);
+    }
 }
