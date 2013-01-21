@@ -23,11 +23,8 @@ void main(void)
 #version 330 core
 
 in vec2 pass_TexCoord;
-
-uniform sampler2D ColorTexture;     
+    
 uniform sampler2D NormalTexture; 
-
-uniform vec3 in_CameraPosition;
 
 struct DirectionalLight
 {

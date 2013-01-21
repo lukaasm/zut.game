@@ -229,12 +229,10 @@ void DeferredRenderer::DirectionalLightPass(glm::vec3 dir, glm::vec3 color)
     Shader* shader = sResourcesMgr->GetShader("deferred_dirlightpass.glsl");
     shader->Bind();
 
-    OGLHelper::ActivateTexture(GL_TEXTURE0, colorTexture);
-    OGLHelper::ActivateTexture(GL_TEXTURE1, normalTexture);
+    glDisable(GL_DEPTH_TEST);
 
-    Camera* camera = sSceneMgr->GetCamera();
+    OGLHelper::ActivateTexture(GL_TEXTURE0, normalTexture);
 
-    shader->SetUniform("in_CameraPosition", camera->GetPosition());
     shader->SetDirectionalLight(dir, color);
 
     // render full screen quad
