@@ -186,13 +186,8 @@ void ResourcesMgr::loadShaders()
     shader = (new Shader())->LoadFromFile("../res/shaders/deferred_dirlightpass.glsl");
     shader->Bind();
     {
-        shader->AddUniform("in_CameraPosition");
-
-        shader->AddUniform("ColorTexture");
-        shader->SetUniform("ColorTexture", 0);
-
         shader->AddUniform("NormalTexture");
-        shader->SetUniform("NormalTexture", 1);
+        shader->SetUniform("NormalTexture", 0);
 
         shader->AddDirectionalLight();
 
