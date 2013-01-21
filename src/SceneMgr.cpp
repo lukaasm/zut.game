@@ -512,6 +512,13 @@ void SceneMgr::renderGUI()
                 cd << cooldown << "s";
                 text2D.RenderText(cd.str(), w-125, 82, 32);
             }
+
+            if (sKeyboard->IsKeyPressed('L'))
+            {
+                text2D.RenderSprite(5, 0, 200, deferred.colorTexture);
+                text2D.RenderSprite(5, 205, 200, deferred.normalTexture);
+                text2D.RenderSprite(5, 410, 200, deferred.depthTexture);
+            }
             break;
         }
         case GAME_END_FAIL:

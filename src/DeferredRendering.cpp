@@ -40,7 +40,7 @@ void DeferredRenderer::Init()
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
         glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
         glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-        glTexImage2D(GL_TEXTURE_2D, 0, RTFORMAT, width, height, 0, RTFORMAT2, GL_FLOAT, NULL);
+        glTexImage2D(GL_TEXTURE_2D, 0, RTFORMAT, width, height, 0, RTFORMAT2, GL_UNSIGNED_BYTE, NULL);
         glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, colorTexture, 0);
     }
     glBindTexture(GL_TEXTURE_2D, 0);
@@ -48,7 +48,11 @@ void DeferredRenderer::Init()
     glGenTextures(1, &normalTexture);
     glBindTexture(GL_TEXTURE_2D, normalTexture);
     {
-        glTexImage2D(GL_TEXTURE_2D, 0, RTFORMAT, width, height, 0, RTFORMAT2, GL_FLOAT, NULL);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+        glTexImage2D(GL_TEXTURE_2D, 0, RTFORMAT, width, height, 0, RTFORMAT2, GL_UNSIGNED_BYTE, NULL);
         glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, normalTexture, 0);
     }
     glBindTexture(GL_TEXTURE_2D, 0);
@@ -74,7 +78,7 @@ void DeferredRenderer::Init()
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
         glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
         glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-        glTexImage2D(GL_TEXTURE_2D, 0, RTFORMAT, width, height, 0, RTFORMAT2, GL_FLOAT, NULL);
+        glTexImage2D(GL_TEXTURE_2D, 0, RTFORMAT, width, height, 0, RTFORMAT2, GL_UNSIGNED_BYTE, NULL);
         glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT3, GL_TEXTURE_2D, lightTexture, 0);
     }
     glBindTexture(GL_TEXTURE_2D, 0);
