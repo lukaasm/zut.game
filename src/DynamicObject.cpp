@@ -14,6 +14,13 @@ void DynamicObject::Move(const uint32& diff)
     if (moveFlags & MOVE_FLAG_FORWARD)
     {
         glm::vec3 offset = lookDirection * moveInfos[MOVE_TYPE_FORWARD].speed *(0.001f * diff) * penalty;
+
+        if (penalty == 1.0f)
+        {
+            offset.x += cos(timers[0].Elapsed()/256.0f)*0.01f;
+            offset.y += sin(timers[0].Elapsed()/256.0f)*0.01f;
+        }
+
         RedoMoveOnCollision(original, offset);
     }
 
@@ -82,7 +89,7 @@ void DynamicObject::ClearMoveType(MoveFlags flag)
 
 DynamicObject::DynamicObject(std::string model, std::string texture) : GameObject(model, texture)
 {
-    timers = new Timer[4];
+    timers = new Timer[5];
     for (uint8 i = 0; i < 4; ++i)
         timers[i].Start(0);
 

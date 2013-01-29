@@ -118,14 +118,14 @@ class GameObject
         float GetOrientation() const { return rotationY; }
 
         virtual void SetOrientation(float rotation);
-
+        std::string modelName;
     protected:
         void recreateModelMatrix();
 
         uint32 guid;
         ObjectTypeId typeId;
 
-        std::string modelName;
+        //std::string modelName;
         std::string textureName;
 
         glm::vec3 scale;
