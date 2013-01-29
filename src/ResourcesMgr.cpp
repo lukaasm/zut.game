@@ -49,7 +49,7 @@ uint32 ResourcesMgr::GetTextureId(std::string name)
 {
     if (!sConfig->GetDefault("render.textures", true))
     {
-        if (name.find("normal_") == std::string::npos && name.find("font.tga") == std::string::npos)
+        if (name.find("normal_") == std::string::npos && name.find("font.tga") == std::string::npos && name.find("gui_") == std::string::npos)
             name = "placeholder.tga";
     }
 

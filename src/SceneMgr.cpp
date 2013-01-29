@@ -69,14 +69,14 @@ void SceneMgr::loadScene(std::string fileName)
                 else if (type == '1')
                 {
                     ADDSTATICOBJECT(true, "wall.obj", "wall.tga", x, z, yOffset)
-                    if (sRandom->Int(0, 1))
-                        ob->SetOrientation(180.0f);
+                    //if (sRandom->Int(0, 1))
+                    //    ob->SetOrientation(180.0f);
                 }
                 else
                 {
                     ADDSTATICOBJECT(true, "wall_r.obj", "wall.tga", x, z, yOffset)
-                    if (sRandom->Int(0, 1))
-                        ob->SetOrientation(180.0f);
+                    //if (sRandom->Int(0, 1))
+                    //    ob->SetOrientation(180.0f);
 
                     if (yOffset < 0.0f)
                     {
@@ -98,11 +98,10 @@ void SceneMgr::OnInit()
 
     terrain = new Terrain();
 
-    loadScene("../res/scene");
-    player = new DynamicObject("sphere.obj", "placeholder.tga");
+    player = new DynamicObject("mage.obj", "mage.tga");
 
-    player->SETPOSITION2(17.06f, 8.6f, 0.075f, player);
-    player->SetScale(glm::vec3(0.115f));
+    player->SETPOSITION2(17.06f, 8.6f, -0.20f, player);
+    player->SetScale(glm::vec3(0.075f));
     player->EnableBoundingBox();
     player->scripts["OnUpdate"].push_back(
         [](DynamicObject& ob)
@@ -111,9 +110,9 @@ void SceneMgr::OnInit()
             {   
                 uint32 x = sMouse->GetPos().x;
                 uint32 centerX = sConfig->GetDefault("width", WINDOW_WIDTH) * 0.5f;
-
+                float sens = sConfig->GetDefault("sensitivity", 1.0f);
                 int32 deltax = centerX - x;
-                ob.SetOrientation(ob.GetOrientation() + deltax*0.3f);
+                ob.SetOrientation(ob.GetOrientation() + deltax*0.3f*sens);
 
                 sMouse->SetPos(centerX, sMouse->GetPos().y);
                 ob.AddMoveType(moveInfos[MOVE_TYPE_FORWARD]);
@@ -129,8 +128,14 @@ void SceneMgr::OnInit()
     player->scripts["OnUpdate"].push_back(
         [](DynamicObject& ob)
         {
+            if (ob.timers[4].Passed())
+                ob.modelName = "mage.obj";
+
             if (!sMouse->IsButtonPressed(GLFW_MOUSE_BUTTON_2))
                 return;
+            
+            ob.timers[4].Start(500);
+            ob.modelName = "mage2.obj";
 
             sMouse->OnButtonRelease(GLFW_MOUSE_BUTTON_2);
 
@@ -175,7 +180,7 @@ void SceneMgr::OnInit()
     player->scripts["OnUpdate"].push_back(
         [](DynamicObject& ob)
         {
-            if (!sMouse->IsButtonPressed(GLFW_MOUSE_BUTTON_3))
+            if (!sMouse->IsButtonPressed(GLFW_MOUSE_BUTTON_3) && !sKeyboard->IsKeyPressed(GLFW_KEY_SPACE))
                 return;
 
             if (!ob.timers[2].Passed())
@@ -184,11 +189,12 @@ void SceneMgr::OnInit()
             ob.timers[2].Start(10000);
 
             sMouse->OnButtonRelease(GLFW_MOUSE_BUTTON_3);
+            sKeyboard->OnKeyRelease(GLFW_KEY_SPACE);
 
             DynamicObject* explo = new DynamicObject("disc.obj", "disc.tga");
             explo->SetTypeId(TYPEID_PROJECTILE);
             Position pos = ob.GetPosition();
-            pos.y += 0.2f;
+            pos.y += 0.1f;
             explo->SetPosition(pos);
             explo->SetScale(glm::vec3(0.15f));
             explo->AddMoveType(moveInfos[MOVE_TYPE_ROTATE_RIGHT]);
@@ -235,6 +241,10 @@ void SceneMgr::OnInit()
 
     // LEN :P
     GameObject* ob;
+    ADDENEMY(17.1723f, 11.6584f)
+
+    loadScene("../res/scene");
+
     ADDSTATICOBJECT(true, "wall.obj", "wall.tga", 14.25f, 19.0f, 0.1f)
     ADDSTATICOBJECT(true, "wall.obj", "wall.tga", 10.15f, 19.0f, 0.2f)
     ob->SetOrientation(180.0f);
@@ -270,7 +280,9 @@ void SceneMgr::OnInit()
     ADDSTATICOBJECT(true, "border_r.obj", "border.tga",  62.8892, 36.5159, 1.25f)
     ob->SetScale(glm::vec3(0.7f, 0.8f, 1.6f));
 
-    coinsOnMap = objects[TYPEID_COIN].size();
+    coinsOnMap = objects[TYPEID_COIN].size() - 1;
+
+    endTime = 0;
 
     text2D.Init();
 
@@ -299,12 +311,6 @@ void SceneMgr::OnUpdate(const uint32& diff)
     if (player->GetHealth() <= 0)
     {
         state = GAME_END_FAIL;
-        return;
-    }
-
-    if (objects[TYPEID_COIN].empty())
-    {
-        state = GAME_END_SUCCESS;
         return;
     }
 
@@ -473,8 +479,8 @@ void SceneMgr::renderGUI()
     {
         case GAME_MENU:
         {
-            uint32 instId = sResourcesMgr->GetTextureId("instructions.tga");
-            text2D.RenderSprite(w/2 - 200, h/2 - 200, 400, instId);
+            uint32 instId = sResourcesMgr->GetTextureId("gui_begin.tga");
+            text2D.RenderSprite(w/2 - 400, h/2 - 400, 800, instId);
             break;
         }
         case GAME_INPROGRESS:
@@ -490,13 +496,24 @@ void SceneMgr::renderGUI()
             text2D.RenderText(hp.str(), w/2 - hp.str().length()*0.5f*18, 30, 18);
 
             std::stringstream kills;
-            kills << "Kills: " << monstersKilled;
-            text2D.RenderText(kills.str(), 5, 30, 16);
+            kills << monstersKilled;
+            text2D.RenderText(kills.str(), 275, 32, 16);
+            uint32 kill = sResourcesMgr->GetTextureId("gui_kill.tga");
+            text2D.RenderSprite(205, 15, 50, kill);
+
+            uint32 coin = sResourcesMgr->GetTextureId("gui_coin.tga");
+            text2D.RenderSprite(15, 15, 50, coin);
 
             std::stringstream points;
-            uint32 coinsCollected = coinsOnMap - objects[TYPEID_COIN].size();
-            points << "Coins: " << coinsCollected << "/" << coinsOnMap;
-            text2D.RenderText(points.str(), 5, 46, 16);
+            uint32 coinsCollected = coinsOnMap - (objects[TYPEID_COIN].size()-1);
+            points << coinsCollected << "/" << coinsOnMap;
+            text2D.RenderText(points.str(), 80, 32, 16);
+
+            if (coinsOnMap == coinsCollected)
+            {
+                state = GAME_END_SUCCESS;
+                endTime = player->timers[0].Elapsed() * 0.001f;
+            }
 
             std::stringstream t;
             t << "Press X to exit game";
@@ -521,24 +538,34 @@ void SceneMgr::renderGUI()
             }
             break;
         }
+        case GAME_INPROGRESS_TUT1:
+        {
+            uint32 gui = sResourcesMgr->GetTextureId("gui_tutorial1.tga");
+            text2D.RenderSprite(w/2 - 300, h/2 - 300, 600, gui);
+
+            if (sMouse->IsButtonPressed(GLFW_MOUSE_BUTTON_2))
+                state = GAME_INPROGRESS;
+
+            break;
+        }
         case GAME_END_FAIL:
         {
-            uint32 instId = sResourcesMgr->GetTextureId("gameover.tga");
-            text2D.RenderSprite(w/2 - 200, h/2 - 200, 400, instId);
+            uint32 instId = sResourcesMgr->GetTextureId("gui_end1.tga");
+            text2D.RenderSprite(w/2 - 400, h/2 - 400, 800, instId);
             break;
         }
         case GAME_END_SUCCESS:
         {
-            uint32 instId = sResourcesMgr->GetTextureId("gamewon.tga");
-            text2D.RenderSprite(w/2 - 250, h/2 - 250, 500, instId);
+            uint32 instId = sResourcesMgr->GetTextureId("gui_end2.tga");
+            text2D.RenderSprite(w/2 - 400, h/2 - 400, 800, instId);
 
             std::stringstream time;
-            time << (int((player->timers[0].Elapsed() * 0.001f) / 60) % 60) << ":" << (int(player->timers[0].Elapsed() * 0.001f) % 60);
-            text2D.RenderText(time.str(), w/2 - 250 + 312, h/2 - 250 + 185, 35);
+            time << std::setprecision(2) << ((endTime / 60) % 60) << "m " << (endTime % 60) <<"s";
+            text2D.RenderText(time.str(), w/2 - 20, h/2 - 250 + 220, 35);
             
             std::stringstream kills;
             kills << monstersKilled;
-            text2D.RenderText(kills.str(), w/2 - 250 + 312, h/2 - 250 + 145, 35);
+            text2D.RenderText(kills.str(), w/2 - 20, h/2 - 250 + 190, 35);
             break;
         }
         case GAME_END_EXIT:

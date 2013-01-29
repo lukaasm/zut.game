@@ -25,11 +25,12 @@ typedef std::list<PointLight> PointLightList;
 
 enum GameState
 {
-    GAME_MENU        = 0,
-    GAME_INPROGRESS  = 1,
-    GAME_END_SUCCESS = 2,
-    GAME_END_FAIL    = 3,
-    GAME_END_EXIT    = 4
+    GAME_MENU            = 0,
+    GAME_INPROGRESS      = 1,
+    GAME_INPROGRESS_TUT1 = 2,
+    GAME_END_SUCCESS     = 3,
+    GAME_END_FAIL        = 4,
+    GAME_END_EXIT        = 5
 };
 
 class SceneMgr
@@ -48,6 +49,8 @@ class SceneMgr
         void UnregisterObject(GameObject* object);
 
         //void RegisterBoundingBox(GameObject* object);
+
+        void SetGameState(GameState s) { state = s; }
 
         void ToggleCamera();
 
@@ -77,6 +80,8 @@ class SceneMgr
 
         uint32 monstersKilled;
         uint32 coinsOnMap;
+
+        uint32 endTime;
 
         std::unordered_set<GameObject*> unregisterQueue;
 

@@ -94,7 +94,7 @@ void main(void)
     for (int i = 0; i < m; i++)
     {
         if (ShadowCoord.z-bias > texture2D(ShadowTexture, ShadowCoord.xy + poissonDisk[i]/700.0).x)
-            shadow -= .6 / m;
+            shadow -= 0.6f / m;
     }
 
     /*if (shadow < 1.0f)

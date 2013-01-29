@@ -26,7 +26,7 @@
 
 #define ADDROCK(c, d) ADDSTATICOBJECT(true, "rock.obj", "rock.tga", c, d, 0.25f) \
     ob->SetScale(glm::vec3(sRandom->Float(0.4f, 1.8f))); \
-    ob->SetOrientation(sRandom->Float(0.0f, 360.0f)); \
+    //ob->SetOrientation(sRandom->Float(0.0f, 360.0f)); \
 
 #define ADDENEMY(c, d) \
     { \
@@ -41,7 +41,7 @@
         sSceneMgr->UnregisterObject(&ob); return; } \
         DynamicObject* player = sSceneMgr->GetPlayer(); \
         float dist = ob.GetDistance(player); \
-        if (dist < 0.5f) {\
+        if (dist < 0.35f) {\
         player->DamageTaken(&ob, 10); \
         ob.ClearMoveType(MOVE_FLAG_FORWARD); \
         ob.GetPosition().y = sSceneMgr->GetHeight(&ob); \
@@ -50,6 +50,11 @@
             ob.GetPosition().y = sSceneMgr->GetHeight(&ob) - 0.20f; \
         } else if (dist < 4.5f) \
             { \
+            if (ob.GetGuid() == 2 && dist < 2.5f && ob.timers[4].Passed()) \
+            { \
+                ob.timers[4].Start(100000); \
+                sSceneMgr->SetGameState(GAME_INPROGRESS_TUT1); \
+            } \
             ob.SetOrientation(ob.GetAngle(player)); \
             ob.AddMoveType(moveInfos[MOVE_TYPE_FORWARD]); \
             ob.GetPosition().y = sSceneMgr->GetHeight(&ob) + abs(sin(ob.timers[0].Elapsed()/256.0f))*0.3f; \
